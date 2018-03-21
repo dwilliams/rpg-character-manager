@@ -4,6 +4,8 @@
 import logging
 import pygame
 
+import char_sheet
+
 ### GLOBALS ###
 
 ### FUNCTIONS ###
@@ -36,6 +38,9 @@ def main():
     logging.debug("Setting up Assets")
     font_default_large = pygame.font.Font(None, 36)
 
+    ### Test Asset ###
+    cmcharsheetone = char_sheet.CMCharSheetOne(100, 100)
+
     # Event Loop
     logging.debug("Starting Event Loop")
     while not stop_event_loop:
@@ -50,6 +55,9 @@ def main():
         text = "FPS: {}".format(frame_clock.get_fps())
         text_width, text_height = font_default_large.size(text)
         surface_fps = font_default_large.render(text, True, pygame.Color('red'), color_background)
+
+        ### Test Asset ###
+        cm_surface = cmcharsheetone.draw()
 
         # Fill, Blit, and Flip the screen
         logging.debug("Filling, Blitting, and Flipping")
