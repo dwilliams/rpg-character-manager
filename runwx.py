@@ -17,16 +17,37 @@ class HelloFrame(wx.Frame):
         hf_panel = wx.Panel(self)
         
         # Put stuff in
-        st = wx.StaticText(hf_panel, label="Hello World!", pos=(25, 25))
-        font = st.GetFont()
-        font.PointSize = font.PointSize + 10
-        font = font.Bold()
-        st.SetFont(font)
+        #st = wx.StaticText(hf_panel, label="Hello World!", pos=(25, 25))
+        #font = st.GetFont()
+        #font.PointSize = font.PointSize + 10
+        #font = font.Bold()
+        #st.SetFont(font)
         
         self.makeMenuBar()
         
         self.CreateStatusBar()
         self.SetStatusText("Welcome to wxPython!")
+        
+        # Overall sizers
+        sizer1 = wx.BoxSizer(wx.HORIZONTAL)
+        sizer2 = wx.BoxSizer(wx.VERTICAL)
+        sizer3 = wx.BoxSizer(wx.VERTICAL)
+        sizer1.Add(sizer2, 0, 0, 0)
+        sizer2.Add(sizer3, 1, wx.EXPAND | wx.ALL, 1)
+        
+        # Char list
+        listctrl1 = wx.ListCtrl(self, size = wx.Size(250, 800))
+        sizer2.Add(listctrl1, 0, 0, 0)
+        
+        # Buttons below list
+        sizer4 = wx.BoxSizer(wx.HORIZONTAL)
+        button1 = wx.Button(self, label = "Add Char")
+        button2 = wx.Button(self, label = "Del Char")
+        sizer4.Add(button1, 0, 0, 0)
+        sizer4.Add(button2, 0, 0, 0)
+        sizer2.Add(sizer4, 0, 0, 0)
+        
+        self.SetSizerAndFit(sizer1)
     
     def makeMenuBar(self):
         # Make a file menu with hello and exit items
