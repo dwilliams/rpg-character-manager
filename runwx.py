@@ -59,11 +59,16 @@ class HelloFrame(wx.Frame):
     def OnAbout(self, event):
         wx.MessageBox("This is a wxPython Hello World sample", "About Hello World 2", wx.OK | wx.ICON_INFORMATION)
 
+class DerivedApp(wx.App):
+    def OnInit(self):
+        # Initialization and creation of the base/first frame
+        the_frame = HelloFrame(None, title = "Hello World 2")
+        the_frame.Show(True)
+        return True
+
 ### MAIN ###
 def main():
-    app = wx.App()
-    frm = HelloFrame(None, title = "Hello World 2")
-    frm.Show()
+    app = DerivedApp()
     app.MainLoop()
 
 if __name__ == '__main__':
