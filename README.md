@@ -7,4 +7,4 @@ Dependencies
 ------------
 
 - Python 3.5+
-- Pygame
+- wxPython 4.0+
