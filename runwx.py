@@ -19,8 +19,10 @@ class HelloFrame(wx.Frame):
         self.logger.debug("Initializing")
 
         # Create an image list to be used in the listctrl
-        self.logolist = wx.ImageList()
-        #self.logolist.Add( wx.Bitmap(??))
+        self.logolist = wx.ImageList(32, 32)
+        sr_logo_bitmap = wx.Bitmap()
+        sr_logo_bitmap.LoadFile("sr_logo.png")
+        self.logolist.Add(sr_logo_bitmap)
 
         # Create a panel in the frame
         hf_panel = wx.Panel(self)
@@ -45,8 +47,9 @@ class HelloFrame(wx.Frame):
         sizer2.Add(sizer3, 1, wx.EXPAND | wx.ALL, 1)
 
         # Char list
-        listctrl1 = wx.ListCtrl(self, size = wx.Size(250, 600))
-        sizer2.Add(listctrl1, 0, 0, 0)
+        self.listctrl1 = wx.ListCtrl(self, size = wx.Size(250, 600), style = (wx.LC_ICON | wx.LC_ALIGN_LEFT))
+        self.listctrl1.SetImageList(self.logolist, wx.IMAGE_LIST_NORMAL)
+        sizer2.Add(self.listctrl1, 0, 0, 0)
 
         # Buttons below list
         sizer4 = wx.BoxSizer(wx.HORIZONTAL)
@@ -100,6 +103,10 @@ class HelloFrame(wx.Frame):
         # Open a dialog asking for game type, char name, etc
         # Gather the info from the dialog
         # Create a new listctrl item
+        #new_list_item = wx.ListItem()
+        #new_list_item.SetImage(0)
+        #new_list_item.SetText("Character One")
+        self.listctrl1.InsertItem(0, "Character One", 0)
         pass
 
     def OnDelButton(self, event):
