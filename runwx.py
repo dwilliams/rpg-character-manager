@@ -25,7 +25,7 @@ class HelloFrame(wx.Frame):
         self.logolist.Add(sr_logo_bitmap)
 
         # Create a panel in the frame
-        hf_panel = wx.Panel(self)
+        #hf_panel = wx.Panel(self)
 
         # Put stuff in
         #st = wx.StaticText(hf_panel, label="Hello World!", pos=(25, 25))
@@ -47,8 +47,9 @@ class HelloFrame(wx.Frame):
         sizer2.Add(sizer3, 1, wx.EXPAND | wx.ALL, 1)
 
         # Char list
-        self.listctrl1 = wx.ListCtrl(self, size = wx.Size(250, 600), style = (wx.LC_ICON | wx.LC_ALIGN_LEFT))
+        self.listctrl1 = wx.ListCtrl(self, size = wx.Size(250, 600), style = (wx.LC_ICON | wx.LC_ALIGN_LEFT | wx.LC_SINGLE_SEL))
         self.listctrl1.SetImageList(self.logolist, wx.IMAGE_LIST_NORMAL)
+        self.Bind(wx.EVT_LIST_ITEM_SELECTED, self.OnListClick, self.listctrl1)
         sizer2.Add(self.listctrl1, 0, 0, 0)
 
         # Buttons below list
@@ -112,7 +113,10 @@ class HelloFrame(wx.Frame):
     def OnDelButton(self, event):
         self.logger.debug("OnDelButton")
         # Remove the selected character from the listctrl
-        pass
+        self.listctrl1.Select(0)
+
+    def OnListClick(self, event):
+        self.logger.debug("OnListClick - Event: %s", str(event))
 
 class DerivedApp(wx.App):
     def OnInit(self):
