@@ -45,6 +45,31 @@ class TestCharacterCreation(unittest.TestCase):
         self.assertEqual(char.name, 'Two')
         self.assertEqual(char.age, '2')
 
+class TestCharacterInventory(unittest.TestCase):
+    pass
+
+class TestCharacterEquipment(unittest.TestCase):
+    pass
+
+class TestCharacterLoadSave(unittest.TestCase):
+    def setUp(self):
+        # Setup logging for the class
+        self.logger = logging.getLogger(type(self).__name__)
+        self.logger.debug("setUp")
+
+        # Create test character
+        self.char = character.Character(name='One', age='1')
+
+    def test_load(self):
+        self.logger.debug("test_load")
+        with self.assertRaises(NotImplementedError):
+            self.char.load_json(json_string = "{}")        
+
+    def test_save(self):
+        self.logger.debug("test_save")
+        with self.assertRaises(NotImplementedError):
+            self.char.save_json()
+
 ### MAIN ###
 def main():
     pass

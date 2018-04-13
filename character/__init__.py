@@ -32,7 +32,7 @@ class Character:
     def load_json(self, json_string):
         raise NotImplementedError()
 
-    def save_json(self, json_string):
+    def save_json(self):
         raise NotImplementedError()
 
     def add_to_inventory(self, item):

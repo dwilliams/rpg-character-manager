@@ -19,7 +19,6 @@ def main():
     parser = argparse.ArgumentParser()
     parser.add_argument('-v', '--verbose', action='store_const', const=True, default=False, help="Enable debug logging.")
     args = parser.parse_args()
-    print("Arguments: {}".format(args))
 
     # Init Logging
     if args.verbose:
