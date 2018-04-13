@@ -22,7 +22,7 @@ class Character:
         #self.race = race # FIXME: Should this be a string or a set of classes that can affect stats?
 
         # Categories of things
-        # FIXME: Should these be objects or basic data structures?
+        # FIXME: Should these be objects or basic data structures for storing items and equipment?
         self.inventory = []
         self.equipped = []
 
@@ -36,6 +36,7 @@ class Character:
         raise NotImplementedError()
 
     def add_to_inventory(self, item):
+        # FIXME: Should the items be checked to be a subclass of type 'item' (i.e. not allow non-items to be added)?
         if item not in self.inventory:
             self.inventory.append(item)
 
@@ -47,6 +48,8 @@ class Character:
             self.inventory.remove(item)
 
     def equip_item(self, item):
+        # FIXME: Should the items be checked to be a subclass of type 'equipment' (i.e. not allow non-equipment to be
+        #        equipped)?
         if item in self.inventory and item not in self.equipped:
             self.equipped.append(item)
 
