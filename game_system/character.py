@@ -54,6 +54,7 @@ class Character:
     def equip_item(self, item):
         if not isinstance(item, Equipment):
             raise ItemNotEquipableException()
+        # FIXME: Should this raise exceptions for all invalid attempts (e.g. if item not in inventory)?
         if item in self.inventory and item not in self.equipped:
             self.equipped.append(item)
 

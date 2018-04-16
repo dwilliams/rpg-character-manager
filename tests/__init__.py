@@ -13,6 +13,9 @@ def generate_test_suite():
     logging.debug("generate_test_suite")
     test_suite = unittest.TestSuite()
     test_suite.addTest(unittest.makeSuite(test_character.TestCharacterCreation))
+    test_suite.addTest(unittest.makeSuite(test_character.TestCharacterInventory))
+    test_suite.addTest(unittest.makeSuite(test_character.TestCharacterInventoryWOverride))
+    test_suite.addTest(unittest.makeSuite(test_character.TestCharacterEquipment))
     test_suite.addTest(unittest.makeSuite(test_character.TestCharacterLoadSave))
     return test_suite
 
