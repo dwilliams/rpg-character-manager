@@ -8,18 +8,6 @@ import logging
 ### FUNCTIONS ###
 
 ### CLASSES ###
-class Item:
-    game_system = 'none'
-    item_name = 'Generic Item'
-
-    def __init__(self):
-        # Setup logging for the class
-        self.logger = logging.getLogger(type(self).__name__)
-        self.logger.debug("Initializing")
-
-    def __str__(self):
-        return "Item: {}".format(self.name)
-
 class Equipment:
     # FIXME: How are modifiers to the character handled?  Currently thinking of adding modifier_?? methods that the
     #        character class can call when calculating the attribute.  An example would be:
