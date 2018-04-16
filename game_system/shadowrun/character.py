@@ -3,7 +3,10 @@
 ### IMPORTS ###
 import logging
 
-from game_system import Character
+from game_system.exceptions import GameSystemMismatchException
+from game_system.character import Character
+
+from game_system.shadowrun.item import ShadowRunItem
 
 ### GLOBALS ###
 
@@ -19,6 +22,16 @@ class ShadowRunCharacter(Character):
 
     def __str__(self):
         return "ShadowRun{}".format(super().__str__())
+
+    def load_json(self, json_string):
+        pass
+
+    def save_json(self):
+        return ''
+
+    def _check_item_type(self, item):
+        if not isinstance(item, ShadowRunItem):
+            raise GameSystemMismatchException()
 
 ### MAIN ###
 def main():

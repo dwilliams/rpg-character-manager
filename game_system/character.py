@@ -3,6 +3,10 @@
 ### IMPORTS ###
 import logging
 
+from game_system.equipment import Equipment
+
+from game_system.exceptions import ItemNotEquipableException
+
 ### GLOBALS ###
 
 ### FUNCTIONS ###
@@ -36,7 +40,7 @@ class Character:
         raise NotImplementedError()
 
     def add_to_inventory(self, item):
-        # FIXME: Should the items be checked to be a subclass of type 'item' (i.e. not allow non-items to be added)?
+        self._check_item_type(item)
         if item not in self.inventory:
             self.inventory.append(item)
 
@@ -48,14 +52,20 @@ class Character:
             self.inventory.remove(item)
 
     def equip_item(self, item):
-        # FIXME: Should the items be checked to be a subclass of type 'equipment' (i.e. not allow non-equipment to be
-        #        equipped)?
+        if not isinstance(item, Equipment):
+            raise ItemNotEquipableException()
         if item in self.inventory and item not in self.equipped:
             self.equipped.append(item)
 
     def unequip_item(self, item):
         if item in self.equipped:
             self.equipped.remove(item)
+
+    def _check_item_type(self, item):
+        # This function should be implented for each game_system to check to make sure the items being added to the
+        # inventory are of the correct type for the game_system.  If the item is of the wrong type, a
+        # 'GameSystemMismatchException' should be raised.
+        raise NotImplementedError()
 
 ### MAIN ###
 def main():
