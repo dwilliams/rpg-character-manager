@@ -3,19 +3,21 @@
 ### IMPORTS ###
 import logging
 
-from game_system import Character
+from game_system import Item
 
 ### GLOBALS ###
 
 ### FUNCTIONS ###
 
 ### CLASSES ###
-class ShadowRunCharacter(Character):
+class ShadowRunItem(Item):
     game_system = 'shadowrun'
+    item_name = 'Generic Item'
 
-    def __init__(self, name = '', age = ''):
-        # Ensure the parent's __init__ is called
-        super().__init__(name = name, age = age)
+    def __init__(self):
+        # Setup logging for the class
+        self.logger = logging.getLogger(type(self).__name__)
+        self.logger.debug("Initializing")
 
     def __str__(self):
         return "ShadowRun{}".format(super().__str__())

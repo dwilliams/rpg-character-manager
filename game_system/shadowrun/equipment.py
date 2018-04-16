@@ -3,21 +3,21 @@
 ### IMPORTS ###
 import logging
 
-from game_system.item import Item
+from game_system.equipment import Equipment
 
 ### GLOBALS ###
 
 ### FUNCTIONS ###
 
 ### CLASSES ###
-class Equipment(Item):
+class ShadowRunEquipment(Equipment):
     # FIXME: How are modifiers to the character handled?  Currently thinking of adding modifier_?? methods that the
     #        character class can call when calculating the attribute.  An example would be:
     #            def mod_strength(self):
     #                return 4
     #        This would be used to add 4 to the character's strength.  The values could be added to class or __init__,
     #        allowing value overrides and base class functions for access.
-    game_system = 'none'
+    game_system = 'shadowrun'
     item_name = 'Generic Equipment'
 
     def __init__(self):
@@ -26,7 +26,7 @@ class Equipment(Item):
         self.logger.debug("Initializing")
 
     def __str__(self):
-        return "Equipment: {}".format(self.item_name)
+        return "ShadowRun{}".format(super().__str__())
 
 ### MAIN ###
 def main():

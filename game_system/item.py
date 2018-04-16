@@ -18,7 +18,7 @@ class Item:
         self.logger.debug("Initializing")
 
     def __str__(self):
-        return "Item: {}".format(self.name)
+        return "Item: {}".format(self.item_name)
 
 ### MAIN ###
 def main():
