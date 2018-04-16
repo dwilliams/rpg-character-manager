@@ -4,7 +4,7 @@
 import logging
 import unittest
 
-import character
+import game_system
 
 ### GLOBALS ###
 
@@ -19,28 +19,28 @@ class TestCharacterCreation(unittest.TestCase):
 
     def test_create_without_values(self):
         self.logger.debug("test_create_without_values")
-        char = character.Character()
+        char = game_system.Character()
         self.logger.debug("Character: %s", char)
         self.assertEqual(char.name, '')
         self.assertEqual(char.age, '')
 
     def test_create_with_name_value(self):
         self.logger.debug("test_create_with_name_value")
-        char = character.Character(name='One')
+        char = game_system.Character(name='One')
         self.logger.debug("Character: %s", char)
         self.assertEqual(char.name, 'One')
         self.assertEqual(char.age, '')
 
     def test_create_with_age_value(self):
         self.logger.debug("test_create_with_age_value")
-        char = character.Character(age='1')
+        char = game_system.Character(age='1')
         self.logger.debug("Character: %s", char)
         self.assertEqual(char.name, '')
         self.assertEqual(char.age, '1')
 
     def test_create_with_name_and_age_values(self):
         self.logger.debug("test_create_with_name_and_age_values")
-        char = character.Character(name='Two', age='2')
+        char = game_system.Character(name='Two', age='2')
         self.logger.debug("Character: %s", char)
         self.assertEqual(char.name, 'Two')
         self.assertEqual(char.age, '2')
@@ -58,7 +58,7 @@ class TestCharacterLoadSave(unittest.TestCase):
         self.logger.debug("setUp")
 
         # Create test character
-        self.char = character.Character(name='One', age='1')
+        self.char = game_system.Character(name='One', age='1')
 
     def test_load(self):
         self.logger.debug("test_load")
