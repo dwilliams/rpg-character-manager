@@ -38,9 +38,9 @@ class Character:
         self.special_stats = {}
 
         # Initialize basic and special stats to creation defaults
-        for stats_type in basic_stats_types:
+        for stats_type in self.basic_stats_types:
             self.basic_stats[stats_type] = 0
-        for stats_type in special_stats_types:
+        for stats_type in self.special_stats_types:
             self.special_stats[stats_type] = 0
 
     def __str__(self):
@@ -82,7 +82,7 @@ class Character:
         raise NotImplementedError()
 
     def get_basic_stat(self, stat_name):
-        if stat_name not in basic_stat_types:
+        if stat_name not in self.basic_stats_types:
             raise CharacterInvalidStatTypeException()
         # Calculate the total strength for the character
         result = self.basic_stats[stat_name]
