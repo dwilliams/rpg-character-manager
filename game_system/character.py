@@ -15,6 +15,9 @@ from game_system.exceptions import ItemNotEquipableException
 class Character:
     game_system = 'none'
 
+    basic_stats_types = ['strength', 'charisma', 'intelligence', 'wisdom']
+    special_stats_types = ['magic']
+
     def __init__(self, name = '', age = ''):
         # Setup logging for the class
         self.logger = logging.getLogger(type(self).__name__)
@@ -29,6 +32,16 @@ class Character:
         # FIXME: Should these be objects or basic data structures for storing items and equipment?
         self.inventory = []
         self.equipped = []
+
+        # Stats dictionaries
+        self.basic_stats = {}
+        self.special_stats = {}
+
+        # Initialize basic and special stats to creation defaults
+        for stats_type in basic_stats_types:
+            self.basic_stats[stats_type] = 0
+        for stats_type in special_stats_types:
+            self.special_stats[stats_type] = 0
 
     def __str__(self):
         return "Character: {}".format(self.name)
@@ -67,6 +80,23 @@ class Character:
         # inventory are of the correct type for the game_system.  If the item is of the wrong type, a
         # 'GameSystemMismatchException' should be raised.
         raise NotImplementedError()
+
+    def get_basic_stat(self, stat_name):
+        if stat_name not in basic_stat_types:
+            raise CharacterInvalidStatTypeException()
+        # Calculate the total strength for the character
+        result = self.basic_stats[stat_name]
+        # Add strength for equipped items
+        # ??
+        # Add stat for game system specials
+        result = result + self._get_basic_stat_game_system_specials(stat_name)
+        # Add strength for temporaries (magic spells, etc)
+        # ??
+        return result
+
+    def _get_basic_stat_game_system_specials(self, stat_name):
+        # Override this for special modifiers for game systems (e.g. biowares in ShadowRun)
+        return 0
 
 ### MAIN ###
 def main():

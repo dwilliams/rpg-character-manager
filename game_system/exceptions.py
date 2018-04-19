@@ -10,6 +10,9 @@
 class GameSystemMismatchException(Exception):
     pass
 
+class CharacterInvalidStatTypeException(Exception):
+    pass
+
 class ItemNotEquipableException(Exception):
     pass
 
