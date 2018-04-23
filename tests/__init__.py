@@ -4,7 +4,7 @@
 import logging
 import unittest
 
-from tests import test_character
+from tests import test_character, test_item
 
 ### GLOBALS ###
 
@@ -12,6 +12,10 @@ from tests import test_character
 def generate_test_suite():
     logging.debug("generate_test_suite")
     test_suite = unittest.TestSuite()
+    # Test Item
+    test_suite.addTest(unittest.makeSuite(test_item.TestItemCreation))
+    # Test Equipment
+    # Test Character
     test_suite.addTest(unittest.makeSuite(test_character.TestCharacterCreation))
     test_suite.addTest(unittest.makeSuite(test_character.TestCharacterInventory))
     test_suite.addTest(unittest.makeSuite(test_character.TestCharacterInventoryWOverride))
