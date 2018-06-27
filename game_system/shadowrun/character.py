@@ -16,7 +16,7 @@ from game_system.shadowrun.item import ShadowRunItem
 class ShadowRunCharacter(Character):
     game_system = 'shadowrun'
 
-    basic_stats_types = ['body', 'quickness', 'strength', 'charisma', 'intelligence', 'wisdom']
+    basic_stats_types = ['body', 'quickness', 'strength', 'charisma', 'intelligence', 'willpower']
     special_stats_types = ['essence', 'magic']
 
     def __init__(self, name=''):

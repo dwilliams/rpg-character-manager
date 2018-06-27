@@ -3,14 +3,14 @@
 ### IMPORTS ###
 #import logging
 
-from game_system.equipment import Equipment
+from game_system.shadowrun.equipment import ShadowRunEquipment
 
 ### GLOBALS ###
 
 ### FUNCTIONS ###
 
 ### CLASSES ###
-class ShadowRunEquipment(Equipment):
+class ShadowRunBioware(ShadowRunEquipment):
     # pylint: disable=too-few-public-methods
     # FIXME: How are modifiers to the character handled?  Currently thinking of adding modifier_?? methods that the
     #        character class can call when calculating the attribute.  An example would be:
@@ -19,11 +19,11 @@ class ShadowRunEquipment(Equipment):
     #        This would be used to add 4 to the character's strength.  The values could be added to class or __init__,
     #        allowing value overrides and base class functions for access.
     game_system = 'shadowrun'
-    item_name = 'Generic Equipment'
+    item_name = 'Generic Bioware'
 
     #def __init__(self):
     #    # Ensure the parent's __init__ is called
     #    super().__init__()
 
     def __str__(self):
-        return "ShadowRunEquipment: {}".format(self.item_name)
+        return "ShadowRunBioware: {}".format(self.item_name)
