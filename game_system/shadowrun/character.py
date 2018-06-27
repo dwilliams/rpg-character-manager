@@ -30,10 +30,24 @@ class ShadowRunCharacter(Character):
         return "ShadowRun{}".format(super().__str__())
 
     def load_dict(self, char_dict):
-        pass
+        if not char_dict['game_system'] == self.game_system:
+            raise GameSystemMismatchException()
+
+        # Load the basic character stats
+        self.name = char_dict['name']
+
+        # Load the inventory & equipment
 
     def save_dict(self):
-        return {}
+        to_save_dict = {}
+
+        # Save the basic character stats
+        to_save_dict['game_system'] = self.game_system
+        to_save_dict['name'] = self.name
+        
+        # Save the inventory & equipment
+        
+        return to_save_dict
 
     def _check_item_type(self, item):
         if not isinstance(item, ShadowRunItem):
