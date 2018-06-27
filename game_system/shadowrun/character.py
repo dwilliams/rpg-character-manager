@@ -29,11 +29,11 @@ class ShadowRunCharacter(Character):
     def __str__(self):
         return "ShadowRun{}".format(super().__str__())
 
-    def load_json(self, json_string):
+    def load_dict(self, chsr_dict):
         pass
 
-    def save_json(self):
-        return ''
+    def save_dict(self):
+        return {}
 
     def _check_item_type(self, item):
         if not isinstance(item, ShadowRunItem):

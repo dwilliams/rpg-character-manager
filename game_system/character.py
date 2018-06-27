@@ -46,10 +46,10 @@ class Character:
     def __str__(self):
         return "Character: {}".format(self.name)
 
-    def load_json(self, json_string):
+    def load_dict(self, char_dict):
         raise NotImplementedError()
 
-    def save_json(self):
+    def save_dict(self):
         raise NotImplementedError()
 
     def add_to_inventory(self, item):

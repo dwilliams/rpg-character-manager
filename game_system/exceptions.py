@@ -16,6 +16,9 @@ class CharacterInvalidStatTypeException(Exception):
 class ItemNotEquipableException(Exception):
     pass
 
+class NotCharacterException(Exception):
+    pass
+
 ### MAIN ###
 def main():
     pass
