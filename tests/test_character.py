@@ -189,12 +189,12 @@ class TestCharacterLoadSave(unittest.TestCase):
     def test_load(self):
         self.logger.debug("test_load")
         with self.assertRaises(NotImplementedError):
-            self.char.load_json(json_string = "{}")
+            self.char.load_dict(char_dict = {})
 
     def test_save(self):
         self.logger.debug("test_save")
         with self.assertRaises(NotImplementedError):
-            self.char.save_json()
+            self.char.save_dict()
 
 ### MAIN ###
 def main():
