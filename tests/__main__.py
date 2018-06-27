@@ -3,6 +3,7 @@
 ### IMPORTS ###
 import argparse
 import logging
+import sys
 import unittest
 
 import tests
@@ -31,7 +32,8 @@ def main():
 
     # Run the test suite
     runner = unittest.TextTestRunner()
-    runner.run(my_test_suite)
+    result = runner.run(my_test_suite)
+    sys.exit(not result.wasSuccessful())
 
 if __name__ == '__main__':
     main()
