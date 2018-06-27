@@ -18,14 +18,14 @@ class Character:
     basic_stats_types = ['strength', 'charisma', 'intelligence', 'wisdom']
     special_stats_types = ['magic']
 
-    def __init__(self, name = '', age = ''):
+    def __init__(self, name = ''):
         # Setup logging for the class
         self.logger = logging.getLogger(type(self).__name__)
         self.logger.debug("Initializing")
 
         # Some basic values about the character
         self.name = name
-        self.age = age
+        #self.age = age
         #self.race = race # FIXME: Should this be a string or a set of classes that can affect stats?
 
         # Categories of things

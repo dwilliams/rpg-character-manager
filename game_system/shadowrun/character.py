@@ -19,9 +19,9 @@ class ShadowRunCharacter(Character):
     basic_stats_types = ['body', 'quickness', 'strength', 'charisma', 'intelligence', 'wisdom']
     special_stats_types = ['essence', 'magic']
 
-    def __init__(self, name = '', age = ''):
+    def __init__(self, name = ''):
         # Ensure the parent's __init__ is called
-        super().__init__(name = name, age = age)
+        super().__init__(name = name)
 
         # Initialize basic and special stats to creation defaults
         self.special_stats['essence'] = 6
@@ -29,7 +29,7 @@ class ShadowRunCharacter(Character):
     def __str__(self):
         return "ShadowRun{}".format(super().__str__())
 
-    def load_dict(self, chsr_dict):
+    def load_dict(self, char_dict):
         pass
 
     def save_dict(self):

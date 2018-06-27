@@ -7,10 +7,10 @@
 ### FUNCTIONS ###
 
 ### CLASSES ###
-class GameSystemMismatchException(Exception):
+class CharacterInvalidStatTypeException(Exception):
     pass
 
-class CharacterInvalidStatTypeException(Exception):
+class GameSystemMismatchException(Exception):
     pass
 
 class ItemNotEquipableException(Exception):

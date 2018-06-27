@@ -22,28 +22,28 @@ class TestCharacterCreation(unittest.TestCase):
         char = game_system.Character()
         self.logger.debug("Character: %s", char)
         self.assertEqual(char.name, '')
-        self.assertEqual(char.age, '')
+        #self.assertEqual(char.age, '')
 
     def test_create_with_name_value(self):
         self.logger.debug("test_create_with_name_value")
         char = game_system.Character(name='One')
         self.logger.debug("Character: %s", char)
         self.assertEqual(char.name, 'One')
-        self.assertEqual(char.age, '')
+        #self.assertEqual(char.age, '')
 
-    def test_create_with_age_value(self):
-        self.logger.debug("test_create_with_age_value")
-        char = game_system.Character(age='1')
-        self.logger.debug("Character: %s", char)
-        self.assertEqual(char.name, '')
-        self.assertEqual(char.age, '1')
+    #def test_create_with_age_value(self):
+    #    self.logger.debug("test_create_with_age_value")
+    #    char = game_system.Character(age='1')
+    #    self.logger.debug("Character: %s", char)
+    #    self.assertEqual(char.name, '')
+    #    self.assertEqual(char.age, '1')
 
-    def test_create_with_name_and_age_values(self):
-        self.logger.debug("test_create_with_name_and_age_values")
-        char = game_system.Character(name='Two', age='2')
-        self.logger.debug("Character: %s", char)
-        self.assertEqual(char.name, 'Two')
-        self.assertEqual(char.age, '2')
+    #def test_create_with_name_and_age_values(self):
+    #    self.logger.debug("test_create_with_name_and_age_values")
+    #    char = game_system.Character(name='Two', age='2')
+    #    self.logger.debug("Character: %s", char)
+    #    self.assertEqual(char.name, 'Two')
+    #    self.assertEqual(char.age, '2')
 
 class TestCharacterInventory(unittest.TestCase):
     def setUp(self):
@@ -52,7 +52,7 @@ class TestCharacterInventory(unittest.TestCase):
         self.logger.debug("setUp")
 
         # Create test character
-        self.char = game_system.Character(name='One', age='1')
+        self.char = game_system.Character(name='One')
 
     def test_add_to_inventory(self):
         self.logger.debug("test_add_to_inventory")
@@ -67,7 +67,7 @@ class TestCharacterInventoryWOverride(unittest.TestCase):
         self.logger.debug("setUp")
 
         # Create test character
-        self.char = game_system.Character(name='Two', age='2')
+        self.char = game_system.Character(name='Two')
         # NOTE: This is overriding the character class item check method to allow the rest of the functionality to be
         #       tested.
         self.char._check_item_type = self._check_item_type
@@ -112,7 +112,7 @@ class TestCharacterEquipment(unittest.TestCase):
         self.logger.debug("setUp")
 
         # Create test character
-        self.char = game_system.Character(name='Three', age='3')
+        self.char = game_system.Character(name='Three')
         # NOTE: This is overriding the character class item check method to allow the rest of the functionality to be
         #       tested.
         self.char._check_item_type = self._check_item_type
@@ -184,7 +184,7 @@ class TestCharacterLoadSave(unittest.TestCase):
         self.logger.debug("setUp")
 
         # Create test character
-        self.char = game_system.Character(name='One', age='1')
+        self.char = game_system.Character(name='One')
 
     def test_load(self):
         self.logger.debug("test_load")
