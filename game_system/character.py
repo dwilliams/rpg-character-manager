@@ -5,7 +5,7 @@ import logging
 
 from game_system.equipment import Equipment
 
-from game_system.exceptions import ItemNotEquipableException
+from game_system.exceptions import CharacterInvalidStatTypeException, ItemNotEquipableException
 
 ### GLOBALS ###
 
@@ -18,7 +18,7 @@ class Character:
     basic_stats_types = ['strength', 'charisma', 'intelligence', 'wisdom']
     special_stats_types = ['magic']
 
-    def __init__(self, name = ''):
+    def __init__(self, name=''):
         # Setup logging for the class
         self.logger = logging.getLogger(type(self).__name__)
         self.logger.debug("Initializing")
@@ -47,17 +47,21 @@ class Character:
         return "Character: {}".format(self.name)
 
     def load_dict(self, char_dict):
+        self.logger.debug("Arguments: char_dict: %s", str(char_dict))
         raise NotImplementedError()
 
     def save_dict(self):
+        self.logger.debug("Arguments: None")
         raise NotImplementedError()
 
     def add_to_inventory(self, item):
+        self.logger.debug("Arguments: item: %s", str(item))
         self._check_item_type(item)
         if item not in self.inventory:
             self.inventory.append(item)
 
     def remove_from_inventory(self, item):
+        self.logger.debug("Arguments: item: %s", str(item))
         if item in self.equipped:
             # FIXME: Should this raise an exception or just remove from equipped?
             self.equipped.remove(item)
@@ -65,6 +69,7 @@ class Character:
             self.inventory.remove(item)
 
     def equip_item(self, item):
+        self.logger.debug("Arguments: item: %s", str(item))
         if not isinstance(item, Equipment):
             raise ItemNotEquipableException()
         # FIXME: Should this raise exceptions for all invalid attempts (e.g. if item not in inventory)?
@@ -72,16 +77,19 @@ class Character:
             self.equipped.append(item)
 
     def unequip_item(self, item):
+        self.logger.debug("Arguments: item: %s", str(item))
         if item in self.equipped:
             self.equipped.remove(item)
 
     def _check_item_type(self, item):
+        self.logger.debug("Arguments: item: %s", str(item))
         # This function should be implented for each game_system to check to make sure the items being added to the
         # inventory are of the correct type for the game_system.  If the item is of the wrong type, a
         # 'GameSystemMismatchException' should be raised.
         raise NotImplementedError()
 
     def get_basic_stat(self, stat_name):
+        self.logger.debug("Arguments: stat_name: %s", str(stat_name))
         if stat_name not in self.basic_stats_types:
             raise CharacterInvalidStatTypeException()
         # Calculate the total strength for the character
@@ -95,12 +103,7 @@ class Character:
         return result
 
     def _get_basic_stat_game_system_specials(self, stat_name):
+        self.logger.debug("Arguments: stat_name: %s", str(stat_name))
+        # pylint: disable=no-self-use
         # Override this for special modifiers for game systems (e.g. biowares in ShadowRun)
         return 0
-
-### MAIN ###
-def main():
-    pass
-
-if __name__ == '__main__':
-    main()

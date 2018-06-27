@@ -132,7 +132,8 @@ class DerivedApp(wx.App):
 ### MAIN ###
 def main():
     # Init Logging
-    logging.basicConfig(level=logging.DEBUG)
+    log_format = "%(asctime)s:%(levelname)s:%(name)s %(funcName)s:%(message)s"
+    logging.basicConfig(format=log_format, level=logging.DEBUG)
 
     app = DerivedApp()
     app.MainLoop()

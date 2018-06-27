@@ -34,38 +34,41 @@ def print_char(char):
 ### MAIN ###
 def main():
     # Init Logging
-    logging.basicConfig(level=logging.DEBUG)
-    
+    log_format = "%(asctime)s:%(levelname)s:%(name)s %(funcName)s:%(message)s"
+    logging.basicConfig(format=log_format, level=logging.DEBUG)
+
     # Parse Arguments
     parser = argparse.ArgumentParser(description="CLI for manipulating RPG characters.")
-    subparsers = parser.add_subparsers(dest="operation", help="Action help, Action to be performed on the RPG character.")
-    
+    subparsers = parser.add_subparsers(
+        dest="operation",
+        help="Action help, Action to be performed on the RPG character.")
+
     ## Operation Arguments for Create
     parser_create = subparsers.add_parser("create", help="Create the RPG character.")
-    parser_create.add_argument("game_system", help="The RPG system to use for the character.", choices=['shadowrun'], default='shadowrun')
+    parser_create.add_argument(
+        "game_system",
+        help="The RPG system to use for the character.",
+        choices=['shadowrun'],
+        default='shadowrun')
     parser_create.add_argument("char_name", help="The name of the character.")
-    
+
     ## Operation Arguments for Print
     parser_print = subparsers.add_parser("print", help="Print the RPG character to the console.")
-    
+
     ## Global Arguments
     parser.add_argument("filename", help="Path to the RPG character file to be manipulated.")
     args = parser.parse_args()
-    
+
     # If not the create operation, load the json file
     if args.operation is not "create":
         with open(os.path.abspath(args.filename)) as f:
             char_json = f.read()
-    
+
     # Call the correct operation with the needed arguments
     if args.operation == 'create':
         create_char(args.game_system, args.char_name, args.filename)
     elif args.operation == 'print':
         print_char(load_char(args.filename))
-    
-    # Debug Stuff
-    logging.debug("Args: %s", str(args))
-    logging.debug("char_json: %s", char_json)
 
 if __name__ == '__main__':
     main()

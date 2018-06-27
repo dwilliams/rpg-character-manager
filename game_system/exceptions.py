@@ -18,10 +18,3 @@ class ItemNotEquipableException(Exception):
 
 class NotCharacterException(Exception):
     pass
-
-### MAIN ###
-def main():
-    pass
-
-if __name__ == '__main__':
-    main()

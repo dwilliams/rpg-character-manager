@@ -195,10 +195,3 @@ class TestCharacterLoadSave(unittest.TestCase):
         self.logger.debug("test_save")
         with self.assertRaises(NotImplementedError):
             self.char.save_dict()
-
-### MAIN ###
-def main():
-    pass
-
-if __name__ == '__main__':
-    main()

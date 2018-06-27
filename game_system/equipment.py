@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 
 ### IMPORTS ###
-import logging
+#import logging
 
 from game_system.item import Item
 
@@ -11,6 +11,7 @@ from game_system.item import Item
 
 ### CLASSES ###
 class Equipment(Item):
+    # pylint: disable=too-few-public-methods
     # FIXME: How are modifiers to the character handled?  Currently thinking of adding modifier_?? methods that the
     #        character class can call when calculating the attribute.  An example would be:
     #            def mod_strength(self):
@@ -20,17 +21,9 @@ class Equipment(Item):
     game_system = 'none'
     item_name = 'Generic Equipment'
 
-    def __init__(self):
-        # Setup logging for the class
-        self.logger = logging.getLogger(type(self).__name__)
-        self.logger.debug("Initializing")
+    #def __init__(self):
+    #    # Ensure the parent's __init__ is called
+    #    super().__init__()
 
     def __str__(self):
         return "Equipment: {}".format(self.item_name)
-
-### MAIN ###
-def main():
-    pass
-
-if __name__ == '__main__':
-    main()

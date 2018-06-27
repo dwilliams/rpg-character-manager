@@ -19,10 +19,3 @@ from game_system.charfile import CharacterFile
 ### FUNCTIONS ###
 
 ### CLASSES ###
-
-### MAIN ###
-def main():
-    pass
-
-if __name__ == '__main__':
-    main()

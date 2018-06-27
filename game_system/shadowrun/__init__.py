@@ -10,10 +10,3 @@ from game_system.shadowrun.equipment import ShadowRunEquipment
 ### FUNCTIONS ###
 
 ### CLASSES ###
-
-### MAIN ###
-def main():
-    pass
-
-if __name__ == '__main__':
-    main()

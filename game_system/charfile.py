@@ -15,10 +15,10 @@ SUPPORTED_GAME_SYSTEMS = ['shadowrun']
 
 ### FUNCTIONS ###
 def get_blank_char_of_game_system(game_system):
+    char = None
     if game_system == 'shadowrun':
-        return ShadowRunCharacter()
-    else:
-        return None
+        char = ShadowRunCharacter()
+    return char
 
 ### CLASSES ###
 class CharacterFile:
@@ -36,8 +36,8 @@ class CharacterFile:
 
     def load_char(self):
         # Read the file
-        with open(self.filepath, 'r') as f:
-            to_load_json = f.read()
+        with open(self.filepath, 'r') as filehandle:
+            to_load_json = filehandle.read()
 
         # Load the JSON into a dict
         to_load_dict = json.loads(to_load_json)
@@ -66,9 +66,5 @@ class CharacterFile:
         to_save_json = json.dumps(to_save_dict)
 
         # Write to the file
-        with open(self.filepath, 'w') as f:
-            f.write(to_save_json)
-
-### MAIN ###
-if __name__ == '__main__':
-    pass
+        with open(self.filepath, 'w') as filehandle:
+            filehandle.write(to_save_json)

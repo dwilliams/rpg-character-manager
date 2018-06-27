@@ -9,6 +9,7 @@ import logging
 
 ### CLASSES ###
 class Item:
+    # pylint: disable=too-few-public-methods
     game_system = 'none'
     item_name = 'Generic Item'
 
@@ -19,10 +20,3 @@ class Item:
 
     def __str__(self):
         return "Item: {}".format(self.item_name)
-
-### MAIN ###
-def main():
-    pass
-
-if __name__ == '__main__':
-    main()
