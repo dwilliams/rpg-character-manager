@@ -8,7 +8,7 @@ import os
 from game_system.character import Character
 from game_system.exceptions import GameSystemMismatchException, NotCharacterException
 
-from game_system.shadowrun import Character as ShadowRunCharacter
+from game_system.shadowrun import ShadowRunCharacter
 
 ### GLOBALS ###
 SUPPORTED_GAME_SYSTEMS = ['shadowrun']
