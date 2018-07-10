@@ -9,6 +9,7 @@ import logging
 
 ### CLASSES ###
 class Item:
+    # pylint: disable=too-few-public-methods
     game_system = 'none'
 
     def __init__(self, data):
@@ -20,6 +21,7 @@ class Item:
             self._morph(data)
 
     def _morph(self, data):
+        # pylint: disable=unused-argument,no-self-use
         NotImplementedError()
 
     def __str__(self):
@@ -32,6 +34,7 @@ class ItemFactory:
         # Setup logging for the class
         self.logger = logging.getLogger(type(self).__name__)
         self.logger.debug("Initializing")
+        self.item_dict = {}
         self._load_data()
 
     def _load_data(self):
@@ -39,3 +42,6 @@ class ItemFactory:
 
     def create(self, item_name):
         raise NotImplementedError()
+
+    def get_list_names(self):
+        return self.item_dict.keys()

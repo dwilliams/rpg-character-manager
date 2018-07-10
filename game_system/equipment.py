@@ -11,6 +11,7 @@ from game_system.item import Item, ItemFactory
 
 ### CLASSES ###
 class Equipment(Item):
+    # pylint: disable=too-few-public-methods
     # FIXME: How are modifiers to the character handled?  Currently thinking of adding modifier_?? methods that the
     #        character class can call when calculating the attribute.  An example would be:
     #            def mod_strength(self):
@@ -40,14 +41,19 @@ class Equipment(Item):
         return "Equipment: {}".format(self.item_name)
 
 class EquipmentFactory(ItemFactory):
-    game_system = 'none'
+    # pylint: disable=abstract-method
+    pass
+    #game_system = 'none'
 
     #def __init__(self):
     #    # Ensure the parent's __init__ is called
     #    super().__init__()
 
-    def _load_data(self):
-        raise NotImplementedError()
+    #def _load_data(self):
+    #    raise NotImplementedError()
 
-    def create(self, item_name):
-        raise NotImplementedError()
+    #def create(self, item_name):
+    #    raise NotImplementedError()
+
+    #def get_list_names(self):
+    #    raise NotImplementedError()

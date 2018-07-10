@@ -17,11 +17,22 @@ class TestItemCreation(unittest.TestCase):
         self.logger = logging.getLogger(type(self).__name__)
         self.logger.debug("setUp")
 
-    def test_create(self):
-        self.logger.debug("test_create")
-        item = game_system.Item()
+        # Test item data for the item class
+        self.item_data = {
+            "item_name": "Test Item One"
+        }
+
+    def test_create_none(self):
+        self.logger.debug("test_create_none")
+        item = game_system.Item(None)
         self.logger.debug("Item: %s", item)
         self.assertEqual(item.item_name, 'Generic Item')
+
+    #def test_create_data(self):
+    #    self.logger.debug("test_create_data")
+    #    item = game_system.Item(self.item_data)
+    #    self.logger.debug("Item: %s", item)
+    #    self.assertEqual(item.item_name, "Test Item One")
 
 ### MAIN ###
 def main():

@@ -1,12 +1,12 @@
 #!/usr/bin/env python3
 
 ### IMPORTS ###
-import logging
+#import logging
 import json
 
 import pkg_resources
 
-from game_system.exceptions import ItemNotEquipableException, ItemNotExistsException
+from game_system.exceptions import ItemNotExistsException
 
 from game_system.equipment import Equipment, EquipmentFactory
 
@@ -16,6 +16,7 @@ from game_system.equipment import Equipment, EquipmentFactory
 
 ### CLASSES ###
 class ShadowRunEquipment(Equipment):
+    # pylint: disable=too-few-public-methods
     # FIXME: How are modifiers to the character handled?  Currently thinking of adding modifier_?? methods that the
     #        character class can call when calculating the attribute.  An example would be:
     #            def mod_strength(self):
@@ -74,5 +75,4 @@ class ShadowRunEquipmentFactory(EquipmentFactory):
     def create(self, item_name):
         if item_name not in self.item_dict.keys():
             raise ItemNotExistsException()
-        # Figure out how to create the equipment
         return ShadowRunEquipment(self.item_dict[item_name])

@@ -56,7 +56,7 @@ class TestCharacterInventory(unittest.TestCase):
 
     def test_add_to_inventory(self):
         self.logger.debug("test_add_to_inventory")
-        item1 = game_system.Item()
+        item1 = game_system.Item(None)
         with self.assertRaises(NotImplementedError):
             self.char.add_to_inventory(item1)
 
@@ -74,13 +74,13 @@ class TestCharacterInventoryWOverride(unittest.TestCase):
 
     def test_add_to_inventory(self):
         self.logger.debug("test_add_to_inventory")
-        item2 = game_system.Item()
+        item2 = game_system.Item(None)
         self.char.add_to_inventory(item2)
         self.assertIn(item2, self.char.inventory)
 
     def test_add_to_inventory_already_in_inventory(self):
         self.logger.debug("test_add_to_inventory_already_in_inventory")
-        item2 = game_system.Item()
+        item2 = game_system.Item(None)
         self.char.add_to_inventory(item2)
         self.assertIn(item2, self.char.inventory)
         self.char.add_to_inventory(item2)
@@ -88,7 +88,7 @@ class TestCharacterInventoryWOverride(unittest.TestCase):
 
     def test_remove_from_inventory(self):
         self.logger.debug("test_remove_from_inventory")
-        item3 = game_system.Item()
+        item3 = game_system.Item(None)
         self.char.add_to_inventory(item3)
         self.assertIn(item3, self.char.inventory)
         self.char.remove_from_inventory(item3)
@@ -96,7 +96,7 @@ class TestCharacterInventoryWOverride(unittest.TestCase):
 
     def test_remove_from_inventory_not_in_inventory(self):
         self.logger.debug("test_remove_from_inventory")
-        item3 = game_system.Item()
+        item3 = game_system.Item(None)
         self.assertNotIn(item3, self.char.inventory)
         self.char.remove_from_inventory(item3)
         self.assertNotIn(item3, self.char.inventory)
@@ -144,7 +144,7 @@ class TestCharacterEquipment(unittest.TestCase):
 
     def test_equip_item_not_equippable(self):
         self.logger.debug("test_equip_item_not_in_inventory")
-        item3 = game_system.Item()
+        item3 = game_system.Item(None)
         with self.assertRaises(game_system.ItemNotEquipableException):
             self.char.equip_item(item3)
 
