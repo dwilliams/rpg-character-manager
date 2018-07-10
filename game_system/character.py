@@ -5,7 +5,9 @@ import logging
 
 from game_system.equipment import Equipment
 
-from game_system.exceptions import CharacterInvalidStatTypeException, ItemNotEquipableException
+from game_system.exceptions import CharacterInvalidStatTypeException
+from game_system.exceptions import ItemNotEquipableException
+from game_system.exceptions import ItemNotInInventoryException
 
 ### GLOBALS ###
 
@@ -26,12 +28,16 @@ class Character:
         # Some basic values about the character
         self.name = name
         #self.age = age
-        #self.race = race # FIXME: Should this be a string or a set of classes that can affect stats?
+
+        # Race
+        # NOTE: Seeing as racial attributes in most game system have an effect on the character, this should be a set of
+        #       classes, similar to equipment.  This will be added later.
+        #self.race = race
 
         # Categories of things
-        # FIXME: Should these be objects or basic data structures for storing items and equipment?
-        self.inventory = []
-        self.equipped = []
+        self.inventory = set()
+        self.equipped = set()
+        self.effects = set() # Spells, etc.  Have burn down time (might be inf).
 
         # Stats dictionaries
         self.basic_stats = {}
@@ -57,24 +63,22 @@ class Character:
     def add_to_inventory(self, item):
         self.logger.debug("Arguments: item: %s", str(item))
         self._check_item_type(item)
-        if item not in self.inventory:
-            self.inventory.append(item)
+        self.inventory.add(item)
 
     def remove_from_inventory(self, item):
         self.logger.debug("Arguments: item: %s", str(item))
-        if item in self.equipped:
-            # FIXME: Should this raise an exception or just remove from equipped?
-            self.equipped.remove(item)
         if item in self.inventory:
+            if item in self.equipped:
+                self.equipped.remove(item)
             self.inventory.remove(item)
 
     def equip_item(self, item):
         self.logger.debug("Arguments: item: %s", str(item))
         if not isinstance(item, Equipment):
             raise ItemNotEquipableException()
-        # FIXME: Should this raise exceptions for all invalid attempts (e.g. if item not in inventory)?
-        if item in self.inventory and item not in self.equipped:
-            self.equipped.append(item)
+        if item not in self.inventory:
+            raise ItemNotInInventoryException()
+        self.equipped.add(item)
 
     def unequip_item(self, item):
         self.logger.debug("Arguments: item: %s", str(item))
@@ -94,16 +98,13 @@ class Character:
             raise CharacterInvalidStatTypeException()
         # Calculate the total strength for the character
         result = self.basic_stats[stat_name]
-        # Add strength for equipped items
-        # ??
-        # Add stat for game system specials
-        result = result + self._get_basic_stat_game_system_specials(stat_name)
-        # Add strength for temporaries (magic spells, etc)
-        # ??
+        self.logger.debug("base: %s", result)
+        # Add mod_ stat_name for equipped items
+        for tmp_item in self.equipped:
+            result = result + getattr(tmp_item, "mod_{}".format(stat_name), 0)
+        self.logger.debug("base+equip: %s", result)
+        # Add mod_ stat_name for temporaries (magic spells, etc)
+        for tmp_effect in self.effects:
+            result = result + getattr(tmp_effect, "mod_{}".format(stat_name), 0)
+        self.logger.debug("base+equip+effect: %s", result)
         return result
-
-    def _get_basic_stat_game_system_specials(self, stat_name):
-        self.logger.debug("Arguments: stat_name: %s", str(stat_name))
-        # pylint: disable=no-self-use
-        # Override this for special modifiers for game systems (e.g. biowares in ShadowRun)
-        return 0

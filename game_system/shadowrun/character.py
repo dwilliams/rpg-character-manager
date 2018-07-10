@@ -63,10 +63,3 @@ class ShadowRunCharacter(Character):
         self.logger.debug("Arguments: item: %s", str(item))
         if not isinstance(item, ShadowRunItem):
             raise GameSystemMismatchException()
-
-    def _get_basic_stat_game_system_specials(self, stat_name):
-        self.logger.debug("Arguments: stat_name: %s", str(stat_name))
-        # Override this for special modifiers for game systems (e.g. biowares in ShadowRun)
-        # Add strength for biowares
-        # Add strength for cyberwares
-        return 0

@@ -10,6 +10,8 @@ from game_system.equipment import Equipment, EquipmentFactory
 from game_system.exceptions import CharacterInvalidStatTypeException
 from game_system.exceptions import GameSystemMismatchException
 from game_system.exceptions import ItemNotEquipableException
+from game_system.exceptions import ItemNotExistsException
+from game_system.exceptions import ItemNotInInventoryException
 from game_system.exceptions import NotCharacterException
 
 from game_system.charfile import CharacterFile

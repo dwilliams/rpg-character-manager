@@ -19,5 +19,8 @@ class ItemNotEquipableException(Exception):
 class ItemNotExistsException(Exception):
     pass
 
+class ItemNotInInventoryException(Exception):
+    pass
+
 class NotCharacterException(Exception):
     pass
