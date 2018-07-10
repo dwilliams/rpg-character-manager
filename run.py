@@ -50,7 +50,7 @@ def add_item_to_char(char, item_class_name):
 ### MAIN ###
 def main():
     # Init Logging
-    log_format = "%(asctime)s:%(levelname)s:%(name)s %(funcName)s:%(message)s"
+    log_format = "%(asctime)s:%(levelname)s:%(name)s.%(funcName)s: %(message)s"
     logging.basicConfig(format=log_format, level=logging.DEBUG)
 
     # Parse Arguments

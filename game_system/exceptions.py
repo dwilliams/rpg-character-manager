@@ -16,5 +16,8 @@ class GameSystemMismatchException(Exception):
 class ItemNotEquipableException(Exception):
     pass
 
+class ItemNotExistsException(Exception):
+    pass
+
 class NotCharacterException(Exception):
     pass
