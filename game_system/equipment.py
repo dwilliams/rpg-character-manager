@@ -22,7 +22,7 @@ class Equipment(Item):
     mod_types = ['mod_strength', 'mod_charisma', 'mod_intelligence', 'mod_wisdom']
     cost_types = ['cost_money']
 
-    def __init__(self, data = None):
+    def __init__(self, data=None):
         # Ensure the parent's __init__ is called
         super().__init__(None)
         self.item_name = 'Generic Equipment'
