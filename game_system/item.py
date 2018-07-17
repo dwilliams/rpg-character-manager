@@ -2,6 +2,7 @@
 
 ### IMPORTS ###
 import logging
+import json
 
 ### GLOBALS ###
 
@@ -39,6 +40,15 @@ class ItemFactory:
 
     def _load_data(self):
         raise NotImplementedError()
+
+    def _load_data_json(self, json_string):
+        self.logger.debug("json_string: %s", json_string)
+        tmp_data = json.loads(json_string)
+        self.logger.debug("tmp_data: %s", tmp_data)
+        self.item_dict = {}
+        for tmp_item in tmp_data:
+            self.item_dict[tmp_item['item_name']] = tmp_item
+        self.logger.debug("self.item_dict: %s", self.item_dict)
 
     def create(self, item_name):
         raise NotImplementedError()

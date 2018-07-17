@@ -65,12 +65,7 @@ class ShadowRunEquipmentFactory(EquipmentFactory):
         self.logger.debug("resource_path: %s", resource_path)
         json_string = pkg_resources.resource_string(resource_package, resource_path)
         self.logger.debug("json_string: %s", json_string)
-        tmp_data = json.loads(json_string)
-        self.logger.debug("tmp_data: %s", tmp_data)
-        self.item_dict = {}
-        for tmp_item in tmp_data:
-            self.item_dict[tmp_item['item_name']] = tmp_item
-        self.logger.debug("self.item_dict: %s", self.item_dict)
+        self._load_data_json(json_string)
 
     def create(self, item_name):
         if item_name not in self.item_dict.keys():
