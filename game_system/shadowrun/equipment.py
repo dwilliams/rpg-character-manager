@@ -51,23 +51,25 @@ class ShadowRunEquipment(Equipment):
         return "ShadowRunEquipment: {}".format(self.item_name)
 
 class ShadowRunEquipmentFactory(EquipmentFactory):
+    # pylint: disable=too-few-public-methods
     game_system = 'shadowrun'
+    resource_package = __name__
+    resource_path = 'equipment.json'
+    creation_class = ShadowRunEquipment
 
     #def __init__(self):
     #    # Ensure the parent's __init__ is called
     #    super().__init__()
     #    self._load_data()
 
-    def _load_data(self):
-        resource_package = __name__
-        resource_path = 'equipment.json' #'/'.join(('shadowrun','equipment.json'))
-        self.logger.debug("resource_package: %s", resource_package)
-        self.logger.debug("resource_path: %s", resource_path)
-        json_string = pkg_resources.resource_string(resource_package, resource_path)
-        self.logger.debug("json_string: %s", json_string)
-        self._load_data_json(json_string)
+    #def _load_data(self):
+    #    self.logger.debug("resource_package: %s", self.resource_package)
+    #    self.logger.debug("resource_path: %s", self.resource_path)
+    #    json_string = pkg_resources.resource_string(self.resource_package, self.resource_path)
+    #    self.logger.debug("json_string: %s", json_string)
+    #    self._load_data_json(json_string)
 
-    def create(self, item_name):
-        if item_name not in self.item_dict.keys():
-            raise ItemNotExistsException()
-        return ShadowRunEquipment(self.item_dict[item_name])
+    #def create(self, item_name):
+    #    if item_name not in self.item_dict.keys():
+    #        raise ItemNotExistsException()
+    #    return self.creation_class(self.item_dict[item_name])

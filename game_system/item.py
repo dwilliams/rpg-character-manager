@@ -3,6 +3,9 @@
 ### IMPORTS ###
 import logging
 import json
+import pkg_resources
+
+from game_system.exceptions import ItemNotExistsException
 
 ### GLOBALS ###
 
@@ -23,13 +26,16 @@ class Item:
 
     def _morph(self, data):
         # pylint: disable=unused-argument,no-self-use
-        NotImplementedError()
+        raise NotImplementedError()
 
     def __str__(self):
         return "Item: {}".format(self.item_name)
 
 class ItemFactory:
     game_system = 'none'
+    resource_package = __name__
+    resource_path = None
+    creation_class = Item
 
     def __init__(self):
         # Setup logging for the class
@@ -39,7 +45,12 @@ class ItemFactory:
         self._load_data()
 
     def _load_data(self):
-        raise NotImplementedError()
+        self.logger.debug("resource_package: %s", self.resource_package)
+        self.logger.debug("resource_path: %s", self.resource_path)
+        if self.resource_path is not None:
+            json_string = pkg_resources.resource_string(self.resource_package, self.resource_path)
+            self.logger.debug("json_string: %s", json_string)
+            self._load_data_json(json_string)
 
     def _load_data_json(self, json_string):
         self.logger.debug("json_string: %s", json_string)
@@ -51,7 +62,9 @@ class ItemFactory:
         self.logger.debug("self.item_dict: %s", self.item_dict)
 
     def create(self, item_name):
-        raise NotImplementedError()
+        if item_name not in self.item_dict.keys():
+            raise ItemNotExistsException()
+        return self.creation_class(self.item_dict[item_name])
 
     def get_list_names(self):
         return self.item_dict.keys()
