@@ -6,7 +6,7 @@ import logging
 import os
 
 from game_system.exceptions import BadFactoryTypeException
-from game_system.item import ItemFactory
+from game_system import ItemFactory
 from game_system.equipment import ItemEquipment
 
 ### GLOBALS ###
