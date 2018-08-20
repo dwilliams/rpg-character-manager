@@ -24,3 +24,6 @@ class ItemNotInInventoryException(Exception):
 
 class NotCharacterException(Exception):
     pass
+
+class BadFactoryTypeException(Exception):
+    pass
