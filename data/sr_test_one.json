@@ -1,0 +1,26 @@
+[
+  {
+    "game_system": "shadowrun",
+    "object_type": "item",
+    "data": {
+      "item_name": "Muscle Augmentation - Level 1",
+      "equipable": true,
+      "mod_quickness": 1,
+      "mod_strength": 1,
+      "cost_body": 0.8,
+      "cost_money": 45000
+    }
+  },
+  {
+    "game_system": "shadowrun",
+    "object_type": "item",
+    "data": {
+      "item_name": "Muscle Augmentation - Level 2",
+      "equipable": true,
+      "mod_quickness": 2,
+      "mod_strength": 2,
+      "cost_body": 1.6,
+      "cost_money": 90000
+    }
+  }
+]
