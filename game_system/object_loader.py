@@ -42,7 +42,12 @@ class ObjectLoader:
 
     def load_from_directory(self, path):
         self.logger.debug("Start - path: %s", path)
+        self.logger.debug("abs_path: %s", os.path.abspath(path))
         # Walk the path for .json files, calling the load_from_file method for each one
+        for root, dirs, files in os.walk(os.path.abspath(path)):
+            self.logger.debug("root: %s, dirs: %s, files: %s", root, dirs, files)
+            for tmp_file in files:
+                self.load_from_file(os.path.join(root, tmp_file))
 
     def load_from_file(self, path):
         self.logger.debug("Start - path: %s", path)
