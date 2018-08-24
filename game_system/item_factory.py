@@ -15,27 +15,24 @@ from game_system.shadowrun import ShadowRunItem
 
 ### CLASSES ###
 class ItemFactory:
-    #game_system = 'none'
-    #resource_package = __name__
-    #resource_path = None
     creation_classes = {
         "none": Item,
         "shadowrun": ShadowRunItem
     }
+    object_type = 'item'
 
     def __init__(self):
         # Setup logging for the class
         self.logger = logging.getLogger(type(self).__name__)
         self.logger.debug("Initializing")
-        self.item_dict = {
-            "none": {},
-            "shadowrun": {},
-        }
+        self.item_dict = {}
+        for tmp_key in self.creation_classes.keys():
+            self.item_dict[tmp_key] = {}
 
     def load_object_data(self, data):
         self.logger.debug("Start - data: %s", data)
         # Check if correct type of object
-        if not data['object_type'] == 'item':
+        if not data['object_type'] == self.object_type:
             raise InvalidObjectTypeException()
         if data['game_system'] not in self.creation_classes.keys():
             raise InvalidGameSystemException()
