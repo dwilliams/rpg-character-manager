@@ -53,6 +53,8 @@ class ItemFactory:
     def create(self, game_system, item_name):
         self.logger.debug("Start - game_system: %s, item_name: %s", game_system, item_name)
         # Make sure game_system is in list of available game systems
+        if game_system not in self.creation_classes.keys():
+            raise InvalidGameSystemException()
         # Make sure item name is in list of available items
         if item_name not in self.item_dict[game_system].keys():
             raise ItemNotExistsException()

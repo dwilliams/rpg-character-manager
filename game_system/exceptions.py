@@ -33,3 +33,6 @@ class InvalidObjectTypeException(Exception):
 
 class InvalidGameSystemException(Exception):
     pass
+
+class InvalidItemAttributeException(Exception):
+    pass
