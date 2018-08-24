@@ -7,7 +7,7 @@ import os
 
 from game_system.exceptions import BadFactoryTypeException
 from game_system import ItemFactory
-from game_system.equipment import ItemEquipment
+from game_system import EquipmentFactory
 
 ### GLOBALS ###
 
@@ -26,26 +26,35 @@ class ObjectLoader:
         # Save the file path
         self.filepath = None
         self.itemFactory = None
-        self.equipmentFactory = None # FIXME: Do I use separate Item and Equipment factories, or an equipable flag?
+        self.equipmentFactory = None
 
     def register_item_factory(self, factory):
-        self.logger.debug("register_item_factory start - factory: %s", factory)
+        self.logger.debug("Start - factory: %s", factory)
         if not isinstance(factory, ItemFactory):
             raise BadFactoryTypeException()
         self.itemFactory = factory
 
-    def register_equipement_factory(self, factory):
-        self.logger.debug("register_equipement_factory start - factory: %s", factory)
+    def register_equipment_factory(self, factory):
+        self.logger.debug("Start - factory: %s", factory)
         if not isinstance(factory, EquipmentFactory):
             raise BadFactoryTypeException()
         self.equipmentFactory = factory
 
     def load_from_directory(self, path):
-        self.logger.debug("load_from_directory start - path: %s", path)
+        self.logger.debug("Start - path: %s", path)
         # Walk the path for .json files, calling the load_from_file method for each one
 
     def load_from_file(self, path):
-        self.logger.debug("load_from_file start - path: %s", path)
-        # Check for .json extension
+        self.logger.debug("Start - path: %s", path)
+        self.logger.debug("abs_path: %s", os.path.abspath(path))
         # Load JSON in to memory
-        # Walk list of objects, sending each to the proper factory
+        with open(os.path.abspath(path)) as tmp_file:
+            tmp_data = json.load(tmp_file)
+        # Walk list of objects from the json file, sending each to the proper factory
+        for tmp_object in tmp_data:
+            self.logger.debug("Object from JSON: %s", tmp_object)
+            #FIXME: try-catch here
+            if tmp_object['object_type'] == "item":
+                self.itemFactory.load_object_data(tmp_object)
+            elif tmp_object['object_type'] == "equipment":
+                self.equipmentFactory.load_object_data(tmp_object)

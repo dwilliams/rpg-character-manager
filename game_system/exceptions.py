@@ -27,3 +27,9 @@ class NotCharacterException(Exception):
 
 class BadFactoryTypeException(Exception):
     pass
+
+class InvalidObjectTypeException(Exception):
+    pass
+
+class InvalidGameSystemException(Exception):
+    pass
