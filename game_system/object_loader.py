@@ -5,9 +5,9 @@ import json
 import logging
 import os
 
-from game_system.exceptions import BadFactoryTypeException
-from game_system import ItemFactory
-from game_system import EquipmentFactory
+from game_system.exceptions import BadFactoryTypeException, InvalidGameSystemException, InvalidObjectTypeException
+from game_system.item_factory import ItemFactory
+from game_system.equipment_factory import EquipmentFactory
 
 ### GLOBALS ###
 
@@ -25,20 +25,20 @@ class ObjectLoader:
 
         # Save the file path
         self.filepath = None
-        self.itemFactory = None
-        self.equipmentFactory = None
+        self.item_factory = None
+        self.equipment_factory = None
 
     def register_item_factory(self, factory):
         self.logger.debug("Start - factory: %s", factory)
         if not isinstance(factory, ItemFactory):
             raise BadFactoryTypeException()
-        self.itemFactory = factory
+        self.item_factory = factory
 
     def register_equipment_factory(self, factory):
         self.logger.debug("Start - factory: %s", factory)
         if not isinstance(factory, EquipmentFactory):
             raise BadFactoryTypeException()
-        self.equipmentFactory = factory
+        self.equipment_factory = factory
 
     def load_from_directory(self, path):
         self.logger.debug("Start - path: %s", path)
@@ -58,8 +58,12 @@ class ObjectLoader:
         # Walk list of objects from the json file, sending each to the proper factory
         for tmp_object in tmp_data:
             self.logger.debug("Object from JSON: %s", tmp_object)
-            #FIXME: try-catch here
-            if tmp_object['object_type'] == "item":
-                self.itemFactory.load_object_data(tmp_object)
-            elif tmp_object['object_type'] == "equipment":
-                self.equipmentFactory.load_object_data(tmp_object)
+            try:
+                if tmp_object['object_type'] == "item":
+                    self.item_factory.load_object_data(tmp_object)
+                elif tmp_object['object_type'] == "equipment":
+                    self.equipment_factory.load_object_data(tmp_object)
+            except InvalidObjectTypeException:
+                self.logger.warning("Attempted to load bad object: %s", tmp_object)
+            except InvalidGameSystemException:
+                self.logger.warning("Attempted to load bad object: %s", tmp_object)

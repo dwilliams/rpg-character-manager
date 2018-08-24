@@ -2,7 +2,6 @@
 
 ### IMPORTS ###
 import logging
-import json
 
 from game_system.exceptions import InvalidGameSystemException, InvalidObjectTypeException, ItemNotExistsException
 
@@ -26,7 +25,7 @@ class ItemFactory:
         self.logger = logging.getLogger(type(self).__name__)
         self.logger.debug("Initializing")
         self.item_dict = {}
-        for tmp_key in self.creation_classes.keys():
+        for tmp_key in self.creation_classes:
             self.item_dict[tmp_key] = {}
 
     def load_object_data(self, data):
