@@ -57,5 +57,9 @@ class ItemFactory:
         # Create and return the item object
         return self.creation_classes[game_system](self.item_dict[game_system][item_name])
 
-    def get_list_names(self):
-        return self.item_dict.keys()
+    def get_list_names(self, game_system):
+        self.logger.debug("Start - game_system: %s", game_system)
+        # Make sure game_system is in list of available game systems
+        if game_system not in self.creation_classes.keys():
+            raise InvalidGameSystemException()
+        return list(self.item_dict[game_system].keys())

@@ -4,7 +4,7 @@
 import logging
 import unittest
 
-from tests import test_character, test_item
+from tests import test_character, test_item, test_item_factory
 
 ### GLOBALS ###
 
@@ -12,15 +12,16 @@ from tests import test_character, test_item
 def generate_test_suite():
     logging.debug("generate_test_suite")
     test_suite = unittest.TestSuite()
-    # Test Item
-    test_suite.addTest(unittest.makeSuite(test_item.TestItemCreation))
+    # Test Item Factory
+    test_suite.addTest(unittest.makeSuite(test_item_factory.TestItemFactoryDataLoad))
+    test_suite.addTest(unittest.makeSuite(test_item_factory.TestItemFactoryItemCreation))
     # Test Equipment
     # Test Character
-    test_suite.addTest(unittest.makeSuite(test_character.TestCharacterCreation))
-    test_suite.addTest(unittest.makeSuite(test_character.TestCharacterInventory))
-    test_suite.addTest(unittest.makeSuite(test_character.TestCharacterInventoryWOverride))
-    test_suite.addTest(unittest.makeSuite(test_character.TestCharacterEquipment))
-    test_suite.addTest(unittest.makeSuite(test_character.TestCharacterLoadSave))
+    #test_suite.addTest(unittest.makeSuite(test_character.TestCharacterCreation))
+    #test_suite.addTest(unittest.makeSuite(test_character.TestCharacterInventory))
+    #test_suite.addTest(unittest.makeSuite(test_character.TestCharacterInventoryWOverride))
+    #test_suite.addTest(unittest.makeSuite(test_character.TestCharacterEquipment))
+    #test_suite.addTest(unittest.makeSuite(test_character.TestCharacterLoadSave))
     return test_suite
 
 ### CLASSES ###

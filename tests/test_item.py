@@ -7,6 +7,10 @@ import unittest
 import game_system
 
 ### GLOBALS ###
+TEST_ITEM_DATA = '''[
+  {"game_system": "none", "object_type": "item", "data": {"item_name": "Generic Item One", "cost_money": 111}},
+  {"game_system": "none", "object_type": "item", "data": {"item_name": "Generic Item Two", "cost_money": 234}}
+]'''
 
 ### FUNCTIONS ###
 
