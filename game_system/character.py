@@ -3,7 +3,7 @@
 ### IMPORTS ###
 import logging
 
-from game_system.equipment import Equipment
+from game_system.none import Equipment
 
 from game_system.exceptions import CharacterInvalidStatTypeException
 from game_system.exceptions import ItemNotEquipableException

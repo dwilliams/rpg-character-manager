@@ -4,15 +4,13 @@
     "object_type": "item",
     "data": {
       "item_name": "Generic Item One",
-      "equipable": false,
       "cost_money": 111
     }
   },{
-    "game_system":"none",
+    "game_system": "none",
     "object_type": "item",
     "data": {
-      "item_name":"Generic Item Two",
-      "equipable": false,
+      "item_name": "Generic Item Two",
       "cost_money": 234
     }
   }

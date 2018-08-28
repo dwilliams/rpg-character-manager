@@ -24,3 +24,15 @@ class ItemNotInInventoryException(Exception):
 
 class NotCharacterException(Exception):
     pass
+
+class BadFactoryTypeException(Exception):
+    pass
+
+class InvalidObjectTypeException(Exception):
+    pass
+
+class InvalidGameSystemException(Exception):
+    pass
+
+class InvalidItemAttributeException(Exception):
+    pass
