@@ -22,12 +22,14 @@ class TestEquipmentCreation(unittest.TestCase):
         equipment = game_system.none.Equipment({"item_name": "Generic Equipment One", "cost_money": 111, "mod_strength": 1, "mod_charisma": 1, "mod_intelligence": 1, "mod_wisdom": 1})
         self.logger.debug("Equipment: %s", equipment)
         self.assertEqual(equipment.item_name, "Generic Equipment One")
+        self.assertEqual(str(equipment), "Equipment: Generic Equipment One")
 
     def test_create_shadowrun(self):
         self.logger.debug("test_create_shadowrun")
         equipment = game_system.shadowrun.ShadowRunEquipment({"item_name": "Generic SR Equipment Two", "mod_quickness": 1, "mod_strength": 1, "cost_body": 0.8, "cost_money": 45000})
         self.logger.debug("ShadowRunEquipment: %s", equipment)
         self.assertEqual(equipment.item_name, "Generic SR Equipment Two")
+        self.assertEqual(str(equipment), "ShadowRunEquipment: Generic SR Equipment Two")
 
 class TestEquipmentStats(unittest.TestCase):
     def setUp(self):
