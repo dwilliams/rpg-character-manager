@@ -1,7 +1,16 @@
-<h2>{{rpg_character.name}} Details</h2>
-<div><span>id: </span>{{rpg_character.id}}</div>
-<div>
-  <label>name:
-    <input [(ngModel)]="rpg_character.name" placeholder="name">
-  </label>
+<h2>RPG Characters</h2>
+<ul class="characters">
+  <li *ngFor="let character of rpg_characters" [class.selected]="character === selectedCharacter" (click)="onSelect(character)">
+    <span class="badge">{{character.id}}</span> {{character.name}}
+  </li>
+</ul>
+
+<div *ngIf="selectedCharacter">
+  <h2>{{selectedCharacter.name}} Details</h2>
+  <div><span>id: </span>{{selectedCharacter.id}}</div>
+  <div>
+    <label>name:
+      <input [(ngModel)]="selectedCharacter.name" placeholder="name">
+    </label>
+  </div>
 </div>
