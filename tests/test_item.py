@@ -7,10 +7,9 @@ import unittest
 import game_system
 
 ### GLOBALS ###
-TEST_ITEM_DATA = '''[
-  {"game_system": "none", "object_type": "item", "data": {"item_name": "Generic Item One", "cost_money": 111}},
-  {"game_system": "none", "object_type": "item", "data": {"item_name": "Generic Item Two", "cost_money": 234}}
-]'''
+TEST_ITEM_LIST = [
+  {"game_system": "shadowrun", "object_type": "item", "data": {"item_name": "Generic SR Item Two", "cost_money": 567}}
+]
 
 ### FUNCTIONS ###
 
@@ -21,16 +20,11 @@ class TestItemCreation(unittest.TestCase):
         self.logger = logging.getLogger(type(self).__name__)
         self.logger.debug("setUp")
 
-        # Test item data for the item class
-        self.item_data = {
-            "item_name": "Test Item One"
-        }
-
     def test_create_none(self):
         self.logger.debug("test_create_none")
-        item = game_system.Item(None)
+        item = game_system.none.Item({"item_name": "Generic Item One", "cost_money": 111})
         self.logger.debug("Item: %s", item)
-        self.assertEqual(item.item_name, 'Generic Item')
+        self.assertEqual(item.item_name, "Generic Item One")
 
     #def test_create_data(self):
     #    self.logger.debug("test_create_data")
