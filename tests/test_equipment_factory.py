@@ -9,7 +9,7 @@ import game_system
 ### GLOBALS ###
 TEST_EQUIPMENT_LIST = [
   {"game_system": "none", "object_type": "equipment", "data": {"item_name": "Generic Equipment One", "cost_money": 111, "mod_strength": 1, "mod_charisma": 1, "mod_intelligence": 1, "mod_wisdom": 1}},
-  {"game_system": "none", "object_type": "equipment", "data": {"item_name": "Generic Equipment Two", "cost_money": 234, "mod_strength": 2, "mod_charisma": 0, "mod_intelligence": 0, "mod_wisdom": 0}},
+  {"game_system": "none", "object_type": "equipment", "data": {"item_name": "Generic Equipment Two", "cost_money": 234, "mod_strength": 2}},
   {"game_system": "shadowrun", "object_type": "equipment", "data": {"item_name": "Generic SR Equipment Two", "mod_quickness": 1, "mod_strength": 1, "cost_body": 0.8, "cost_money": 45000}}
 ]
 
