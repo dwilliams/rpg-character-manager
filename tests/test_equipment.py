@@ -49,6 +49,9 @@ class TestEquipmentStats(unittest.TestCase):
             else:
                 self.logger.debug("tmp_cost: %s, equip value: %s, 0", tmp_cost, self.eq_none.get_cost(tmp_cost))
                 self.assertEqual(self.eq_none.get_cost(tmp_cost), 0)
+        self.logger.debug("testing a bad cost")
+        with self.assertRaises(game_system.exceptions.InvalidItemAttributeException):
+            self.eq_none.get_cost("bad_cost")
 
     def test_costs_shadowrun(self):
         self.logger.debug("test_costs_shadowrun")
@@ -59,6 +62,9 @@ class TestEquipmentStats(unittest.TestCase):
             else:
                 self.logger.debug("tmp_cost: %s, equip value: %s, 0", tmp_cost, self.eq_shadowrun.get_cost(tmp_cost))
                 self.assertEqual(self.eq_shadowrun.get_cost(tmp_cost), 0)
+        self.logger.debug("testing a bad cost")
+        with self.assertRaises(game_system.exceptions.InvalidItemAttributeException):
+            self.eq_shadowrun.get_cost("bad_cost")
 
     def test_mods_none(self):
         self.logger.debug("test_mods_none")
@@ -69,6 +75,9 @@ class TestEquipmentStats(unittest.TestCase):
             else:
                 self.logger.debug("tmp_mod: %s, equip value: %s, 0", tmp_mod, self.eq_none.get_mod(tmp_mod))
                 self.assertEqual(self.eq_none.get_mod(tmp_mod), 0)
+        self.logger.debug("testing a bad mod")
+        with self.assertRaises(game_system.exceptions.InvalidItemAttributeException):
+            self.eq_none.get_mod("bad_mod")
 
     def test_mods_shadowrun(self):
         self.logger.debug("test_mods_shadowrun")
@@ -79,6 +88,9 @@ class TestEquipmentStats(unittest.TestCase):
             else:
                 self.logger.debug("tmp_mod: %s, equip value: %s, 0", tmp_mod, self.eq_shadowrun.get_mod(tmp_mod))
                 self.assertEqual(self.eq_shadowrun.get_mod(tmp_mod), 0)
+        self.logger.debug("testing a bad mod")
+        with self.assertRaises(game_system.exceptions.InvalidItemAttributeException):
+            self.eq_shadowrun.get_mod("bad_mod")
 
 ### MAIN ###
 def main():
