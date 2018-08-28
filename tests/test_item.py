@@ -26,11 +26,11 @@ class TestItemCreation(unittest.TestCase):
         self.logger.debug("Item: %s", item)
         self.assertEqual(item.item_name, "Generic Item One")
 
-    #def test_create_data(self):
-    #    self.logger.debug("test_create_data")
-    #    item = game_system.Item(self.item_data)
-    #    self.logger.debug("Item: %s", item)
-    #    self.assertEqual(item.item_name, "Test Item One")
+    def test_create_shadowrun(self):
+        self.logger.debug("test_create_shadowrun")
+        item = game_system.shadowrun.ShadowRunItem({"item_name": "Generic SR Item Two", "cost_money": 567})
+        self.logger.debug("ShadowRunItem: %s", item)
+        self.assertEqual(item.item_name, "Generic SR Item Two")
 
 ### MAIN ###
 def main():

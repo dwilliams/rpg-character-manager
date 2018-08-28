@@ -55,7 +55,7 @@ class TestItemFactoryItemCreation(unittest.TestCase):
     def test_create_shadowrun(self):
         self.logger.debug("test_create_shadowrun")
         item = self.item_factory.create('shadowrun', "Generic SR Item Two")
-        self.logger.debug("Item: %s", item)
+        self.logger.debug("ShadowRunItem: %s", item)
         self.assertIsInstance(item, game_system.shadowrun.ShadowRunItem)
         self.assertEqual(item.item_name, "Generic SR Item Two")
 
