@@ -43,6 +43,10 @@ class Item:
                 setattr(self, tmp_cost, data[tmp_cost])
                 self.logger.debug("Set attribute %s to %s", tmp_cost, data[tmp_cost])
 
+    def get_name(self):
+        self.logger.debug('Start - None')
+        return self.item_name
+
     def get_mod(self, mod_type):
         self.logger.debug("Start - mod_type: %s", mod_type)
         if mod_type not in self.mod_types:

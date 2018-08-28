@@ -1,8 +1,6 @@
 #!/usr/bin/env python3
 
 ### IMPORTS ###
-from game_system.character import Character
-
 from game_system.item_factory import ItemFactory
 from game_system.equipment_factory import EquipmentFactory
 

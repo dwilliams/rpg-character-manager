@@ -5,9 +5,9 @@ import json
 import logging
 import os
 
-from game_system.character import Character
 from game_system.exceptions import GameSystemMismatchException, NotCharacterException
 
+from game_system.none import Character
 from game_system.shadowrun import ShadowRunCharacter
 
 ### GLOBALS ###

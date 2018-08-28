@@ -4,7 +4,7 @@
 #import logging
 
 from game_system.exceptions import GameSystemMismatchException
-from game_system.character import Character
+from game_system.none.character import Character
 
 from game_system.shadowrun.item import ShadowRunItem
 
@@ -30,36 +30,15 @@ class ShadowRunCharacter(Character):
         return "ShadowRun{}".format(super().__str__())
 
     def load_dict(self, char_dict):
-        self.logger.debug("Arguments: char_dict: %s", str(char_dict))
-        if not char_dict['game_system'] == self.game_system:
-            raise GameSystemMismatchException()
-
-        # Load the basic character stats
-        self.name = char_dict['name']
-
-        # Load the inventory & equipment
+        self.logger.debug("Start - char_dict: %s", str(char_dict))
+        super().load_dict(char_dict)
 
     def save_dict(self):
-        self.logger.debug("Arguments: None")
-        to_save_dict = {}
-
-        # Save the basic character stats
-        to_save_dict['game_system'] = self.game_system
-        to_save_dict['name'] = self.name
-
-        to_save_dict['basic_stats'] = {}
-        for stats_type in self.basic_stats_types:
-            to_save_dict['basic_stats'][stats_type] = self.basic_stats[stats_type]
-
-        to_save_dict['special_stats'] = {}
-        for stats_type in self.special_stats_types:
-            to_save_dict['special_stats'][stats_type] = self.special_stats[stats_type]
-
-        # Save the inventory & equipment
-
-        return to_save_dict
+        self.logger.debug("Start - None")
+        char_dict = super().save_dict()
+        return char_dict
 
     def _check_item_type(self, item):
-        self.logger.debug("Arguments: item: %s", str(item))
+        self.logger.debug("Start - item: %s", str(item))
         if not isinstance(item, ShadowRunItem):
             raise GameSystemMismatchException()
