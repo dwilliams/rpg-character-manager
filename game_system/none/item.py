@@ -47,12 +47,12 @@ class Item:
         self.logger.debug("Start - mod_type: %s", mod_type)
         if mod_type not in self.mod_types:
             raise InvalidItemAttributeException()
-        self.logger.debug("Return: %d", int(getattr(self, mod_type, 0)))
-        return int(getattr(self, mod_type, 0))
+        self.logger.debug("Return: %d", getattr(self, mod_type, 0))
+        return getattr(self, mod_type, 0)
 
     def get_cost(self, cost_type):
         self.logger.debug("Start - cost_type: %s", cost_type)
         if cost_type not in self.cost_types:
             raise InvalidItemAttributeException()
-        self.logger.debug("Return: %d", int(getattr(self, cost_type, 0)))
-        return int(getattr(self, cost_type, 0))
+        self.logger.debug("Return: %d", getattr(self, cost_type, 0))
+        return getattr(self, cost_type, 0)

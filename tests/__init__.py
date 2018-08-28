@@ -20,6 +20,7 @@ def generate_test_suite():
     test_suite.addTest(unittest.makeSuite(test_item_factory.TestItemFactoryItemCreation))
     # Test Equipment
     test_suite.addTest(unittest.makeSuite(test_equipment.TestEquipmentCreation))
+    test_suite.addTest(unittest.makeSuite(test_equipment.TestEquipmentStats))
     # Test Equipment Factory
     test_suite.addTest(unittest.makeSuite(test_equipment_factory.TestEquipmentFactoryDataLoad))
     test_suite.addTest(unittest.makeSuite(test_equipment_factory.TestEquipmentFactoryEquipmentCreation))
