@@ -37,7 +37,7 @@ class Character:
         # Categories of things
         self.inventory = set()
         self.equipped = set()
-        self.effects = set() # Spells, etc.  Have burn down time (might be inf).
+        self.effects = set() # Effects from spells, etc.  Have burn down time (might be inf).
 
         # Stats dictionaries
         self.basic_stats = {}
