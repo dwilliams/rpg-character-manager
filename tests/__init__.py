@@ -4,7 +4,8 @@
 import logging
 import unittest
 
-from tests import test_character, test_item, test_item_factory
+from tests import test_equipment_factory
+from tests import test_item_factory
 
 ### GLOBALS ###
 
@@ -15,7 +16,9 @@ def generate_test_suite():
     # Test Item Factory
     test_suite.addTest(unittest.makeSuite(test_item_factory.TestItemFactoryDataLoad))
     test_suite.addTest(unittest.makeSuite(test_item_factory.TestItemFactoryItemCreation))
-    # Test Equipment
+    # Test Equipment Factory
+    test_suite.addTest(unittest.makeSuite(test_equipment_factory.TestEquipmentFactoryDataLoad))
+    test_suite.addTest(unittest.makeSuite(test_equipment_factory.TestEquipmentFactoryEquipmentCreation))
     # Test Character
     #test_suite.addTest(unittest.makeSuite(test_character.TestCharacterCreation))
     #test_suite.addTest(unittest.makeSuite(test_character.TestCharacterInventory))
