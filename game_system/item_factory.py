@@ -35,16 +35,8 @@ class ItemFactory:
             raise InvalidObjectTypeException()
         if data['game_system'] not in self.creation_classes.keys():
             raise InvalidGameSystemException()
+        self.logger.debug("game_system: %s, item_name: %s", data['game_system'], data['data']['item_name'])
         self.item_dict[data['game_system']][data['data']['item_name']] = data['data']
-
-    # def _load_data_json(self, json_string):
-        # self.logger.debug("json_string: %s", json_string)
-        # tmp_data = json.loads(json_string)
-        # self.logger.debug("tmp_data: %s", tmp_data)
-        # self.item_dict = {}
-        # for tmp_item in tmp_data:
-            # self.item_dict[tmp_item['item_name']] = tmp_item
-        # self.logger.debug("self.item_dict: %s", self.item_dict)
 
     def create(self, game_system, item_name):
         self.logger.debug("Start - game_system: %s, item_name: %s", game_system, item_name)
@@ -62,4 +54,6 @@ class ItemFactory:
         # Make sure game_system is in list of available game systems
         if game_system not in self.creation_classes.keys():
             raise InvalidGameSystemException()
+        self.logger.debug("item_dict keys: %s", self.item_dict.keys())
+        self.logger.debug("item_dict[%s] keys: %s", game_system, self.item_dict[game_system].keys())
         return list(self.item_dict[game_system].keys())

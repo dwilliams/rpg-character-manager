@@ -23,7 +23,8 @@ def main():
 
     # Init Logging
     if args.verbose:
-        logging.basicConfig(level=logging.DEBUG)
+        log_format = "%(asctime)s:%(levelname)s:%(name)s.%(funcName)s: %(message)s"
+        logging.basicConfig(format=log_format, level=logging.DEBUG)
     else:
         logging.basicConfig(level=logging.INFO)
 
