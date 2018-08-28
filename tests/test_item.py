@@ -24,14 +24,14 @@ class TestItemCreation(unittest.TestCase):
         self.logger.debug("test_create_none")
         item = game_system.none.Item({"item_name": "Generic Item One", "cost_money": 111})
         self.logger.debug("Item: %s", item)
-        self.assertEqual(item.item_name, "Generic Item One")
+        self.assertEqual(item.get_name(), "Generic Item One")
         self.assertEqual(str(item), "Item: Generic Item One")
 
     def test_create_shadowrun(self):
         self.logger.debug("test_create_shadowrun")
         item = game_system.shadowrun.ShadowRunItem({"item_name": "Generic SR Item Two", "cost_money": 567})
         self.logger.debug("ShadowRunItem: %s", item)
-        self.assertEqual(item.item_name, "Generic SR Item Two")
+        self.assertEqual(item.get_name(), "Generic SR Item Two")
         self.assertEqual(str(item), "ShadowRunItem: Generic SR Item Two")
 
 ### MAIN ###

@@ -5,7 +5,6 @@ import logging
 import os
 
 import game_system
-import game_system.shadowrun
 
 ### GLOBALS ###
 
@@ -32,6 +31,17 @@ def main():
 
     # Check the item
     logging.info("item cost: %d", item_one.get_cost('cost_money'))
+
+    # Create a character
+    char_one = game_system.none.Character()
+    char_one.name = "Test Char One"
+    char_one.add_to_inventory(item_one)
+
+    # Check the character
+    logging.info("character: %s", char_one)
+
+    # Print the character save output
+    logging.debug("character save: %s", char_one.save_dict())
 
 if __name__ == '__main__':
     main()

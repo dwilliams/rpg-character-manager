@@ -7,7 +7,7 @@
 ### FUNCTIONS ###
 
 ### CLASSES ###
-class CharacterInvalidStatTypeException(Exception):
+class InvalidCharacterStatTypeException(Exception):
     pass
 
 class GameSystemMismatchException(Exception):
