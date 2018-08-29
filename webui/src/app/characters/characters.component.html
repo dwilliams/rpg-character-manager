@@ -1,8 +1,16 @@
 <h2>RPG Characters</h2>
+
+<div>
+  <label>Character name: <input #characterName /></label>
+  <!-- (click) passes input value to add() and then clears the input -->
+  <button (click)="add(characterName.value); characterName.value=''">Add</button>
+</div>
+
 <ul class="characters">
-  <li *ngFor="let character of rpg_characters" [class.selected]="character === selectedCharacter" (click)="onSelect(character)">
-    <span class="badge">{{character.id}}</span> {{character.name}}
+  <li *ngFor="let character of rpg_characters">
+    <a routerLink="/detail/{{character.id}}">
+      <span class="badge">{{character.id}}</span> {{character.name}}
+    </a>
+    <button class="delete" title="delect character" (click)="delete(character)">X</button>
   </li>
 </ul>
-
-<app-character-detail [character]="selectedCharacter"></app-character-detail>
