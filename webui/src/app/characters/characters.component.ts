@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { RPGcharacter } from '../rpgcharacter';
-import { RPGCHARACTERS } from '../mock-rpgcharacters';
+import { CharacterService } from '../character.service';
 
 @Component({
   selector: 'app-characters',
@@ -8,17 +8,21 @@ import { RPGCHARACTERS } from '../mock-rpgcharacters';
   styleUrls: ['./characters.component.css']
 })
 export class CharactersComponent implements OnInit {
-  rpg_characters = RPGCHARACTERS;
+  rpg_characters: RPGcharacter[];
 
   selectedCharacter: RPGcharacter;
 
-  constructor() { }
+  constructor(private characterService: CharacterService) { }
 
   ngOnInit() {
+    this.getCharacters();
   }
 
   onSelect(character: RPGcharacter): void {
     this.selectedCharacter = character;
   }
 
+  getCharacters(): void {
+    this.characterService.getCharacters().subscribe(characters => this.rpg_characters = characters);
+  }
 }
