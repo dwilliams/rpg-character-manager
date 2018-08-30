@@ -13,7 +13,6 @@ import { CharactersComponent } from './characters/characters.component';
 import { CharacterDetailComponent } from './character-detail/character-detail.component';
 import { MessagesComponent } from './messages/messages.component';
 import { AppRoutingModule } from './app-routing.module';
-import { DashboardComponent } from './dashboard/dashboard.component';
 import { CharacterSearchComponent } from './character-search/character-search.component';
 
 import { HttpClientInMemoryWebApiModule } from 'angular-in-memory-web-api';
@@ -27,7 +26,6 @@ import { MyNavComponent } from './my-nav/my-nav.component';
     CharactersComponent,
     CharacterDetailComponent,
     MessagesComponent,
-    DashboardComponent,
     CharacterSearchComponent,
     CharacterSheetComponent,
     MyNavComponent
