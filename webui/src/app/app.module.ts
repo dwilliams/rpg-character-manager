@@ -5,7 +5,7 @@ import { HttpClientModule } from '@angular/common/http';
 import { FormsModule } from '@angular/forms';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
-import { MatButtonModule, MatCheckboxModule, MatGridListModule, MatCardModule, MatMenuModule, MatIconModule } from '@angular/material';
+import { MatButtonModule, MatCheckboxModule, MatGridListModule, MatCardModule, MatMenuModule, MatIconModule, MatToolbarModule, MatSidenavModule, MatListModule } from '@angular/material';
 import { LayoutModule } from '@angular/cdk/layout';
 
 import { AppComponent } from './app.component';
@@ -19,6 +19,7 @@ import { CharacterSearchComponent } from './character-search/character-search.co
 import { HttpClientInMemoryWebApiModule } from 'angular-in-memory-web-api';
 import { InMemoryDataService } from './in-memory-data.service';
 import { CharacterSheetComponent } from './character-sheet/character-sheet.component';
+import { MyNavComponent } from './my-nav/my-nav.component';
 
 @NgModule({
   declarations: [
@@ -28,7 +29,8 @@ import { CharacterSheetComponent } from './character-sheet/character-sheet.compo
     MessagesComponent,
     DashboardComponent,
     CharacterSearchComponent,
-    CharacterSheetComponent
+    CharacterSheetComponent,
+    MyNavComponent
   ],
   imports: [
     BrowserModule,
@@ -46,7 +48,10 @@ import { CharacterSheetComponent } from './character-sheet/character-sheet.compo
     MatCardModule,
     MatMenuModule,
     MatIconModule,
-    LayoutModule
+    LayoutModule,
+    MatToolbarModule,
+    MatSidenavModule,
+    MatListModule
   ],
   providers: [],
   bootstrap: [AppComponent]
