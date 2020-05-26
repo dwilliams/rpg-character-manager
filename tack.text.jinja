@@ -1,0 +1,18 @@
+ShadowRun Character
+
+Name: {{ char.name }}
+ ___________________________________________________________________________
+|_____ Attributes ______|____ Dice Pools ____|_______ Health Status ________|
+|         Body: {{ "%-7d"|format(char.body) }} |  Combat: {{ "%3d D%2d"|format(char.dice_combat,6) }}   |       L   M     S       D    |
+|    Quickness: {{ "%-7d"|format(char.quickness) }} |   Magic: {{ "%3d D%2d"|format(char.dice_magic,6) }}   |       _ _ _ _ _ _ _ _ _ _    |
+|     Strength: {{ "%-7d"|format(char.strength) }} |  Rigger: {{ "%3d D%2d"|format(char.dice_rigger,6) }}   | Stun |{{ "X|" * char.stun }}{{ "_|" * (10 - char.stun) }}   |
+|     Charisma: {{ "%-7d"|format(char.charisma) }} |____________________|       _ _ _ _ _ _ _ _ _ _    |
+| Intelligence: {{ "%-7d"|format(char.intelligence) }} |______ Armor _______|  Dmg |{{ "X|" * char.damage }}{{ "_|" * (10 - char.damage) }}   |
+|    Willpower: {{ "%-7d"|format(char.willpower) }} | Balistic: {{ "%-7d"|format(char.armor_balistic) }}  |______________________________|
+|                       |   Impact: {{ "%-7d"|format(char.armor_impact) }}  |
+|      Essence:         |____________________|
+|        Magic:         |
+|                       |
+|     Reaction: {{ "%-7d"|format(char.reaction) }} |
+|   Initiative: {{ "%3d D%2d"|format(char.dice_initiative,6) }} |
+|_______________________|____________________|______________________________|
