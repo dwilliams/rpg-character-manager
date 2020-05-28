@@ -26,13 +26,13 @@ class Character:
     basic_stats_types = ['strength', 'charisma', 'intelligence', 'wisdom']
     special_stats_types = ['magic']
 
-    def __init__(self):
+    def __init__(self, name = "New Character"):
         # Setup logging for the class
         self.logger = logging.getLogger(type(self).__name__)
         self.logger.debug("Initializing")
 
         # Some basic values about the character
-        self.name = "New Character"
+        self.name = name
         self.age = 1
 
         # Race
@@ -145,7 +145,7 @@ class Character:
         self.logger.debug("Start - stat_name: %s", str(stat_name))
         if stat_name not in self.basic_stats_types:
             raise InvalidCharacterStatTypeException()
-        ## Calculate the total strength for the character
+        ## Calculate the total stat for the character
         # Grab the base stat for the character
         result = self.basic_stats[stat_name]
         self.logger.debug("base: %s", result)
@@ -158,3 +158,25 @@ class Character:
             result = result + tmp_effect.get_mod("mod_{}".format(stat_name))
         self.logger.debug("base+equip+effect: %s", result)
         return result
+
+    def get_special_stat(self, stat_name):
+        self.logger.debug("Start - stat_name: %s", str(stat_name))
+        if stat_name not in self.special_stats_types:
+            raise InvalidCharacterStatTypeException()
+        ## Calculate the total stat for the character
+        # Grab the base stat for the character
+        result = self.special_stats[stat_name]
+        self.logger.debug("base: %s", result)
+        # Add mod_ stat_name for equipped items
+        for tmp_item in self.equipped:
+            result = result + tmp_item.get_mod("mod_{}".format(stat_name))
+        self.logger.debug("base+equip: %s", result)
+        # Add mod_ stat_name for temporaries (magic spells, etc)
+        for tmp_effect in self.effects:
+            result = result + tmp_effect.get_mod("mod_{}".format(stat_name))
+        self.logger.debug("base+equip+effect: %s", result)
+        return result
+
+    def get_calcd_stat(self, stat_name):
+        self.logger.debug("Start - stat_name: %s", str(stat_name))
+        raise InvalidCharacterStatTypeException()

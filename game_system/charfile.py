@@ -9,15 +9,18 @@ from game_system.exceptions import GameSystemMismatchException, NotCharacterExce
 
 from game_system.none import Character
 from game_system.shadowrun import ShadowRunCharacter
+from game_system.adnd import ADNDCharacter
 
 ### GLOBALS ###
-SUPPORTED_GAME_SYSTEMS = ['shadowrun']
+SUPPORTED_GAME_SYSTEMS = ['shadowrun', 'adnd']
 
 ### FUNCTIONS ###
 def get_blank_char_of_game_system(game_system):
     char = None
     if game_system == 'shadowrun':
         char = ShadowRunCharacter()
+    elif game_system == 'adnd':
+        char = ADNDCharacter()
     return char
 
 ### CLASSES ###
@@ -38,6 +41,7 @@ class CharacterFile:
         # Read the file
         with open(self.filepath, 'r') as filehandle:
             to_load_json = filehandle.read()
+        self.logger.debug("JSON: \n%s", to_load_json)
 
         # Load the JSON into a dict
         to_load_dict = json.loads(to_load_json)
