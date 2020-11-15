@@ -58,5 +58,5 @@ class Item:
         self.logger.debug("Start - cost_type: %s", cost_type)
         if cost_type not in self.cost_types:
             raise InvalidItemAttributeException()
-        self.logger.debug("Return: %d", getattr(self, cost_type, 0))
+        self.logger.debug("Return: %s", getattr(self, cost_type, 0))
         return getattr(self, cost_type, 0)

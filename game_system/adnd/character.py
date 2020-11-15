@@ -10,6 +10,9 @@ from game_system.exceptions import InvalidCharacterStatTypeException
 
 from game_system.none.character import Character
 
+from game_system.adnd.equipment import ADNDEquipment
+from game_system.adnd.item import ADNDItem
+
 from game_system.adnd.data_ability import DATA_ABILITY
 
 ### GLOBALS ###
@@ -131,6 +134,9 @@ LEVELING_DATA = {
 ### CLASSES ###
 class ADNDCharacter(Character):
     game_system = 'adnd'
+
+    class_equipment = ADNDEquipment
+    class_item = ADNDItem
 
     basic_stats_types = ['strength', 'dexterity', 'constitution', 'intelligence', 'wisdom', 'charisma']
     special_stats_types = ['hitpoints', 'experience', 'comeliness']

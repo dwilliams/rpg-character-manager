@@ -1,0 +1,4 @@
+pylint>=2.4
+radon>=4.3
+coverage>=5.3
+coveralls>=1.2

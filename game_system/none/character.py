@@ -5,6 +5,7 @@ import logging
 
 from game_system.none.equipment import Equipment
 from game_system.none.item import Item
+from game_system.none.weapon import Weapon
 
 from game_system.exceptions import InvalidCharacterStatTypeException
 from game_system.exceptions import GameSystemMismatchException
@@ -20,8 +21,9 @@ from game_system.exceptions import NotCharacterException
 class Character:
     game_system = 'none'
 
-    class_item = Item
     class_equipment = Equipment
+    class_item = Item
+    class_weapon = Weapon
 
     basic_stats_types = ['strength', 'charisma', 'intelligence', 'wisdom']
     special_stats_types = ['magic']
@@ -42,7 +44,8 @@ class Character:
 
         # Categories of things
         self.inventory = set()
-        self.equipped = set()
+        self.active_equipment = set()
+        self.active_weapons = set()
         self.effects = set() # Effects from spells, etc.  Have burn down time (might be inf).
 
         # Stats dictionaries
@@ -123,23 +126,45 @@ class Character:
 
     def remove_from_inventory(self, item):
         self.logger.debug("Start - item: %s", str(item))
-        if item in self.inventory:
-            if item in self.equipped:
-                self.equipped.remove(item)
-            self.inventory.remove(item)
+        if item not in self.inventory:
+            raise ItemNotInInventoryException()
+        if item in self.active_equipment:
+            self.active_equipment.remove(item)
+        if item in self.active_weapons:
+            self.active_weapons.remove(item)
+        self.inventory.remove(item)
 
-    def equip_item(self, item):
+    def equip_equipment(self, item):
         self.logger.debug("Start - item: %s", str(item))
-        if not isinstance(item, Equipment):
+        if not isinstance(item, self.class_equipment):
             raise ItemNotEquipableException()
         if item not in self.inventory:
             raise ItemNotInInventoryException()
-        self.equipped.add(item)
+        self.active_equipment.add(item)
 
-    def unequip_item(self, item):
+    def unequip_equipment(self, item):
         self.logger.debug("Start - item: %s", str(item))
-        if item in self.equipped:
-            self.equipped.remove(item)
+        if item in self.active_equipment:
+            self.active_equipment.remove(item)
+
+    def get_equipment(self):
+        return self.active_equipment
+
+    def equip_weapon(self, item):
+        self.logger.debug("Start - item: %s", str(item))
+        if not isinstance(item, self.class_weapon):
+            raise ItemNotEquipableException()
+        if item not in self.inventory:
+            raise ItemNotInInventoryException()
+        self.active_weapons.add(item)
+
+    def unequip_weapon(self, item):
+        self.logger.debug("Start - item: %s", str(item))
+        if item in self.active_weapons:
+            self.active_weapons.remove(item)
+
+    def get_weapons(self):
+        return self.active_weapons
 
     def get_basic_stat(self, stat_name):
         self.logger.debug("Start - stat_name: %s", str(stat_name))

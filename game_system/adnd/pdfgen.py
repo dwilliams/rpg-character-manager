@@ -11,26 +11,29 @@ from game_system.adnd.character import ADNDCharacter
 
 ### CLASSES ###
 class ADNDPDF(FPDF):
-    def __init__(self, name, orientation = 'P', unit = 'in', format = 'Letter'):
+    def __init__(self, char_name, orientation = 'P', unit = 'in', format = 'Letter'):
         super().__init__(orientation = orientation, unit = unit, format = format)
         self.alias_nb_pages()
         self.set_font('Arial', '', 16)
-        self.char_name = name
+        self.char_name = char_name
+        self.set_title("{} - ADND".format(self.char_name))
 
     def header(self):
         self.set_font('Arial', '', 10)
-        self.cell(0, 0.25, "{} - Advanced Dungeons and Dragons".format(self.char_name), 'B', 0, 'C')
+        self.cell(0, 0.25, "Advanced Dungeons and Dragons", 'B', 0, 'C')
         self.ln(0.5)
 
     def footer(self):
-        self.set_y(-0.5)
         self.set_font('Arial', '', 10)
+        self.set_y(-0.5)
         self.cell(0, 0.25, "{} of {nb}".format(self.page_no(), nb = "{nb}"), 'T', 0, 'R')
+        self.set_y(-0.5)
+        self.cell(0, 0.25, "{}".format(self.char_name), '0', 0, 'L')
 
 class ADNDPDFGen:
     def __init__(self, char):
         self.character = char
-        self.pdf_class = ADNDPDF(self.character.name)
+        self.pdf_class = None
         # We're going to be bad and do the work here so it's only done once.
         self._generate_pdf()
 
@@ -41,6 +44,7 @@ class ADNDPDFGen:
         return self.pdf_class.output(dest = 'S').encode('latin-1')
 
     def _generate_pdf(self):
+        self.pdf_class = ADNDPDF(self.character.name)
         self._generate_page_char()
         self._generate_page_skills()
         self._generate_page_thaco()
@@ -281,10 +285,105 @@ class ADNDPDFGen:
         self.pdf_class.cell(1.5, 0, "{0: ^6}".format(0), 0, 1, 'L')
 
     def _generate_page_skills(self):
-        pass
+        self.pdf_class.add_page()
+
+        # Page Title Block
+        self.pdf_class.set_xy(0.5, 0.8)
+        self.pdf_class.set_font('Arial', '', 16)
+        self.pdf_class.cell(0.5, 0, "Skills", 0, 0, 'L')
 
     def _generate_page_thaco(self):
-        pass
+        self.pdf_class.add_page()
+
+        # Page Title Block
+        self.pdf_class.set_xy(0.5, 0.8)
+        self.pdf_class.set_font('Arial', '', 16)
+        self.pdf_class.cell(0.5, 0, "THAC0", 0, 0, 'L')
+
+        # Page Layout
+        self.pdf_class.line(1.75, 1.25, 7.75, 1.25)
+        self.pdf_class.line(1.75, 1.5, 7.75, 1.5)
+        self.pdf_class.line(1.75, 1.75, 7.75, 1.75)
+        self.pdf_class.line(1.75, 2.0, 7.75, 2.0)
+        self.pdf_class.line(1.75, 2.25, 7.75, 2.25)
+        self.pdf_class.line(1.75, 2.5, 7.75, 2.5)
+        self.pdf_class.line(1.75, 2.75, 7.75, 2.75)
+        self.pdf_class.line(1.75, 3.0, 7.75, 3.0)
+        self.pdf_class.line(1.75, 3.25, 7.75, 3.25)
+        self.pdf_class.line(1.75, 3.5, 7.75, 3.5)
+
+        self.pdf_class.line(0.75, 4.0, 7.75, 4.0)
+        self.pdf_class.line(0.75, 4.25, 7.75, 4.25)
+        self.pdf_class.line(0.75, 4.5, 7.75, 4.5)
+        self.pdf_class.line(0.75, 4.75, 7.75, 4.75)
+        self.pdf_class.line(0.75, 5.0, 7.75, 5.0)
+        self.pdf_class.line(0.75, 5.25, 7.75, 5.25)
+        self.pdf_class.line(0.75, 5.5, 7.75, 5.5)
+        self.pdf_class.line(0.75, 5.75, 7.75, 5.75)
+        self.pdf_class.line(0.75, 6.0, 7.75, 6.0)
+        self.pdf_class.line(0.75, 6.25, 7.75, 6.25)
+        self.pdf_class.line(0.75, 6.5, 7.75, 6.5)
+        self.pdf_class.line(0.75, 6.75, 7.75, 6.75)
+        self.pdf_class.line(0.75, 7.0, 7.75, 7.0)
+        self.pdf_class.line(0.75, 7.25, 7.75, 7.25)
+        self.pdf_class.line(0.75, 7.5, 7.75, 7.5)
+        self.pdf_class.line(0.75, 7.75, 7.75, 7.75)
+        self.pdf_class.line(0.75, 8.0, 7.75, 8.0)
+        self.pdf_class.line(0.75, 8.25, 7.75, 8.25)
+        self.pdf_class.line(0.75, 8.5, 7.75, 8.5)
+        self.pdf_class.line(0.75, 8.75, 7.75, 8.75)
+        self.pdf_class.line(0.75, 9.0, 7.75, 9.0)
+        self.pdf_class.line(0.75, 9.25, 7.75, 9.25)
+
+        self.pdf_class.line(0.75, 4.0, 0.75, 9.25)
+        self.pdf_class.line(1.75, 1.25, 1.75, 9.25)
+        self.pdf_class.line(3.25, 1.25, 3.25, 9.25)
+        self.pdf_class.line(4.75, 1.25, 4.75, 9.25)
+        self.pdf_class.line(6.25, 1.25, 6.25, 9.25)
+        self.pdf_class.line(7.75, 1.25, 7.75, 9.25)
+
+        self.pdf_class.set_font('Arial', '', 12)
+        self.pdf_class.set_xy(0.45, 1.25)
+        self.pdf_class.cell(1.25, 0.25, "Weapon", 0, 2, 'R')
+        self.pdf_class.cell(1.25, 0.25, "Weight", 0, 2, 'R')
+        self.pdf_class.cell(1.25, 0.25, "Type", 0, 2, 'R')
+        self.pdf_class.cell(1.25, 0.25, "Size", 0, 2, 'R')
+        self.pdf_class.cell(1.25, 0.25, "Speed", 0, 2, 'R')
+        self.pdf_class.cell(1.25, 0.25, "Damage S/M", 0, 2, 'R')
+        self.pdf_class.cell(1.25, 0.25, "Damage L", 0, 2, 'R')
+        self.pdf_class.cell(1.25, 0.25, "Attacks", 0, 2, 'R')
+        self.pdf_class.cell(1.25, 0.25, "Range", 0, 2, 'R')
+
+        self.pdf_class.set_xy(0.75, 3.75)
+        self.pdf_class.cell(1.0, 0.25, "AC", 0, 2, 'C')
+        self.pdf_class.cell(1.0, 0.25, "10", 0, 2, 'C')
+        self.pdf_class.cell(1.0, 0.25, "9", 0, 2, 'C')
+        self.pdf_class.cell(1.0, 0.25, "8", 0, 2, 'C')
+        self.pdf_class.cell(1.0, 0.25, "7", 0, 2, 'C')
+        self.pdf_class.cell(1.0, 0.25, "6", 0, 2, 'C')
+        self.pdf_class.cell(1.0, 0.25, "5", 0, 2, 'C')
+        self.pdf_class.cell(1.0, 0.25, "4", 0, 2, 'C')
+        self.pdf_class.cell(1.0, 0.25, "3", 0, 2, 'C')
+        self.pdf_class.cell(1.0, 0.25, "2", 0, 2, 'C')
+        self.pdf_class.cell(1.0, 0.25, "1", 0, 2, 'C')
+        self.pdf_class.cell(1.0, 0.25, "0", 0, 2, 'C')
+        self.pdf_class.cell(1.0, 0.25, "-1", 0, 2, 'C')
+        self.pdf_class.cell(1.0, 0.25, "-2", 0, 2, 'C')
+        self.pdf_class.cell(1.0, 0.25, "-3", 0, 2, 'C')
+        self.pdf_class.cell(1.0, 0.25, "-4", 0, 2, 'C')
+        self.pdf_class.cell(1.0, 0.25, "-5", 0, 2, 'C')
+        self.pdf_class.cell(1.0, 0.25, "-6", 0, 2, 'C')
+        self.pdf_class.cell(1.0, 0.25, "-7", 0, 2, 'C')
+        self.pdf_class.cell(1.0, 0.25, "-8", 0, 2, 'C')
+        self.pdf_class.cell(1.0, 0.25, "-9", 0, 2, 'C')
+        self.pdf_class.cell(1.0, 0.25, "-10", 0, 2, 'C')
+
+        # Weapons & THAC0
 
     def _generate_page_inventory(self):
-        pass
+        self.pdf_class.add_page()
+
+        # Page Title Block
+        self.pdf_class.set_xy(0.5, 0.8)
+        self.pdf_class.set_font('Arial', '', 16)
+        self.pdf_class.cell(0.5, 0, "Inventory", 0, 0, 'L')

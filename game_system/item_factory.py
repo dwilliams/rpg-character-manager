@@ -6,6 +6,7 @@ import logging
 from game_system.exceptions import InvalidGameSystemException, InvalidObjectTypeException, ItemNotExistsException
 
 from game_system.none import Item
+from game_system.adnd import ADNDItem
 from game_system.shadowrun import ShadowRunItem
 
 ### GLOBALS ###
@@ -16,6 +17,7 @@ from game_system.shadowrun import ShadowRunItem
 class ItemFactory:
     creation_classes = {
         "none": Item,
+        "adnd": ADNDItem,
         "shadowrun": ShadowRunItem
     }
     object_type = 'item'
