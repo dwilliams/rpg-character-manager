@@ -13,5 +13,45 @@
       "item_name": "Generic Item Two",
       "cost_money": 234
     }
+  },
+  {
+    "game_system": "none",
+    "object_type": "equipment",
+    "data": {
+      "item_name": "Generic Equipment One",
+      "cost_money": 111,
+      "mod_strength": 1,
+      "mod_charisma": 1,
+      "mod_intelligence": 1,
+      "mod_wisdom": 1
+    }
+  },
+  {
+    "game_system": "none",
+    "object_type": "equipment",
+    "data": {
+      "item_name": "Generic Equipment Two",
+      "cost_money": 222,
+      "mod_strength": 2,
+      "mod_charisma": 2,
+      "mod_intelligence": 2,
+      "mod_wisdom": 2
+    }
+  },{
+    "game_system": "none",
+    "object_type": "weapon",
+    "data": {
+      "item_name": "Generic Weapon One",
+      "cost_money": 123,
+      "stat_damage": 1
+    }
+  },{
+    "game_system": "none",
+    "object_type": "weapon",
+    "data": {
+      "item_name": "Generic Weapon Two",
+      "cost_money": 321,
+      "stat_damage": 2
+    }
   }
 ]

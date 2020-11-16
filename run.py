@@ -6,7 +6,7 @@ import logging
 import os
 
 import game_system
-import game_system.shadowrun
+#import game_system.shadowrun
 
 ### GLOBALS ###
 
@@ -54,11 +54,13 @@ def main():
     logging.basicConfig(format=log_format, level=logging.DEBUG)
 
     # Initialize the Game System Factories
-    gs_item_factory = game_system.ItemFactory()
-    gs_equipment_factory = game_system.EquipmentFactory()
+    gs_item_factory = game_system.factories.ItemFactory()
+    gs_equipment_factory = game_system.factories.EquipmentFactory()
+    gs_weapon_factory = game_system.factories.WeaponFactory()
     gs_object_loader = game_system.ObjectLoader()
     gs_object_loader.register_item_factory(gs_item_factory)
     gs_object_loader.register_equipment_factory(gs_equipment_factory)
+    gs_object_loader.register_weapon_factory(gs_weapon_factory)
     gs_object_loader.load_from_file('data/none_test_one.json')
 
     # Parse Arguments

@@ -63,6 +63,8 @@ def run_all_tests():
     # Consolidate all suites into one
     suites = []
     suites.extend(build_test_suites("test_*.py"))
+    suites.extend(build_test_suites("factories/test_*.py"))
+    suites.extend(build_test_suites("none/test_*.py"))
     suites.extend(build_test_suites("adnd/test_*.py"))
     test_suite = unittest.TestSuite(suites)
     # Run the test suite containing all the tests from all the modules

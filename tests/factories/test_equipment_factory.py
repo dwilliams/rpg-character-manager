@@ -28,7 +28,7 @@ class TestEquipmentFactoryDataLoad(unittest.TestCase):
 
     def test_create_factory_and_load_data(self):
         self.logger.debug("test_create_factory_and_load_data")
-        equipment_factory = game_system.EquipmentFactory()
+        equipment_factory = game_system.factories.EquipmentFactory()
         for test_equipment_data in TEST_EQUIPMENT_LIST:
             equipment_factory.load_object_data(test_equipment_data)
         for tmp_game_system in self.test_equipment_names:
@@ -41,7 +41,7 @@ class TestEquipmentFactoryEquipmentCreation(unittest.TestCase):
         self.logger = logging.getLogger(type(self).__name__)
         self.logger.debug("setUp")
 
-        self.equipment_factory = game_system.EquipmentFactory()
+        self.equipment_factory = game_system.factories.EquipmentFactory()
         for test_equipment_data in TEST_EQUIPMENT_LIST:
             self.equipment_factory.load_object_data(test_equipment_data)
 

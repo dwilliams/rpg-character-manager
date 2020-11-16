@@ -6,8 +6,9 @@ import logging
 import os
 
 from game_system.exceptions import BadFactoryTypeException, InvalidGameSystemException, InvalidObjectTypeException
-from game_system.item_factory import ItemFactory
-from game_system.equipment_factory import EquipmentFactory
+from game_system.factories.item_factory import ItemFactory
+from game_system.factories.equipment_factory import EquipmentFactory
+from game_system.factories.weapon_factory import WeaponFactory
 
 ### GLOBALS ###
 
@@ -27,6 +28,7 @@ class ObjectLoader:
         self.filepath = None
         self.item_factory = None
         self.equipment_factory = None
+        self.weapon_factory = None
 
     def register_item_factory(self, factory):
         self.logger.debug("Start - factory: %s", factory)
@@ -39,6 +41,12 @@ class ObjectLoader:
         if not isinstance(factory, EquipmentFactory):
             raise BadFactoryTypeException()
         self.equipment_factory = factory
+
+    def register_weapon_factory(self, factory):
+        self.logger.debug("Start - factory: %s", factory)
+        if not isinstance(factory, WeaponFactory):
+            raise BadFactoryTypeException()
+        self.weapon_factory = factory
 
     def load_from_directory(self, path):
         self.logger.debug("Start - path: %s", path)
@@ -63,6 +71,8 @@ class ObjectLoader:
                     self.item_factory.load_object_data(tmp_object)
                 elif tmp_object['object_type'] == "equipment":
                     self.equipment_factory.load_object_data(tmp_object)
+                elif tmp_object['object_type'] == "weapon":
+                    self.weapon_factory.load_object_data(tmp_object)
             except InvalidObjectTypeException:
                 self.logger.warning("Attempted to load bad object: %s", tmp_object)
             except InvalidGameSystemException:
