@@ -43,7 +43,7 @@ class Character:
         #self.race = race
 
         # Categories of things
-        self.inventory = set()
+        self.inventory = set() # FIXME: How to handle quantity?
         self.active_equipment = set()
         self.active_weapons = set()
         self.effects = set() # Effects from spells, etc.  Have burn down time (might be inf).
@@ -66,7 +66,7 @@ class Character:
         if not isinstance(item, self.class_item):
             raise GameSystemMismatchException()
 
-    def load_dict(self, char_dict):
+    def load_dict(self, char_dict, item_factory, equipment_factory, weapon_factory):
         self.logger.debug("Start - char_dict: %s", str(char_dict))
 
         # Check the object format and game_system
@@ -87,6 +87,19 @@ class Character:
                 self.special_stats[stats_type] = char_dict['data']['special_stats'][stats_type]
 
         # Load the inventory & equipment
+        for tmp_item_name in char_dict['data']['inventory']:
+            if tmp_item_name in item_factory.get_list_names(self.game_system):
+                self.add_to_inventory(item_factory.create(self.game_system, tmp_item_name))
+            elif tmp_item_name in equipment_factory.get_list_names(self.game_system):
+                tmp_equipment = equipment_factory.create(self.game_system, tmp_item_name)
+                self.add_to_inventory(tmp_equipment)
+                if tmp_item_name in char_dict['data']['active_equipment']:
+                    self.equip_equipment(tmp_equipment)
+            elif tmp_item_name in weapon_factory.get_list_names(self.game_system):
+                tmp_weapon = weapon_factory.create(self.game_system, tmp_item_name)
+                self.add_to_inventory(tmp_weapon)
+                if tmp_item_name in char_dict['data']['active_weapons']:
+                    self.equip_weapon(tmp_weapon)
 
     def save_dict(self):
         self.logger.debug("Start - None")
@@ -113,9 +126,13 @@ class Character:
         for tmp_item in self.inventory:
             char_dict['data']['inventory'].append(tmp_item.get_name())
 
-        char_dict['data']['equipped'] = []
-        for tmp_item in self.equipped:
-            char_dict['data']['equipped'].append(tmp_item.get_name())
+        char_dict['data']['active_equipment'] = []
+        for tmp_item in self.active_equipment:
+            char_dict['data']['active_equipment'].append(tmp_item.get_name())
+
+        char_dict['data']['active_weapons'] = []
+        for tmp_item in self.active_weapons:
+            char_dict['data']['active_weapons'].append(tmp_item.get_name())
 
         return char_dict
 
@@ -175,7 +192,7 @@ class Character:
         result = self.basic_stats[stat_name]
         self.logger.debug("base: %s", result)
         # Add mod_ stat_name for equipped items
-        for tmp_item in self.equipped:
+        for tmp_item in self.active_equipment:
             result = result + tmp_item.get_mod("mod_{}".format(stat_name))
         self.logger.debug("base+equip: %s", result)
         # Add mod_ stat_name for temporaries (magic spells, etc)
@@ -193,7 +210,7 @@ class Character:
         result = self.special_stats[stat_name]
         self.logger.debug("base: %s", result)
         # Add mod_ stat_name for equipped items
-        for tmp_item in self.equipped:
+        for tmp_item in self.active_equipment:
             result = result + tmp_item.get_mod("mod_{}".format(stat_name))
         self.logger.debug("base+equip: %s", result)
         # Add mod_ stat_name for temporaries (magic spells, etc)

@@ -379,6 +379,48 @@ class ADNDPDFGen:
         self.pdf_class.cell(1.0, 0.25, "-10", 0, 2, 'C')
 
         # Weapons & THAC0
+        # FIXME: Figure out how to do a second page
+        tmp_wpns_list = list(self.character.active_weapons)
+        tmp_num_wpns = len(tmp_wpns_list) if len(self.character.active_weapons) < 4 else 4
+        for tmp_i in range(tmp_num_wpns):
+            # Grab and fill in Name and Stats from weapon
+            # Grab THAC0 and fill in chart
+            tmp_x_offset = 1.75 + (tmp_i * 1.5)
+            tmp_thaco = self.character.get_thaco_for_weapon(tmp_wpns_list[tmp_i])
+            self.pdf_class.set_font('Arial', '', 12)
+            self.pdf_class.set_xy(tmp_x_offset, 1.25)
+            self.pdf_class.cell(1.5, 0.25, tmp_wpns_list[tmp_i].item_name, 0, 2, 'C')
+            self.pdf_class.cell(1.5, 0.25, str(tmp_wpns_list[tmp_i].get_stat('stat_weight')), 0, 2, 'C')
+            self.pdf_class.cell(1.5, 0.25, str(tmp_wpns_list[tmp_i].get_stat('stat_type')), 0, 2, 'C')
+            self.pdf_class.cell(1.5, 0.25, str(tmp_wpns_list[tmp_i].get_stat('stat_size')), 0, 2, 'C')
+            self.pdf_class.cell(1.5, 0.25, str(tmp_wpns_list[tmp_i].get_stat('stat_speed')), 0, 2, 'C')
+            self.pdf_class.cell(1.5, 0.25, "{} + {}".format(tmp_wpns_list[tmp_i].get_stat('stat_damage_sm'), self.character.get_calcd_stat('damage_adjust')), 0, 2, 'C')
+            self.pdf_class.cell(1.5, 0.25, "{} + {}".format(tmp_wpns_list[tmp_i].get_stat('stat_damage_l'), self.character.get_calcd_stat('damage_adjust')), 0, 2, 'C')
+            self.pdf_class.cell(1.5, 0.25, "?", 0, 2, 'C')
+            self.pdf_class.cell(1.5, 0.25, str(tmp_wpns_list[tmp_i].get_stat('stat_range')), 0, 2, 'C')
+
+            self.pdf_class.set_xy(tmp_x_offset, 4.0)
+            self.pdf_class.cell(1.5, 0.25, "{}".format(tmp_thaco - 10) if tmp_thaco > 11 else "", 0, 2, 'C')
+            self.pdf_class.cell(1.5, 0.25, "{}".format(tmp_thaco - 9) if tmp_thaco > 10 else "", 0, 2, 'C')
+            self.pdf_class.cell(1.5, 0.25, "{}".format(tmp_thaco - 8) if tmp_thaco > 9 else "", 0, 2, 'C')
+            self.pdf_class.cell(1.5, 0.25, "{}".format(tmp_thaco - 7) if tmp_thaco > 8 else "", 0, 2, 'C')
+            self.pdf_class.cell(1.5, 0.25, "{}".format(tmp_thaco - 6) if tmp_thaco > 7 else "", 0, 2, 'C')
+            self.pdf_class.cell(1.5, 0.25, "{}".format(tmp_thaco - 5) if tmp_thaco > 6 else "", 0, 2, 'C')
+            self.pdf_class.cell(1.5, 0.25, "{}".format(tmp_thaco - 4) if tmp_thaco > 5 else "", 0, 2, 'C')
+            self.pdf_class.cell(1.5, 0.25, "{}".format(tmp_thaco - 3) if tmp_thaco > 4 else "", 0, 2, 'C')
+            self.pdf_class.cell(1.5, 0.25, "{}".format(tmp_thaco - 2) if tmp_thaco > 3 else "", 0, 2, 'C')
+            self.pdf_class.cell(1.5, 0.25, "{}".format(tmp_thaco - 1) if tmp_thaco > 2 else "", 0, 2, 'C')
+            self.pdf_class.cell(1.5, 0.25, "{}".format(tmp_thaco) if tmp_thaco > 1 else "", 0, 2, 'C')
+            self.pdf_class.cell(1.5, 0.25, "{}".format(tmp_thaco + 1) if tmp_thaco < 20 else "", 0, 2, 'C')
+            self.pdf_class.cell(1.5, 0.25, "{}".format(tmp_thaco + 2) if tmp_thaco < 19 else "", 0, 2, 'C')
+            self.pdf_class.cell(1.5, 0.25, "{}".format(tmp_thaco + 3) if tmp_thaco < 18 else "", 0, 2, 'C')
+            self.pdf_class.cell(1.5, 0.25, "{}".format(tmp_thaco + 4) if tmp_thaco < 17 else "", 0, 2, 'C')
+            self.pdf_class.cell(1.5, 0.25, "{}".format(tmp_thaco + 5) if tmp_thaco < 16 else "", 0, 2, 'C')
+            self.pdf_class.cell(1.5, 0.25, "{}".format(tmp_thaco + 6) if tmp_thaco < 15 else "", 0, 2, 'C')
+            self.pdf_class.cell(1.5, 0.25, "{}".format(tmp_thaco + 7) if tmp_thaco < 14 else "", 0, 2, 'C')
+            self.pdf_class.cell(1.5, 0.25, "{}".format(tmp_thaco + 8) if tmp_thaco < 13 else "", 0, 2, 'C')
+            self.pdf_class.cell(1.5, 0.25, "{}".format(tmp_thaco + 9) if tmp_thaco < 12 else "", 0, 2, 'C')
+            self.pdf_class.cell(1.5, 0.25, "{}".format(tmp_thaco + 10) if tmp_thaco < 11 else "", 0, 2, 'C')
 
     def _generate_page_inventory(self):
         self.pdf_class.add_page()

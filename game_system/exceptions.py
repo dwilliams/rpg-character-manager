@@ -13,6 +13,9 @@ class InvalidCharacterStatTypeException(Exception):
 class GameSystemMismatchException(Exception):
     pass
 
+class ItemNotActiveException(Exception):
+    pass
+
 class ItemNotEquipableException(Exception):
     pass
 

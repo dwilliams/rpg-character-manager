@@ -5,8 +5,7 @@
 
 import bisect
 
-from game_system.exceptions import GameSystemMismatchException
-from game_system.exceptions import InvalidCharacterStatTypeException
+from game_system.exceptions import GameSystemMismatchException, ItemNotActiveException, InvalidCharacterStatTypeException
 
 from game_system.none.character import Character
 
@@ -14,9 +13,9 @@ from game_system.adnd.equipment import ADNDEquipment
 from game_system.adnd.item import ADNDItem
 
 from game_system.adnd.data_ability import DATA_ABILITY
+from game_system.adnd.data_level import DATA_LEVEL
 
 ### GLOBALS ###
-
 
 LEVELING_DATA = {
     'rogue': {
@@ -156,9 +155,9 @@ class ADNDCharacter(Character):
     def __str__(self):
         return "ADND{}".format(super().__str__())
 
-    def load_dict(self, char_dict):
+    def load_dict(self, char_dict, item_factory, equipment_factory, weapon_factory):
         self.logger.debug("Start - char_dict: %s", str(char_dict))
-        super().load_dict(char_dict)
+        super().load_dict(char_dict, item_factory, equipment_factory, weapon_factory)
 
     def save_dict(self):
         self.logger.debug("Start - None")
@@ -224,8 +223,20 @@ class ADNDCharacter(Character):
         self.logger.debug("Start - None")
         exp = self.get_special_stat('experience')
         self.logger.debug("Experience: %d", exp)
-        exp_list = list(LEVELING_DATA['rogue'].keys())
+        exp_list = list(LEVELING_DATA['rogue'].keys()) # FIXME: Move to character class variable
         self.logger.debug("Experience: %s", exp_list)
         pos = bisect.bisect_right(exp_list, exp)
         self.logger.debug("Bisect Position: %d", pos)
         return LEVELING_DATA['rogue'][exp_list[pos-1]]['level']
+
+    def get_thaco_for_weapon(self, weapon):
+        self.logger.debug("Start - weapon: %s", weapon)
+        # Get starting thac0 based on level
+        tmp_thaco = DATA_LEVEL['rogue'][self._get_level()]['thac0'] # FIXME: Move to character class variable
+        # Check for spec based modifiers
+        tmp_thaco = tmp_thaco - self.get_calcd_stat('to_hit_adjust')
+        # Check for weapon modifiers
+        if weapon not in self.active_weapons:
+            raise ItemNotActiveException
+        tmp_thaco = tmp_thaco - weapon.get_stat('stat_to_hit_adjust')
+        return tmp_thaco

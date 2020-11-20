@@ -104,3 +104,4 @@ ENV/
 /pylint_output.txt
 /test.pdf
 coverage_report
+/data_ignore

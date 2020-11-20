@@ -5,7 +5,11 @@ import json
 import logging
 import os
 
-from game_system.exceptions import GameSystemMismatchException, NotCharacterException
+from game_system.exceptions import BadFactoryTypeException, GameSystemMismatchException, NotCharacterException
+
+from game_system.factories.item_factory import ItemFactory
+from game_system.factories.equipment_factory import EquipmentFactory
+from game_system.factories.weapon_factory import WeaponFactory
 
 from game_system.none import Character
 from game_system.shadowrun import ShadowRunCharacter
@@ -26,20 +30,39 @@ def get_blank_char_of_game_system(game_system):
 ### CLASSES ###
 class CharacterFile:
     """
-    This class handles the convertion of the Character object and other associated data into or from a JSON string saved
+    This class handles the conversion of the Character object and other associated data into or from a JSON string saved
     into a file.
     """
-    def __init__(self, charfilepath):
+    def __init__(self):
         # Setup logging for the class
         self.logger = logging.getLogger(type(self).__name__)
         self.logger.debug("Initializing")
 
-        # Save the file path
-        self.filepath = os.path.abspath(charfilepath)
+        self.item_factory = None
+        self.equipment_factory = None
+        self.weapon_factory = None
 
-    def load_char(self):
+    def register_item_factory(self, factory):
+        self.logger.debug("Start - factory: %s", factory)
+        if not isinstance(factory, ItemFactory):
+            raise BadFactoryTypeException()
+        self.item_factory = factory
+
+    def register_equipment_factory(self, factory):
+        self.logger.debug("Start - factory: %s", factory)
+        if not isinstance(factory, EquipmentFactory):
+            raise BadFactoryTypeException()
+        self.equipment_factory = factory
+
+    def register_weapon_factory(self, factory):
+        self.logger.debug("Start - factory: %s", factory)
+        if not isinstance(factory, WeaponFactory):
+            raise BadFactoryTypeException()
+        self.weapon_factory = factory
+
+    def load_char(self, filepath):
         # Read the file
-        with open(self.filepath, 'r') as filehandle:
+        with open(os.path.abspath(filepath), 'r') as filehandle:
             to_load_json = filehandle.read()
         self.logger.debug("JSON: \n%s", to_load_json)
 
@@ -52,11 +75,11 @@ class CharacterFile:
 
         # Convert the dict into a Character using the correct game_system type
         character = get_blank_char_of_game_system(to_load_dict['game_system'])
-        character.load_dict(to_load_dict)
+        character.load_dict(to_load_dict, self.item_factory, self.equipment_factory, self.weapon_factory)
 
         return character
 
-    def save_char(self, character):
+    def save_char(self, character, filepath):
         to_save_dict = {}
 
         # Check to make sure the passed in character is derived from the game_system Character
@@ -70,5 +93,5 @@ class CharacterFile:
         to_save_json = json.dumps(to_save_dict)
 
         # Write to the file
-        with open(self.filepath, 'w') as filehandle:
+        with open(os.path.abspath(filepath), 'w') as filehandle:
             filehandle.write(to_save_json)

@@ -14,51 +14,6 @@ import game_system.adnd
 ### FUNCTIONS ###
 
 ### CLASSES ###
-class ADNDCharacterTMP:
-    def __init__(self):
-        self.name = 'Ten Tin'
-        self.strength = 10
-        self.dexterity = 10
-        self.constitution = 10
-        self.intelligence = 10
-        self.wisdom = 10
-        self.charisma = 10
-        self.health = 10
-
-        self.damage = 0
-
-    @property
-    def dice_combat(self):
-        return math.floor((self.quickness + self.intelligence + self.willpower) / 2)
-
-    @property
-    def dice_magic(self):
-        return 0
-
-    @property
-    def dice_rigger(self):
-        return 0
-
-    @property
-    def dice_initiative(self):
-        return 1
-
-    @property
-    def reaction(self):
-        return math.floor((self.quickness + self.intelligence) / 2)
-
-    @property
-    def armor_impact(self):
-        return 0
-
-    @property
-    def armor_balistic(self):
-        return 0
-
-    def format_to_text(self):
-        # Jinja Template
-        tmp_template = load_template('tack.text.jinja')
-        return tmp_template.render(char=self)
 
 ### MAIN ###
 def main():
@@ -66,21 +21,24 @@ def main():
     log_format = "%(asctime)s:%(levelname)s:%(name)s.%(funcName)s: %(message)s"
     logging.basicConfig(format=log_format, level=logging.DEBUG)
 
-    # Create Character
-    #char_one = SRCharacter()
-    #char_one.quickness = 10
-    #char_one.intelligence = 8
-    #char_one.willpower = 6
-    #char_one.stun = 3
-    #char_one.damage = 7
+    # Load Objects and Prime Factories
+    gs_item_factory = game_system.factories.ItemFactory()
+    gs_equipment_factory = game_system.factories.EquipmentFactory()
+    gs_weapon_factory = game_system.factories.WeaponFactory()
+    gs_object_loader = game_system.ObjectLoader()
+    gs_object_loader.register_item_factory(gs_item_factory)
+    gs_object_loader.register_equipment_factory(gs_equipment_factory)
+    gs_object_loader.register_weapon_factory(gs_weapon_factory)
+    gs_object_loader.load_from_directory("data_ignore") # FIXME: Convert to argparse?
 
-    # Display Character
-    #logging.debug("Char: \n%s", char_one.format_to_text())
-
+    # Create the character from the json file
     logging.debug("Creating a simple character from a file")
-    charfile = game_system.CharacterFile('tack_pdf_char.json')
+    charfile = game_system.CharacterFile()
+    charfile.register_item_factory(gs_item_factory)
+    charfile.register_equipment_factory(gs_equipment_factory)
+    charfile.register_weapon_factory(gs_weapon_factory)
     #char_ten = game_system.adnd.ADNDCharacter()
-    char_ten = charfile.load_char()
+    char_ten = charfile.load_char('tack_pdf_char2.json')
 
     logging.debug("Creating PDF class")
     pdf_gen = game_system.adnd.ADNDPDFGen(char_ten)
