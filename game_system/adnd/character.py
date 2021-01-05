@@ -5,128 +5,22 @@
 
 import bisect
 
-from game_system.exceptions import GameSystemMismatchException, ItemNotActiveException, InvalidCharacterStatTypeException
+from game_system.exceptions import GameSystemMismatchException
+from game_system.exceptions import ItemNotActiveException
+from game_system.exceptions import InvalidCharacterStatTypeException
+from game_system.exceptions import InvalidObjectTypeException
+from game_system.exceptions import BadDataException
 
 from game_system.none.character import Character
 
 from game_system.adnd.equipment import ADNDEquipment
 from game_system.adnd.item import ADNDItem
+from game_system.adnd.weapon import ADNDWeapon
 
 from game_system.adnd.data_ability import DATA_ABILITY
 from game_system.adnd.data_level import DATA_LEVEL
 
 ### GLOBALS ###
-
-LEVELING_DATA = {
-    'rogue': {
-        0: {
-            'level': 1,
-            'hitdice': 1,
-            'levelhp': 0
-        },
-        1250: {
-            'level': 2,
-            'hitdice': 2,
-            'levelhp': 0
-        },
-        2500: {
-            'level': 3,
-            'hitdice': 3,
-            'levelhp': 0
-        },
-        5000: {
-            'level': 4,
-            'hitdice': 4,
-            'levelhp': 0
-        },
-        10000: {
-            'level': 5,
-            'hitdice': 5,
-            'levelhp': 0
-        },
-        20000: {
-            'level': 6,
-            'hitdice': 6,
-            'levelhp': 0
-        },
-        40000: {
-            'level': 7,
-            'hitdice': 7,
-            'levelhp': 0
-        },
-        70000: {
-            'level': 8,
-            'hitdice': 8,
-            'levelhp': 0
-        },
-        110000: {
-            'level': 9,
-            'hitdice': 9,
-            'levelhp': 0
-        },
-        160000: {
-            'level': 10,
-            'hitdice': 10,
-            'levelhp': 0
-        },
-        220000: {
-            'level': 11,
-            'hitdice': 10,
-            'levelhp': 2
-        },
-        440000: {
-            'level': 12,
-            'hitdice': 10,
-            'levelhp': 4
-        },
-        660000: {
-            'level': 13,
-            'hitdice': 10,
-            'levelhp': 6
-        },
-        880000: {
-            'level': 14,
-            'hitdice': 10,
-            'levelhp': 8
-        },
-        1100000: {
-            'level': 15,
-            'hitdice': 10,
-            'levelhp': 10
-        },
-        1320000: {
-            'level': 16,
-            'hitdice': 10,
-            'levelhp': 12
-        },
-        1540000: {
-            'level': 17,
-            'hitdice': 10,
-            'levelhp': 14
-        },
-        1760000: {
-            'level': 18,
-            'hitdice': 10,
-            'levelhp': 16
-        },
-        1980000: {
-            'level': 19,
-            'hitdice': 10,
-            'levelhp': 18
-        },
-        2200000: {
-            'level': 20,
-            'hitdice': 10,
-            'levelhp': 20
-        }
-    },
-    'warrior': {
-    },
-    'wizard': {
-    },
-    'priest': {
-    }
-}
 
 ### FUNCTIONS ###
 
@@ -136,9 +30,10 @@ class ADNDCharacter(Character):
 
     class_equipment = ADNDEquipment
     class_item = ADNDItem
+    class_weapon = ADNDWeapon
 
     basic_stats_types = ['strength', 'dexterity', 'constitution', 'intelligence', 'wisdom', 'charisma']
-    special_stats_types = ['hitpoints', 'experience', 'comeliness']
+    special_stats_types = ['experience', 'comeliness']
 
     class_types = ['warrior', 'wizard', 'priest', 'rogue']
 
@@ -150,7 +45,19 @@ class ADNDCharacter(Character):
         super().__init__(name=name)
 
         # Initialize basic and special stats to creation defaults
-        self.special_stats['health'] = 6
+        self.hit_dice = [6, 0, 0, 0, 0, 0, 0, 0, 0, 0] # Should be 10 hit dice max for character in ADND
+
+        # Skills
+        self.thief_skills = {
+            'pick_pockets': [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+            'open_locks': [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+            'find_remove_traps': [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+            'move_silently': [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+            'hide_shadows': [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+            'detect_noise': [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+            'climb_walls': [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+            'read_languages': [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+        }
 
     def __str__(self):
         return "ADND{}".format(super().__str__())
@@ -159,16 +66,30 @@ class ADNDCharacter(Character):
         self.logger.debug("Start - char_dict: %s", str(char_dict))
         super().load_dict(char_dict, item_factory, equipment_factory, weapon_factory)
 
+        self.hit_dice = char_dict['data']['hit_dice'][0:10] # Should this be checked to make sure it's a list?
+
+        self.thief_skills = char_dict['data']['thief_skills'] # Should this be checked to make sure it's the right data
+                                                              # structure?  Really, should this be a class?
+
+        self.logger.debug("End - None")
+
     def save_dict(self):
         self.logger.debug("Start - None")
         char_dict = super().save_dict()
+
+        char_dict['data']['hit_dice'] = self.hit_dice
+
+        char_dict['data']['thief_skills'] = self.thief_skills
+
+        self.logger.debug("End - char_dict: %s", char_dict)
         return char_dict
 
     def _check_item_type(self, item):
         self.logger.debug("Start - item: %s", str(item))
-        #if not isinstance(item, ADNDItem):
         if item.game_system != self.game_system:
             raise GameSystemMismatchException()
+        if not isinstance(item, (ADNDItem, ADNDEquipment, ADNDWeapon)):
+            raise InvalidObjectTypeException()
 
     def get_calcd_stat(self, stat_name):
         self.logger.debug("Start - stat_name: %s", str(stat_name))
@@ -223,11 +144,11 @@ class ADNDCharacter(Character):
         self.logger.debug("Start - None")
         exp = self.get_special_stat('experience')
         self.logger.debug("Experience: %d", exp)
-        exp_list = list(LEVELING_DATA['rogue'].keys()) # FIXME: Move to character class variable
-        self.logger.debug("Experience: %s", exp_list)
-        pos = bisect.bisect_right(exp_list, exp)
+        tmp_exp_list = [DATA_LEVEL['rogue'][tmp_i]['experience'] for tmp_i in DATA_LEVEL['rogue'].keys()] # FIXME: Move to character class variable
+        self.logger.debug("Experience TMP: %s", tmp_exp_list)
+        pos = bisect.bisect_right(tmp_exp_list, exp)
         self.logger.debug("Bisect Position: %d", pos)
-        return LEVELING_DATA['rogue'][exp_list[pos-1]]['level']
+        return pos
 
     def get_thaco_for_weapon(self, weapon):
         self.logger.debug("Start - weapon: %s", weapon)
@@ -239,4 +160,44 @@ class ADNDCharacter(Character):
         if weapon not in self.active_weapons:
             raise ItemNotActiveException
         tmp_thaco = tmp_thaco - weapon.get_stat('stat_to_hit_adjust')
+        self.logger.debug("End - thac0: %s", tmp_thaco)
         return tmp_thaco
+
+    def add_hit_dice(self, index, roll):
+        self.logger.debug("Start - index: %s, roll: %s", index, roll)
+        if index > 10: # len(self.hit_dice) which should always be 10 for ADND, using index starting at 1
+            raise BadDataException()
+        self.hit_dice[index - 1] = roll # FIXME: Should eventually add checks for max roll based on class.
+        self.logger.debug("End - None")
+
+    def get_health(self):
+        self.logger.debug("Start - None")
+        # Add up all hit_dice rolls for level
+        tmp_result = 0
+        for tmp_i in self.hit_dice[0:(DATA_LEVEL['rogue'][self._get_level()]['hitdice'])]:
+            tmp_result = tmp_result + tmp_i
+        # FIXME: Don't forget to add the levelhp for levels above 10
+        self.logger.debug("End - health: %s", tmp_result)
+        return tmp_result
+
+    def get_hit_dice(self):
+        self.logger.debug("Start - None")
+        tmp_result = "{} + {}".format(
+            DATA_LEVEL['rogue'][self._get_level()]['hitdice'],
+            DATA_LEVEL['rogue'][self._get_level()]['levelhp']
+        )
+        self.logger.debug("End - hit_dice_str: %s", tmp_result)
+        return tmp_result
+
+    def get_thief_skill(self, thief_skill, level = 0):
+        self.logger.debug("Start - thief_skill: %s, level: %d", thief_skill, level)
+        tmp_thief_skill = "thief_{}".format(thief_skill)
+        tmp_level = int(self._get_level() if level == 0 else level)
+        tmp_result = 0
+        for i in self.thief_skills[thief_skill][0:tmp_level]:
+            tmp_result = tmp_result + i # Adding percents
+        self.logger.debug("Level add ups: %d", tmp_result)
+        if tmp_thief_skill in DATA_ABILITY['dexterity'][self.get_basic_stat('dexterity')]:
+            tmp_result = tmp_result + DATA_ABILITY['dexterity'][self.get_basic_stat('dexterity')][tmp_thief_skill]
+        self.logger.debug("Stat Modifier add ups: %d", tmp_result)
+        return tmp_result

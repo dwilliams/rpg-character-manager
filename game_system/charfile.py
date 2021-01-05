@@ -90,7 +90,7 @@ class CharacterFile:
         to_save_dict = character.save_dict()
 
         # Convert the dictionary to JSON
-        to_save_json = json.dumps(to_save_dict)
+        to_save_json = json.dumps(to_save_dict, indent = 2)
 
         # Write to the file
         with open(os.path.abspath(filepath), 'w') as filehandle:

@@ -48,7 +48,7 @@ class ADNDPDFGen:
         self._generate_page_char()
         self._generate_page_skills()
         self._generate_page_thaco()
-        self._generate_page_inventory()
+        self._generate_inventory()
 
     def _generate_page_char(self):
         self.pdf_class.add_page()
@@ -77,14 +77,14 @@ class ADNDPDFGen:
         self.pdf_class.set_font('Arial', '', 16)
         self.pdf_class.cell(5.5, 0, "Hit Points:", 0, 0, 'R')
         self.pdf_class.set_font('Arial', 'U', 14)
-        self.pdf_class.cell(6, 0, "{0: ^16}".format(self.character.get_special_stat('hitpoints')), 0, 1, 'L')
+        self.pdf_class.cell(6, 0, "{0: ^16}".format(self.character.get_health()), 0, 1, 'L')
 
         self.pdf_class.set_xy(0.75, 1.70)
         self.pdf_class.set_font('Arial', '', 10)
         self.pdf_class.cell(5.5, 0, "Hit Dice:", 0, 0, 'R')
         self.pdf_class.set_font('Arial', 'U', 8)
-        self.pdf_class.cell(6, 0, "{0: ^16}".format(0), 0, 1, 'L')
-        
+        self.pdf_class.cell(6, 0, "{0: ^16}".format(self.character.get_hit_dice()), 0, 1, 'L')
+
         self.pdf_class.set_xy(0.75, 2.0)
         self.pdf_class.set_font('Arial', '', 16)
         self.pdf_class.cell(5.5, 0, "Armor Class:", 0, 0, 'R')
@@ -287,10 +287,64 @@ class ADNDPDFGen:
     def _generate_page_skills(self):
         self.pdf_class.add_page()
 
+        skill_count = 7
+        page_count = int(skill_count / 33) # 33 rows
+        # Figure out how to go to page 2?
+        #row_count = 33
+        column_count = 10
+
         # Page Title Block
         self.pdf_class.set_xy(0.5, 0.8)
         self.pdf_class.set_font('Arial', '', 16)
-        self.pdf_class.cell(0.5, 0, "Skills", 0, 0, 'L')
+        self.pdf_class.cell(0.5, 0, "Thief Skills", 0, 0, 'L')
+
+        # Page Layout
+        self.pdf_class.line(0.75, 1.5, 2.75 + (0.5 * column_count), 1.5)
+        row_count = 8 # Only 8 thief skills
+        for i in range(row_count):
+            self.pdf_class.line(0.75, 1.75 + (0.25 * i), 2.75 + (0.5 * column_count), 1.75 + (0.25 * i))
+
+        self.pdf_class.line(0.75, 1.5, 0.75, 1.5 + (0.25 * row_count))
+        self.pdf_class.line(2.75, 1.5, 2.75, 1.5 + (0.25 * row_count))
+        for i in range(column_count):
+            self.pdf_class.line(3.25 + (0.5 * i), 1.5, 3.25 + (0.5 * i), 1.5 + (0.25 * row_count))
+
+        self.pdf_class.set_font('Arial', '', 12)
+        self.pdf_class.set_xy(0.45, 1.25)
+        self.pdf_class.cell(1.25, 0.25, "Skill Name:", 0, 2, 'R')
+        self.pdf_class.set_xy(1.45, 1.25)
+        self.pdf_class.cell(1.25, 0.25, "Level:", 0, 2, 'R')
+        for i in range(column_count):
+            self.pdf_class.set_xy(2.75 + (i * 0.5), 1.25)
+            if int(self.character.get_calcd_stat('level')) > 10:
+                self.pdf_class.cell(0.5, 0.25, str(int(self.character.get_calcd_stat('level')) - i), 0, 2, 'C')
+            else:
+                self.pdf_class.cell(0.5, 0.25, str(column_count - i), 0, 2, 'C')
+
+        # Character Skill Data
+        self.pdf_class.set_xy(1.45, 1.5)
+        self.pdf_class.cell(1.25, 0.25, "Pick Pockets", 0, 2, 'R')
+        self.pdf_class.cell(1.25, 0.25, "Open Locks", 0, 2, 'R')
+        self.pdf_class.cell(1.25, 0.25, "Find or Remove Traps", 0, 2, 'R')
+        self.pdf_class.cell(1.25, 0.25, "Move Silently", 0, 2, 'R')
+        self.pdf_class.cell(1.25, 0.25, "Hide in Shadows", 0, 2, 'R')
+        self.pdf_class.cell(1.25, 0.25, "Detect Noise", 0, 2, 'R')
+        self.pdf_class.cell(1.25, 0.25, "Climb Walls", 0, 2, 'R')
+        self.pdf_class.cell(1.25, 0.25, "Read Languages", 0, 2, 'R')
+        for i in range(column_count):
+            self.pdf_class.set_xy(2.75 + (i * 0.5), 1.55)
+            tmp_level = column_count - i
+            if int(self.character.get_calcd_stat('level')) > 10:
+                tmp_level = int(self.character.get_calcd_stat('level')) - i
+            if tmp_level < int(self.character.get_calcd_stat('level')) + 1:
+                self.pdf_class.cell(0.5, 0.25, "{}%".format(self.character.get_thief_skill('pick_pockets', tmp_level)), 0, 2, 'C')
+                self.pdf_class.cell(0.5, 0.25, "{}%".format(self.character.get_thief_skill('open_locks', tmp_level)), 0, 2, 'C')
+                self.pdf_class.cell(0.5, 0.25, "{}%".format(self.character.get_thief_skill('find_remove_traps', tmp_level)), 0, 2, 'C')
+                self.pdf_class.cell(0.5, 0.25, "{}%".format(self.character.get_thief_skill('move_silently', tmp_level)), 0, 2, 'C')
+                self.pdf_class.cell(0.5, 0.25, "{}%".format(self.character.get_thief_skill('hide_shadows', tmp_level)), 0, 2, 'C')
+                self.pdf_class.cell(0.5, 0.25, "{}%".format(self.character.get_thief_skill('detect_noise', tmp_level)), 0, 2, 'C')
+                self.pdf_class.cell(0.5, 0.25, "{}%".format(self.character.get_thief_skill('climb_walls', tmp_level)), 0, 2, 'C')
+                self.pdf_class.cell(0.5, 0.25, "{}%".format(self.character.get_thief_skill('read_languages', tmp_level)), 0, 2, 'C')
 
     def _generate_page_thaco(self):
         self.pdf_class.add_page()
@@ -381,7 +435,7 @@ class ADNDPDFGen:
         # Weapons & THAC0
         # FIXME: Figure out how to do a second page
         tmp_wpns_list = list(self.character.active_weapons)
-        tmp_num_wpns = len(tmp_wpns_list) if len(self.character.active_weapons) < 4 else 4
+        tmp_num_wpns = len(tmp_wpns_list) if len(self.character.active_weapons) < 4 else 4 # Figure out how to go to page 2
         for tmp_i in range(tmp_num_wpns):
             # Grab and fill in Name and Stats from weapon
             # Grab THAC0 and fill in chart
@@ -422,10 +476,55 @@ class ADNDPDFGen:
             self.pdf_class.cell(1.5, 0.25, "{}".format(tmp_thaco + 9) if tmp_thaco < 12 else "", 0, 2, 'C')
             self.pdf_class.cell(1.5, 0.25, "{}".format(tmp_thaco + 10) if tmp_thaco < 11 else "", 0, 2, 'C')
 
-    def _generate_page_inventory(self):
+    def _generate_inventory(self):
+        tmp_items_list = list(self.character.inventory)
+        inv_count = len(tmp_items_list)
+        page_count = int(inv_count / 33) + 1 # 33 rows
+
+        for i in range(page_count):
+            page_inv_start = i * 33
+            self._generate_page_inventory(tmp_items_list[page_inv_start:]) # Sublist without earlier items
+        # Blank Page if needed
+        if inv_count % 33 > 22:
+            self._generate_page_inventory([])
+
+    def _generate_page_inventory(self, inv_sublist):
         self.pdf_class.add_page()
+
+        row_count = 33
+        num_items = len(inv_sublist) if len(inv_sublist) < 34 else 33
 
         # Page Title Block
         self.pdf_class.set_xy(0.5, 0.8)
         self.pdf_class.set_font('Arial', '', 16)
         self.pdf_class.cell(0.5, 0, "Inventory", 0, 0, 'L')
+
+        # Page Layout
+        # 0.75 to 7.75: 7, (7 - 0.5) / 2: 3.25
+        self.pdf_class.line(0.75, 1.5, 7.75, 1.5)
+        for i in range(row_count):
+            self.pdf_class.line(0.75, 1.75 + (0.25 * i), 7.75, 1.75 + (0.25 * i))
+        self.pdf_class.line(0.75, 1.5, 0.75, 1.5 + (0.25 * row_count))
+        self.pdf_class.line(1.25, 1.5, 1.25, 1.5 + (0.25 * row_count))
+        self.pdf_class.line(6.75, 1.5, 6.75, 1.5 + (0.25 * row_count))
+        self.pdf_class.line(7.75, 1.5, 7.75, 1.5 + (0.25 * row_count))
+        # Column Headers
+        self.pdf_class.set_font('Arial', '', 12)
+        self.pdf_class.set_xy(0.75, 1.25)
+        self.pdf_class.cell(0.5, 0.25, "QTY", 0, 2, 'C')
+        self.pdf_class.set_xy(1.25, 1.25)
+        self.pdf_class.cell(5.5, 0.25, "Name", 0, 2, 'C')
+        self.pdf_class.set_xy(6.75, 1.25)
+        self.pdf_class.cell(1.0, 0.25, "Value", 0, 2, 'C')
+
+        # Draw character inventory data
+        # Left column, then right column
+        # FIXME: Handle quantities
+        self.pdf_class.set_font('Arial', '', 12)
+        for i in range(num_items):
+            self.pdf_class.set_xy(0.75, 1.5 + (0.25 * i))
+            self.pdf_class.cell(0.5, 0.25, "1", 0, 2, 'C') # QTY
+            self.pdf_class.set_xy(1.25, 1.5 + (0.25 * i))
+            self.pdf_class.cell(5.5, 0.25, inv_sublist[i].item_name, 0, 2, 'L') # NAME
+            self.pdf_class.set_xy(6.75, 1.5 + (0.25 * i))
+            self.pdf_class.cell(1.0, 0.25, inv_sublist[i].get_cost('cost_money'), 0, 2, 'R') # VALUE

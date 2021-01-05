@@ -39,3 +39,6 @@ class InvalidGameSystemException(Exception):
 
 class InvalidItemAttributeException(Exception):
     pass
+
+class BadDataException(Exception):
+    pass

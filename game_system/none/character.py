@@ -11,6 +11,7 @@ from game_system.exceptions import InvalidCharacterStatTypeException
 from game_system.exceptions import GameSystemMismatchException
 from game_system.exceptions import ItemNotEquipableException
 from game_system.exceptions import ItemNotInInventoryException
+from game_system.exceptions import InvalidObjectTypeException
 from game_system.exceptions import NotCharacterException
 
 ### GLOBALS ###
@@ -65,6 +66,8 @@ class Character:
         self.logger.debug("Start - item: %s", str(item))
         if not isinstance(item, self.class_item):
             raise GameSystemMismatchException()
+        if not isinstance(item, (Item, Equipment, Weapon)):
+            raise InvalidObjectTypeException()
 
     def load_dict(self, char_dict, item_factory, equipment_factory, weapon_factory):
         self.logger.debug("Start - char_dict: %s", str(char_dict))
