@@ -33,18 +33,20 @@ class ADNDCharacter(Character):
     class_weapon = ADNDWeapon
 
     basic_stats_types = ['strength', 'dexterity', 'constitution', 'intelligence', 'wisdom', 'charisma']
-    special_stats_types = ['experience', 'comeliness']
+    special_stats_types = ['comeliness']
 
+    # FIXME: Should probably make this a series of python classes so character
+    #        classes like 'thief' and 'bard' can expand on 'rogue'.
     class_types = ['warrior', 'wizard', 'priest', 'rogue']
 
     # Class = string
-    # Skills = ?
 
     def __init__(self, name=''):
         # Ensure the parent's __init__ is called
         super().__init__(name=name)
 
         # Initialize basic and special stats to creation defaults
+        self.experience = [0]
         self.hit_dice = [6, 0, 0, 0, 0, 0, 0, 0, 0, 0] # Should be 10 hit dice max for character in ADND
 
         # Skills
@@ -66,10 +68,13 @@ class ADNDCharacter(Character):
         self.logger.debug("Start - char_dict: %s", str(char_dict))
         super().load_dict(char_dict, item_factory, equipment_factory, weapon_factory)
 
+        self.experience = char_dict['data']['experience']
         self.hit_dice = char_dict['data']['hit_dice'][0:10] # Should this be checked to make sure it's a list?
 
         self.thief_skills = char_dict['data']['thief_skills'] # Should this be checked to make sure it's the right data
                                                               # structure?  Really, should this be a class?
+
+        # FIXME: Add proficiencies, etc.
 
         self.logger.debug("End - None")
 
@@ -77,6 +82,7 @@ class ADNDCharacter(Character):
         self.logger.debug("Start - None")
         char_dict = super().save_dict()
 
+        char_dict['data']['experience'] = self.experience
         char_dict['data']['hit_dice'] = self.hit_dice
 
         char_dict['data']['thief_skills'] = self.thief_skills
@@ -93,56 +99,99 @@ class ADNDCharacter(Character):
 
     def get_calcd_stat(self, stat_name):
         self.logger.debug("Start - stat_name: %s", str(stat_name))
-        if stat_name == 'level':
-            return self._get_level()
         # STR based stats
-        elif stat_name == 'to_hit_adjust':
+        # if stat_name == 'hit_probability':
+        #     tmp_stat = self.get_basic_stat('strength')
+        #     self.logger.debug("stat strength: %s", tmp_stat)
+        #     tmp_value = DATA_ABILITY['strength'][tmp_stat]['hit_probability']
+        #     self.logger.debug("stat value: %s", tmp_value)
+        #     return tmp_value
+        # elif stat_name == 'damage_adjust':
+        #     tmp_stat = self.get_basic_stat('strength')
+        #     self.logger.debug("stat strength: %s", tmp_stat)
+        #     tmp_value = DATA_ABILITY['strength'][tmp_stat]['damage_adjust']
+        #     self.logger.debug("stat value: %s", tmp_value)
+        #     return tmp_value
+        # elif stat_name == 'open_doors':
+        #     tmp_stat = self.get_basic_stat('strength')
+        #     self.logger.debug("stat strength: %s", tmp_stat)
+        #     tmp_value = DATA_ABILITY['strength'][tmp_stat]['open_doors']
+        #     self.logger.debug("stat value: %s", tmp_value)
+        #     return tmp_value
+        if stat_name in DATA_ABILITY['strength']['1']:
             tmp_stat = self.get_basic_stat('strength')
-            self.logger.debug("stat strength: %d", tmp_stat)
-            tmp_value = DATA_ABILITY['strength'][tmp_stat]['hit_probability']
-            self.logger.debug("stat value: %d", tmp_value)
-            return tmp_value
-        elif stat_name == 'damage_adjust':
-            tmp_stat = self.get_basic_stat('strength')
-            self.logger.debug("stat strength: %d", tmp_stat)
-            tmp_value = DATA_ABILITY['strength'][tmp_stat]['damage_adjust']
-            self.logger.debug("stat value: %d", tmp_value)
-            return tmp_value
-        elif stat_name == 'open_doors':
-            tmp_stat = self.get_basic_stat('strength')
-            self.logger.debug("stat strength: %d", tmp_stat)
-            tmp_value = DATA_ABILITY['strength'][tmp_stat]['open_doors']
-            self.logger.debug("stat value: %d", tmp_value)
+            self.logger.debug("stat strength: %s", tmp_stat)
+            tmp_value = DATA_ABILITY['strength'][tmp_stat][stat_name]
+            self.logger.debug("stat value: %s", tmp_value)
             return tmp_value
         # DEX based stats
-        elif stat_name == 'reaction_adjust':
+        # elif stat_name == 'reaction_adjust':
+        #     tmp_stat = self.get_basic_stat('dexterity')
+        #     self.logger.debug("stat dexterity: %s", tmp_stat)
+        #     tmp_value = DATA_ABILITY['dexterity'][tmp_stat]['reaction_adjust']
+        #     self.logger.debug("stat value: %s", tmp_value)
+        #     return tmp_value
+        # elif stat_name == 'missile_attack_adjust':
+        #     tmp_stat = self.get_basic_stat('dexterity')
+        #     self.logger.debug("stat dexterity: %s", tmp_stat)
+        #     tmp_value = DATA_ABILITY['dexterity'][tmp_stat]['missile_attack_adjust']
+        #     self.logger.debug("stat value: %s", tmp_value)
+        #     return tmp_value
+        # elif stat_name == 'defensive_adjust':
+        #     tmp_stat = self.get_basic_stat('dexterity')
+        #     self.logger.debug("stat dexterity: %s", tmp_stat)
+        #     tmp_value = DATA_ABILITY['dexterity'][tmp_stat]['defensive_adjust']
+        #     self.logger.debug("stat value: %s", tmp_value)
+        #     return tmp_value
+        elif stat_name in DATA_ABILITY['dexterity']['1']:
             tmp_stat = self.get_basic_stat('dexterity')
-            self.logger.debug("stat dexterity: %d", tmp_stat)
-            tmp_value = DATA_ABILITY['dexterity'][tmp_stat]['reaction_adjust']
-            self.logger.debug("stat value: %d", tmp_value)
-            return tmp_value
-        elif stat_name == 'missile_adjust':
-            tmp_stat = self.get_basic_stat('dexterity')
-            self.logger.debug("stat dexterity: %d", tmp_stat)
-            tmp_value = DATA_ABILITY['dexterity'][tmp_stat]['missile_attack_adjust']
-            self.logger.debug("stat value: %d", tmp_value)
-            return tmp_value
-        elif stat_name == 'defense_adjust':
-            tmp_stat = self.get_basic_stat('dexterity')
-            self.logger.debug("stat dexterity: %d", tmp_stat)
-            tmp_value = DATA_ABILITY['dexterity'][tmp_stat]['defensive_adjust']
-            self.logger.debug("stat value: %d", tmp_value)
+            self.logger.debug("stat dexterity: %s", tmp_stat)
+            tmp_value = DATA_ABILITY['dexterity'][tmp_stat][stat_name]
+            self.logger.debug("stat value: %s", tmp_value)
             return tmp_value
         # CON based stats
+        elif stat_name in DATA_ABILITY['constitution']['1']:
+            tmp_stat = self.get_basic_stat('constitution')
+            self.logger.debug("stat constitution: %s", tmp_stat)
+            tmp_value = DATA_ABILITY['constitution'][tmp_stat][stat_name]
+            self.logger.debug("stat value: %s", tmp_value)
+            return tmp_value
         # INT based stats
+        elif stat_name in DATA_ABILITY['intelligence']['1']:
+            tmp_stat = self.get_basic_stat('intelligence')
+            self.logger.debug("stat intelligence: %s", tmp_stat)
+            tmp_value = DATA_ABILITY['intelligence'][tmp_stat][stat_name]
+            self.logger.debug("stat value: %s", tmp_value)
+            return tmp_value
         # WIS based stats
+        elif stat_name in DATA_ABILITY['wisdom']['1']:
+            tmp_stat = self.get_basic_stat('wisdom')
+            self.logger.debug("stat wisdom: %s", tmp_stat)
+            tmp_value = DATA_ABILITY['wisdom'][tmp_stat][stat_name]
+            self.logger.debug("stat value: %s", tmp_value)
+            return tmp_value
         # CHA based stats
+        elif stat_name in DATA_ABILITY['charisma']['1']:
+            tmp_stat = self.get_basic_stat('charisma')
+            self.logger.debug("stat charisma: %s", tmp_stat)
+            tmp_value = DATA_ABILITY['charisma'][tmp_stat][stat_name]
+            self.logger.debug("stat value: %s", tmp_value)
+            return tmp_value
         else:
             raise InvalidCharacterStatTypeException()
 
-    def _get_level(self):
+    def get_experience(self):
         self.logger.debug("Start - None")
-        exp = self.get_special_stat('experience')
+        exp_list = self.experience
+        exp = 0
+        for i in exp_list:
+            exp = exp + int(i)
+        self.logger.debug("Experience: %d", exp)
+        return exp
+
+    def get_level(self):
+        self.logger.debug("Start - None")
+        exp = self.get_experience()
         self.logger.debug("Experience: %d", exp)
         tmp_exp_list = [DATA_LEVEL['rogue'][tmp_i]['experience'] for tmp_i in DATA_LEVEL['rogue'].keys()] # FIXME: Move to character class variable
         self.logger.debug("Experience TMP: %s", tmp_exp_list)
@@ -153,11 +202,11 @@ class ADNDCharacter(Character):
     def get_thaco_for_weapon(self, weapon):
         self.logger.debug("Start - weapon: %s", weapon)
         # Get starting thac0 based on level
-        tmp_thaco = DATA_LEVEL['rogue'][self._get_level()]['thac0'] # FIXME: Move to character class variable
+        tmp_thaco = DATA_LEVEL['rogue'][self.get_level()]['thac0'] # FIXME: Move to character class variable
         # Check for spec based modifiers
-        tmp_thaco = tmp_thaco - self.get_calcd_stat('to_hit_adjust')
+        tmp_thaco = tmp_thaco - self.get_calcd_stat('hit_probability')
         # Check for weapon modifiers
-        if weapon not in self.active_weapons:
+        if weapon not in self.inventory.get_weapons():
             raise ItemNotActiveException
         tmp_thaco = tmp_thaco - weapon.get_stat('stat_to_hit_adjust')
         self.logger.debug("End - thac0: %s", tmp_thaco)
@@ -174,7 +223,7 @@ class ADNDCharacter(Character):
         self.logger.debug("Start - None")
         # Add up all hit_dice rolls for level
         tmp_result = 0
-        for tmp_i in self.hit_dice[0:(DATA_LEVEL['rogue'][self._get_level()]['hitdice'])]:
+        for tmp_i in self.hit_dice[0:(DATA_LEVEL['rogue'][self.get_level()]['hitdice'])]:
             tmp_result = tmp_result + tmp_i
         # FIXME: Don't forget to add the levelhp for levels above 10
         self.logger.debug("End - health: %s", tmp_result)
@@ -183,17 +232,35 @@ class ADNDCharacter(Character):
     def get_hit_dice(self):
         self.logger.debug("Start - None")
         tmp_result = "{} + {}".format(
-            DATA_LEVEL['rogue'][self._get_level()]['hitdice'],
-            DATA_LEVEL['rogue'][self._get_level()]['levelhp']
+            DATA_LEVEL['rogue'][self.get_level()]['hitdice'],
+            DATA_LEVEL['rogue'][self.get_level()]['levelhp']
         )
         self.logger.debug("End - hit_dice_str: %s", tmp_result)
         return tmp_result
 
+    def get_saving_throw(self, type):
+        self.logger.debug("Start - Type: %s", type)
+        tmp_result = 20
+        if type in DATA_LEVEL['rogue'][self.get_level()]['saving_throws']:
+            tmp_result = DATA_LEVEL['rogue'][self.get_level()]['saving_throws'][type]
+        self.logger.debug("End - Value: %s", tmp_result)
+        return tmp_result
+
     def get_thief_skill(self, thief_skill, level = 0):
         self.logger.debug("Start - thief_skill: %s, level: %d", thief_skill, level)
+        base_thief_skills = {
+            "pick_pockets": 15,
+            "open_locks": 10,
+            "find_remove_traps": 5,
+            "move_silently": 10,
+            "hide_shadows": 5,
+            "detect_noise": 15,
+            "climb_walls": 60,
+            "read_languages": 0
+        }
         tmp_thief_skill = "thief_{}".format(thief_skill)
-        tmp_level = int(self._get_level() if level == 0 else level)
-        tmp_result = 0
+        tmp_level = int(self.get_level() if level == 0 else level)
+        tmp_result = base_thief_skills[thief_skill]
         for i in self.thief_skills[thief_skill][0:tmp_level]:
             tmp_result = tmp_result + i # Adding percents
         self.logger.debug("Level add ups: %d", tmp_result)

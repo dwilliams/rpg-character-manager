@@ -47,7 +47,7 @@ class ADNDPDFGen:
         self.pdf_class = ADNDPDF(self.character.name)
         self._generate_page_char()
         self._generate_page_skills()
-        self._generate_page_thaco()
+        self._generate_thaco()
         self._generate_inventory()
 
     def _generate_page_char(self):
@@ -65,13 +65,13 @@ class ADNDPDFGen:
         self.pdf_class.set_font('Arial', '', 16)
         self.pdf_class.cell(5.5, 0, "Level:", 0, 0, 'R')
         self.pdf_class.set_font('Arial', 'U', 14)
-        self.pdf_class.cell(6, 0, "{0: ^16}".format(self.character.get_calcd_stat('level')), 0, 1, 'L')
+        self.pdf_class.cell(6, 0, "{0: ^16}".format(self.character.get_level()), 0, 1, 'L')
 
         self.pdf_class.set_xy(0.75, 1.20)
         self.pdf_class.set_font('Arial', '', 10)
         self.pdf_class.cell(5.5, 0, "Experience:", 0, 0, 'R')
         self.pdf_class.set_font('Arial', 'U', 8)
-        self.pdf_class.cell(6, 0, "{0: ^16}".format(self.character.get_special_stat('experience')), 0, 1, 'L')
+        self.pdf_class.cell(6, 0, "{0: ^16}".format(self.character.get_experience()), 0, 1, 'L')
 
         self.pdf_class.set_xy(0.75, 1.5)
         self.pdf_class.set_font('Arial', '', 16)
@@ -102,7 +102,7 @@ class ADNDPDFGen:
         self.pdf_class.set_font('Arial', '', 12)
         self.pdf_class.cell(1, 0, "To Hit Adj:", 0, 0, 'R')
         self.pdf_class.set_font('Arial', 'U', 10)
-        self.pdf_class.cell(1.5, 0, "{0: ^6}".format(self.character.get_calcd_stat('to_hit_adjust')), 0, 1, 'L')
+        self.pdf_class.cell(1.5, 0, "{0: ^6}".format(self.character.get_calcd_stat('hit_probability')), 0, 1, 'L')
 
         self.pdf_class.set_xy(0.75, 3.5)
         self.pdf_class.set_font('Arial', '', 12)
@@ -133,13 +133,13 @@ class ADNDPDFGen:
         self.pdf_class.set_font('Arial', '', 12)
         self.pdf_class.cell(1, 0, "Missile Adj:", 0, 0, 'R')
         self.pdf_class.set_font('Arial', 'U', 10)
-        self.pdf_class.cell(1.5, 0, "{0: ^6}".format(self.character.get_calcd_stat('missile_adjust')), 0, 1, 'L')
+        self.pdf_class.cell(1.5, 0, "{0: ^6}".format(self.character.get_calcd_stat('missile_attack_adjust')), 0, 1, 'L')
 
         self.pdf_class.set_xy(3.5, 3.75)
         self.pdf_class.set_font('Arial', '', 12)
         self.pdf_class.cell(1, 0, "Defense Adj:", 0, 0, 'R')
         self.pdf_class.set_font('Arial', 'U', 10)
-        self.pdf_class.cell(1.5, 0, "{0: ^6}".format(self.character.get_calcd_stat('defense_adjust')), 0, 1, 'L')
+        self.pdf_class.cell(1.5, 0, "{0: ^6}".format(self.character.get_calcd_stat('defensive_adjust')), 0, 1, 'L')
 
         # CON Block
         self.pdf_class.set_xy(6.25, 3.0)
@@ -152,19 +152,19 @@ class ADNDPDFGen:
         self.pdf_class.set_font('Arial', '', 12)
         self.pdf_class.cell(1, 0, "Hit Point Adj:", 0, 0, 'R')
         self.pdf_class.set_font('Arial', 'U', 10)
-        self.pdf_class.cell(1.5, 0, "{0: ^6}".format(self.character.get_basic_stat('constitution')), 0, 1, 'L')
+        self.pdf_class.cell(1.5, 0, "{0: ^6}".format(self.character.get_calcd_stat('hit_point_adjust')), 0, 1, 'L')
 
         self.pdf_class.set_xy(6.25, 3.5)
         self.pdf_class.set_font('Arial', '', 12)
         self.pdf_class.cell(1, 0, "System Shock:", 0, 0, 'R')
         self.pdf_class.set_font('Arial', 'U', 10)
-        self.pdf_class.cell(1.5, 0, "{0: ^6}".format(self.character.get_basic_stat('constitution')), 0, 1, 'L')
+        self.pdf_class.cell(1.5, 0, "{0: ^6}".format(self.character.get_calcd_stat('system_shock')), 0, 1, 'L')
 
         self.pdf_class.set_xy(6.25, 3.75)
         self.pdf_class.set_font('Arial', '', 12)
         self.pdf_class.cell(1, 0, "Res Survival:", 0, 0, 'R')
         self.pdf_class.set_font('Arial', 'U', 10)
-        self.pdf_class.cell(1.5, 0, "{0: ^6}".format(self.character.get_basic_stat('constitution')), 0, 1, 'L')
+        self.pdf_class.cell(1.5, 0, "{0: ^6}".format(self.character.get_calcd_stat('resurrection_survival')), 0, 1, 'L')
 
         # INT Block
         self.pdf_class.set_xy(0.75, 5.0)
@@ -175,21 +175,27 @@ class ADNDPDFGen:
 
         self.pdf_class.set_xy(0.75, 5.25)
         self.pdf_class.set_font('Arial', '', 12)
-        self.pdf_class.cell(1, 0, "Max Spell Lvl:", 0, 0, 'R')
+        self.pdf_class.cell(1, 0, "Num Langs:", 0, 0, 'R')
         self.pdf_class.set_font('Arial', 'U', 10)
-        self.pdf_class.cell(1.5, 0, "{0: ^6}".format(self.character.get_basic_stat('intelligence')), 0, 1, 'L')
+        self.pdf_class.cell(1.5, 0, "{0: ^6}".format(self.character.get_calcd_stat('num_languages')), 0, 1, 'L')
 
         self.pdf_class.set_xy(0.75, 5.5)
         self.pdf_class.set_font('Arial', '', 12)
-        self.pdf_class.cell(1, 0, "% to Learn:", 0, 0, 'R')
+        self.pdf_class.cell(1, 0, "Max Spell Lvl:", 0, 0, 'R')
         self.pdf_class.set_font('Arial', 'U', 10)
-        self.pdf_class.cell(1.5, 0, "{0: ^6}".format(self.character.get_basic_stat('intelligence')), 0, 1, 'L')
+        self.pdf_class.cell(1.5, 0, "{0: ^6}".format(self.character.get_calcd_stat('spell_level')), 0, 1, 'L')
 
         self.pdf_class.set_xy(0.75, 5.75)
         self.pdf_class.set_font('Arial', '', 12)
+        self.pdf_class.cell(1, 0, "% to Learn:", 0, 0, 'R')
+        self.pdf_class.set_font('Arial', 'U', 10)
+        self.pdf_class.cell(1.5, 0, "{0: ^6}".format(self.character.get_calcd_stat('learn_spell_chance')), 0, 1, 'L')
+
+        self.pdf_class.set_xy(0.75, 6.0)
+        self.pdf_class.set_font('Arial', '', 12)
         self.pdf_class.cell(1, 0, "Spells / Lvl:", 0, 0, 'R')
         self.pdf_class.set_font('Arial', 'U', 10)
-        self.pdf_class.cell(1.5, 0, "{0: ^6}".format(self.character.get_basic_stat('intelligence')), 0, 1, 'L')
+        self.pdf_class.cell(1.5, 0, "{0: ^6}".format(self.character.get_calcd_stat('max_spells_per_level')), 0, 1, 'L')
 
         # WIS Block
         self.pdf_class.set_xy(3.5, 5.0)
@@ -202,19 +208,19 @@ class ADNDPDFGen:
         self.pdf_class.set_font('Arial', '', 12)
         self.pdf_class.cell(1, 0, "MD Adj:", 0, 0, 'R')
         self.pdf_class.set_font('Arial', 'U', 10)
-        self.pdf_class.cell(1.5, 0, "{0: ^6}".format(self.character.get_basic_stat('wisdom')), 0, 1, 'L')
+        self.pdf_class.cell(1.5, 0, "{0: ^6}".format(self.character.get_calcd_stat('magic_defense')), 0, 1, 'L')
 
         self.pdf_class.set_xy(3.5, 5.5)
         self.pdf_class.set_font('Arial', '', 12)
         self.pdf_class.cell(1, 0, "Bonus Spells:", 0, 0, 'R')
         self.pdf_class.set_font('Arial', 'U', 10)
-        self.pdf_class.cell(1.5, 0, "{0: ^6}".format(self.character.get_basic_stat('wisdom')), 0, 1, 'L')
+        self.pdf_class.cell(1.5, 0, "{0: ^6}".format(self.character.get_calcd_stat('bonus_spells')), 0, 1, 'L')
 
         self.pdf_class.set_xy(3.5, 5.75)
         self.pdf_class.set_font('Arial', '', 12)
         self.pdf_class.cell(1, 0, "% Fail:", 0, 0, 'R')
         self.pdf_class.set_font('Arial', 'U', 10)
-        self.pdf_class.cell(1.5, 0, "{0: ^6}".format(self.character.get_basic_stat('wisdom')), 0, 1, 'L')
+        self.pdf_class.cell(1.5, 0, "{0: ^6}".format(self.character.get_calcd_stat('spell_failure_chance')), 0, 1, 'L')
 
         # CHA Block
         self.pdf_class.set_xy(6.25, 5.0)
@@ -227,62 +233,68 @@ class ADNDPDFGen:
         self.pdf_class.set_font('Arial', '', 12)
         self.pdf_class.cell(1, 0, "Max Henchmen:", 0, 0, 'R')
         self.pdf_class.set_font('Arial', 'U', 10)
-        self.pdf_class.cell(1.5, 0, "{0: ^6}".format(self.character.get_basic_stat('charisma')), 0, 1, 'L')
+        self.pdf_class.cell(1.5, 0, "{0: ^6}".format(self.character.get_calcd_stat('max_num_henchmen')), 0, 1, 'L')
 
         self.pdf_class.set_xy(6.25, 5.5)
         self.pdf_class.set_font('Arial', '', 12)
         self.pdf_class.cell(1, 0, "Loyalty Base:", 0, 0, 'R')
         self.pdf_class.set_font('Arial', 'U', 10)
-        self.pdf_class.cell(1.5, 0, "{0: ^6}".format(self.character.get_basic_stat('charisma')), 0, 1, 'L')
+        self.pdf_class.cell(1.5, 0, "{0: ^6}".format(self.character.get_calcd_stat('loyalty_base')), 0, 1, 'L')
 
         self.pdf_class.set_xy(6.25, 5.75)
         self.pdf_class.set_font('Arial', '', 12)
         self.pdf_class.cell(1, 0, "Reaction Adj:", 0, 0, 'R')
         self.pdf_class.set_font('Arial', 'U', 10)
-        self.pdf_class.cell(1.5, 0, "{0: ^6}".format(self.character.get_basic_stat('charisma')), 0, 1, 'L')
+        self.pdf_class.cell(1.5, 0, "{0: ^6}".format(self.character.get_calcd_stat('reaction_adjust')), 0, 1, 'L')
 
         # Saving Throws Block
         self.pdf_class.set_xy(0.75, 7.0)
         self.pdf_class.set_font('Arial', '', 12)
         self.pdf_class.cell(1.5, 0, "Saving Throws:", 0, 0, 'L')
-        #self.pdf_class.set_font('Arial', 'U', 10)
-        #self.pdf_class.cell(1, 0, "{0: ^16}".format(self.character.get_basic_stat('intelligence')), 0, 1, 'L')
 
         self.pdf_class.set_xy(0.75, 7.25)
         self.pdf_class.set_font('Arial', '', 12)
         self.pdf_class.cell(1, 0, "PPDM:", 0, 0, 'R')
         self.pdf_class.set_font('Arial', 'U', 10)
-        self.pdf_class.cell(1.5, 0, "{0: ^6}".format(0), 0, 1, 'L')
+        self.pdf_class.cell(1.5, 0, "{0: ^6}".format(self.character.get_saving_throw('ppdm')), 0, 1, 'L')
 
         self.pdf_class.set_xy(0.75, 7.5)
         self.pdf_class.set_font('Arial', '', 12)
         self.pdf_class.cell(1, 0, "RSW:", 0, 0, 'R')
         self.pdf_class.set_font('Arial', 'U', 10)
-        self.pdf_class.cell(1.5, 0, "{0: ^6}".format(0), 0, 1, 'L')
+        self.pdf_class.cell(1.5, 0, "{0: ^6}".format(self.character.get_saving_throw('rsw')), 0, 1, 'L')
 
         self.pdf_class.set_xy(0.75, 7.75)
         self.pdf_class.set_font('Arial', '', 12)
         self.pdf_class.cell(1, 0, "PP:", 0, 0, 'R')
         self.pdf_class.set_font('Arial', 'U', 10)
-        self.pdf_class.cell(1.5, 0, "{0: ^6}".format(0), 0, 1, 'L')
+        self.pdf_class.cell(1.5, 0, "{0: ^6}".format(self.character.get_saving_throw('pp')), 0, 1, 'L')
 
         self.pdf_class.set_xy(0.75, 8.0)
         self.pdf_class.set_font('Arial', '', 12)
         self.pdf_class.cell(1, 0, "BW:", 0, 0, 'R')
         self.pdf_class.set_font('Arial', 'U', 10)
-        self.pdf_class.cell(1.5, 0, "{0: ^6}".format(0), 0, 1, 'L')
+        self.pdf_class.cell(1.5, 0, "{0: ^6}".format(self.character.get_saving_throw('bw')), 0, 1, 'L')
 
         self.pdf_class.set_xy(0.75, 8.25)
         self.pdf_class.set_font('Arial', '', 12)
         self.pdf_class.cell(1, 0, "SPELL:", 0, 0, 'R')
         self.pdf_class.set_font('Arial', 'U', 10)
-        self.pdf_class.cell(1.5, 0, "{0: ^6}".format(0), 0, 1, 'L')
+        self.pdf_class.cell(1.5, 0, "{0: ^6}".format(self.character.get_saving_throw('spell')), 0, 1, 'L')
 
         self.pdf_class.set_xy(0.75, 8.5)
         self.pdf_class.set_font('Arial', '', 12)
         self.pdf_class.cell(1, 0, "MR:", 0, 0, 'R')
         self.pdf_class.set_font('Arial', 'U', 10)
-        self.pdf_class.cell(1.5, 0, "{0: ^6}".format(0), 0, 1, 'L')
+        self.pdf_class.cell(1.5, 0, "{0: ^6}".format('?'), 0, 1, 'L')
+
+        self.pdf_class.set_xy(3.5, 7.0)
+        self.pdf_class.set_font('Arial', '', 12)
+        self.pdf_class.cell(1.5, 0, "Weapon Proficiencies:", 0, 0, 'C')
+
+        self.pdf_class.set_xy(6.25, 7.0)
+        self.pdf_class.set_font('Arial', '', 12)
+        self.pdf_class.cell(1.5, 0, "Non-Weapon Proficiencies:", 0, 0, 'C')
 
     def _generate_page_skills(self):
         self.pdf_class.add_page()
@@ -316,8 +328,8 @@ class ADNDPDFGen:
         self.pdf_class.cell(1.25, 0.25, "Level:", 0, 2, 'R')
         for i in range(column_count):
             self.pdf_class.set_xy(2.75 + (i * 0.5), 1.25)
-            if int(self.character.get_calcd_stat('level')) > 10:
-                self.pdf_class.cell(0.5, 0.25, str(int(self.character.get_calcd_stat('level')) - i), 0, 2, 'C')
+            if int(self.character.get_level()) > 10:
+                self.pdf_class.cell(0.5, 0.25, str(int(self.character.get_level()) - i), 0, 2, 'C')
             else:
                 self.pdf_class.cell(0.5, 0.25, str(column_count - i), 0, 2, 'C')
 
@@ -334,9 +346,9 @@ class ADNDPDFGen:
         for i in range(column_count):
             self.pdf_class.set_xy(2.75 + (i * 0.5), 1.55)
             tmp_level = column_count - i
-            if int(self.character.get_calcd_stat('level')) > 10:
-                tmp_level = int(self.character.get_calcd_stat('level')) - i
-            if tmp_level < int(self.character.get_calcd_stat('level')) + 1:
+            if int(self.character.get_level()) > 10:
+                tmp_level = int(self.character.get_level()) - i
+            if tmp_level < int(self.character.get_level()) + 1:
                 self.pdf_class.cell(0.5, 0.25, "{}%".format(self.character.get_thief_skill('pick_pockets', tmp_level)), 0, 2, 'C')
                 self.pdf_class.cell(0.5, 0.25, "{}%".format(self.character.get_thief_skill('open_locks', tmp_level)), 0, 2, 'C')
                 self.pdf_class.cell(0.5, 0.25, "{}%".format(self.character.get_thief_skill('find_remove_traps', tmp_level)), 0, 2, 'C')
@@ -346,7 +358,19 @@ class ADNDPDFGen:
                 self.pdf_class.cell(0.5, 0.25, "{}%".format(self.character.get_thief_skill('climb_walls', tmp_level)), 0, 2, 'C')
                 self.pdf_class.cell(0.5, 0.25, "{}%".format(self.character.get_thief_skill('read_languages', tmp_level)), 0, 2, 'C')
 
-    def _generate_page_thaco(self):
+    def _generate_thaco(self):
+        tmp_wpns_list = self.character.inventory.get_weapons()
+        thaco_count = len(tmp_wpns_list)
+        page_count = int(thaco_count / 4) + 1 # 33 rows
+
+        for i in range(page_count):
+            page_thaco_start = i * 4
+            self._generate_page_thaco(tmp_wpns_list[page_thaco_start:]) # Sublist without earlier items
+        # Blank Page if needed
+        if thaco_count % 4 > 3:
+            self._generate_page_thaco([])
+
+    def _generate_page_thaco(self, thaco_sublist):
         self.pdf_class.add_page()
 
         # Page Title Block
@@ -434,24 +458,24 @@ class ADNDPDFGen:
 
         # Weapons & THAC0
         # FIXME: Figure out how to do a second page
-        tmp_wpns_list = list(self.character.active_weapons)
-        tmp_num_wpns = len(tmp_wpns_list) if len(self.character.active_weapons) < 4 else 4 # Figure out how to go to page 2
+        #tmp_wpns_list = self.character.inventory.get_weapons()
+        tmp_num_wpns = len(thaco_sublist) if len(thaco_sublist) < 4 else 4 # Figure out how to go to page 2
         for tmp_i in range(tmp_num_wpns):
             # Grab and fill in Name and Stats from weapon
             # Grab THAC0 and fill in chart
             tmp_x_offset = 1.75 + (tmp_i * 1.5)
-            tmp_thaco = self.character.get_thaco_for_weapon(tmp_wpns_list[tmp_i])
+            tmp_thaco = self.character.get_thaco_for_weapon(thaco_sublist[tmp_i])
             self.pdf_class.set_font('Arial', '', 12)
             self.pdf_class.set_xy(tmp_x_offset, 1.25)
-            self.pdf_class.cell(1.5, 0.25, tmp_wpns_list[tmp_i].item_name, 0, 2, 'C')
-            self.pdf_class.cell(1.5, 0.25, str(tmp_wpns_list[tmp_i].get_stat('stat_weight')), 0, 2, 'C')
-            self.pdf_class.cell(1.5, 0.25, str(tmp_wpns_list[tmp_i].get_stat('stat_type')), 0, 2, 'C')
-            self.pdf_class.cell(1.5, 0.25, str(tmp_wpns_list[tmp_i].get_stat('stat_size')), 0, 2, 'C')
-            self.pdf_class.cell(1.5, 0.25, str(tmp_wpns_list[tmp_i].get_stat('stat_speed')), 0, 2, 'C')
-            self.pdf_class.cell(1.5, 0.25, "{} + {}".format(tmp_wpns_list[tmp_i].get_stat('stat_damage_sm'), self.character.get_calcd_stat('damage_adjust')), 0, 2, 'C')
-            self.pdf_class.cell(1.5, 0.25, "{} + {}".format(tmp_wpns_list[tmp_i].get_stat('stat_damage_l'), self.character.get_calcd_stat('damage_adjust')), 0, 2, 'C')
+            self.pdf_class.cell(1.5, 0.25, thaco_sublist[tmp_i].item_name, 0, 2, 'C')
+            self.pdf_class.cell(1.5, 0.25, str(thaco_sublist[tmp_i].get_stat('stat_weight')), 0, 2, 'C')
+            self.pdf_class.cell(1.5, 0.25, str(thaco_sublist[tmp_i].get_stat('stat_type')), 0, 2, 'C')
+            self.pdf_class.cell(1.5, 0.25, str(thaco_sublist[tmp_i].get_stat('stat_size')), 0, 2, 'C')
+            self.pdf_class.cell(1.5, 0.25, str(thaco_sublist[tmp_i].get_stat('stat_speed')), 0, 2, 'C')
+            self.pdf_class.cell(1.5, 0.25, "{} + {}".format(thaco_sublist[tmp_i].get_stat('stat_damage_sm'), self.character.get_calcd_stat('damage_adjust')), 0, 2, 'C')
+            self.pdf_class.cell(1.5, 0.25, "{} + {}".format(thaco_sublist[tmp_i].get_stat('stat_damage_l'), self.character.get_calcd_stat('damage_adjust')), 0, 2, 'C')
             self.pdf_class.cell(1.5, 0.25, "?", 0, 2, 'C')
-            self.pdf_class.cell(1.5, 0.25, str(tmp_wpns_list[tmp_i].get_stat('stat_range')), 0, 2, 'C')
+            self.pdf_class.cell(1.5, 0.25, str(thaco_sublist[tmp_i].get_stat('stat_range')), 0, 2, 'C')
 
             self.pdf_class.set_xy(tmp_x_offset, 4.0)
             self.pdf_class.cell(1.5, 0.25, "{}".format(tmp_thaco - 10) if tmp_thaco > 11 else "", 0, 2, 'C')
@@ -477,13 +501,13 @@ class ADNDPDFGen:
             self.pdf_class.cell(1.5, 0.25, "{}".format(tmp_thaco + 10) if tmp_thaco < 11 else "", 0, 2, 'C')
 
     def _generate_inventory(self):
-        tmp_items_list = list(self.character.inventory)
-        inv_count = len(tmp_items_list)
+        tmp_item_names_list = list(self.character.inventory.get_item_names())
+        inv_count = len(tmp_item_names_list)
         page_count = int(inv_count / 33) + 1 # 33 rows
 
         for i in range(page_count):
             page_inv_start = i * 33
-            self._generate_page_inventory(tmp_items_list[page_inv_start:]) # Sublist without earlier items
+            self._generate_page_inventory(tmp_item_names_list[page_inv_start:]) # Sublist without earlier items
         # Blank Page if needed
         if inv_count % 33 > 22:
             self._generate_page_inventory([])
@@ -518,13 +542,12 @@ class ADNDPDFGen:
         self.pdf_class.cell(1.0, 0.25, "Value", 0, 2, 'C')
 
         # Draw character inventory data
-        # Left column, then right column
-        # FIXME: Handle quantities
         self.pdf_class.set_font('Arial', '', 12)
         for i in range(num_items):
+            tmp_items = self.character.inventory.get_items_by_name(inv_sublist[i])
             self.pdf_class.set_xy(0.75, 1.5 + (0.25 * i))
-            self.pdf_class.cell(0.5, 0.25, "1", 0, 2, 'C') # QTY
+            self.pdf_class.cell(0.5, 0.25, str(len(tmp_items)), 0, 2, 'C') # QTY
             self.pdf_class.set_xy(1.25, 1.5 + (0.25 * i))
-            self.pdf_class.cell(5.5, 0.25, inv_sublist[i].item_name, 0, 2, 'L') # NAME
+            self.pdf_class.cell(5.5, 0.25, tmp_items[0].item_name, 0, 2, 'L') # NAME
             self.pdf_class.set_xy(6.75, 1.5 + (0.25 * i))
-            self.pdf_class.cell(1.0, 0.25, inv_sublist[i].get_cost('cost_money'), 0, 2, 'R') # VALUE
+            self.pdf_class.cell(1.0, 0.25, tmp_items[0].get_cost('cost_money'), 0, 2, 'R') # VALUE

@@ -16,7 +16,7 @@ class Item:
     mod_types = []
     cost_types = ['cost_money']
 
-    def __init__(self, data):
+    def __init__(self, data = None):
         # Setup logging for the class
         self.logger = logging.getLogger(type(self).__name__)
         self.logger.debug("Initializing")

@@ -3,16 +3,18 @@
 ### IMPORTS ###
 import logging
 
-from game_system.none.equipment import Equipment
-from game_system.none.item import Item
-from game_system.none.weapon import Weapon
+from game_system.inventory import Inventory
 
 from game_system.exceptions import InvalidCharacterStatTypeException
 from game_system.exceptions import GameSystemMismatchException
-from game_system.exceptions import ItemNotEquipableException
-from game_system.exceptions import ItemNotInInventoryException
-from game_system.exceptions import InvalidObjectTypeException
+# from game_system.exceptions import ItemNotEquipableException
+# from game_system.exceptions import ItemNotInInventoryException
+# from game_system.exceptions import InvalidObjectTypeException
 from game_system.exceptions import NotCharacterException
+
+from .item import Item
+from .equipment import Equipment
+from .weapon import Weapon
 
 ### GLOBALS ###
 
@@ -22,8 +24,8 @@ from game_system.exceptions import NotCharacterException
 class Character:
     game_system = 'none'
 
-    class_equipment = Equipment
     class_item = Item
+    class_equipment = Equipment
     class_weapon = Weapon
 
     basic_stats_types = ['strength', 'charisma', 'intelligence', 'wisdom']
@@ -44,9 +46,10 @@ class Character:
         #self.race = race
 
         # Categories of things
-        self.inventory = set() # FIXME: How to handle quantity?
-        self.active_equipment = set()
-        self.active_weapons = set()
+        # self.inventory = set() # FIXME: How to handle quantity?
+        # self.active_equipment = set()
+        # self.active_weapons = set()
+        self.inventory = Inventory(self.game_system, self.class_item, self.class_equipment, self.class_weapon)
         self.effects = set() # Effects from spells, etc.  Have burn down time (might be inf).
 
         # Stats dictionaries
@@ -62,12 +65,12 @@ class Character:
     def __str__(self):
         return "Character: {}".format(self.name)
 
-    def _check_item_type(self, item):
-        self.logger.debug("Start - item: %s", str(item))
-        if not isinstance(item, self.class_item):
-            raise GameSystemMismatchException()
-        if not isinstance(item, (Item, Equipment, Weapon)):
-            raise InvalidObjectTypeException()
+    # def _check_item_type(self, item):
+    #     self.logger.debug("Start - item: %s", str(item))
+    #     if not isinstance(item, self.class_item):
+    #         raise GameSystemMismatchException()
+    #     if not isinstance(item, (Item, Equipment, Weapon)):
+    #         raise InvalidObjectTypeException()
 
     def load_dict(self, char_dict, item_factory, equipment_factory, weapon_factory):
         self.logger.debug("Start - char_dict: %s", str(char_dict))
@@ -90,19 +93,7 @@ class Character:
                 self.special_stats[stats_type] = char_dict['data']['special_stats'][stats_type]
 
         # Load the inventory & equipment
-        for tmp_item_name in char_dict['data']['inventory']:
-            if tmp_item_name in item_factory.get_list_names(self.game_system):
-                self.add_to_inventory(item_factory.create(self.game_system, tmp_item_name))
-            elif tmp_item_name in equipment_factory.get_list_names(self.game_system):
-                tmp_equipment = equipment_factory.create(self.game_system, tmp_item_name)
-                self.add_to_inventory(tmp_equipment)
-                if tmp_item_name in char_dict['data']['active_equipment']:
-                    self.equip_equipment(tmp_equipment)
-            elif tmp_item_name in weapon_factory.get_list_names(self.game_system):
-                tmp_weapon = weapon_factory.create(self.game_system, tmp_item_name)
-                self.add_to_inventory(tmp_weapon)
-                if tmp_item_name in char_dict['data']['active_weapons']:
-                    self.equip_weapon(tmp_weapon)
+        self.inventory.load_dict(char_dict['data']['inventory'], item_factory, equipment_factory, weapon_factory)
 
     def save_dict(self):
         self.logger.debug("Start - None")
@@ -125,66 +116,9 @@ class Character:
             char_dict['data']['special_stats'][stats_type] = self.special_stats[stats_type]
 
         # Save the inventory & equipment
-        char_dict['data']['inventory'] = []
-        for tmp_item in self.inventory:
-            char_dict['data']['inventory'].append(tmp_item.get_name())
-
-        char_dict['data']['active_equipment'] = []
-        for tmp_item in self.active_equipment:
-            char_dict['data']['active_equipment'].append(tmp_item.get_name())
-
-        char_dict['data']['active_weapons'] = []
-        for tmp_item in self.active_weapons:
-            char_dict['data']['active_weapons'].append(tmp_item.get_name())
+        char_dict['data']['inventory'] = self.inventory.save_dict()
 
         return char_dict
-
-    def add_to_inventory(self, item):
-        self.logger.debug("Start - item: %s", str(item))
-        self._check_item_type(item)
-        self.inventory.add(item)
-
-    def remove_from_inventory(self, item):
-        self.logger.debug("Start - item: %s", str(item))
-        if item not in self.inventory:
-            raise ItemNotInInventoryException()
-        if item in self.active_equipment:
-            self.active_equipment.remove(item)
-        if item in self.active_weapons:
-            self.active_weapons.remove(item)
-        self.inventory.remove(item)
-
-    def equip_equipment(self, item):
-        self.logger.debug("Start - item: %s", str(item))
-        if not isinstance(item, self.class_equipment):
-            raise ItemNotEquipableException()
-        if item not in self.inventory:
-            raise ItemNotInInventoryException()
-        self.active_equipment.add(item)
-
-    def unequip_equipment(self, item):
-        self.logger.debug("Start - item: %s", str(item))
-        if item in self.active_equipment:
-            self.active_equipment.remove(item)
-
-    def get_equipment(self):
-        return self.active_equipment
-
-    def equip_weapon(self, item):
-        self.logger.debug("Start - item: %s", str(item))
-        if not isinstance(item, self.class_weapon):
-            raise ItemNotEquipableException()
-        if item not in self.inventory:
-            raise ItemNotInInventoryException()
-        self.active_weapons.add(item)
-
-    def unequip_weapon(self, item):
-        self.logger.debug("Start - item: %s", str(item))
-        if item in self.active_weapons:
-            self.active_weapons.remove(item)
-
-    def get_weapons(self):
-        return self.active_weapons
 
     def get_basic_stat(self, stat_name):
         self.logger.debug("Start - stat_name: %s", str(stat_name))
@@ -195,7 +129,7 @@ class Character:
         result = self.basic_stats[stat_name]
         self.logger.debug("base: %s", result)
         # Add mod_ stat_name for equipped items
-        for tmp_item in self.active_equipment:
+        for tmp_item in self.inventory.get_equipment():
             result = result + tmp_item.get_mod("mod_{}".format(stat_name))
         self.logger.debug("base+equip: %s", result)
         # Add mod_ stat_name for temporaries (magic spells, etc)
@@ -213,7 +147,7 @@ class Character:
         result = self.special_stats[stat_name]
         self.logger.debug("base: %s", result)
         # Add mod_ stat_name for equipped items
-        for tmp_item in self.active_equipment:
+        for tmp_item in self.inventory.get_equipment():
             result = result + tmp_item.get_mod("mod_{}".format(stat_name))
         self.logger.debug("base+equip: %s", result)
         # Add mod_ stat_name for temporaries (magic spells, etc)

@@ -77,10 +77,3 @@ class TestWeaponStats(unittest.TestCase):
         self.logger.debug("test_bad_stat_none")
         with self.assertRaises(game_system.exceptions.InvalidItemAttributeException):
             self.wpn_none.get_stat("bad_stat")
-
-### MAIN ###
-def main():
-    pass
-
-if __name__ == '__main__':
-    main()

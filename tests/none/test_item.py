@@ -65,10 +65,3 @@ class TestItemStats(unittest.TestCase):
         self.logger.debug("test_bad_mod_none")
         with self.assertRaises(game_system.exceptions.InvalidItemAttributeException):
             self.item_none.get_mod("bad_mod")
-
-### MAIN ###
-def main():
-    pass
-
-if __name__ == '__main__':
-    main()

@@ -97,10 +97,3 @@ class TestEquipmentStats(unittest.TestCase):
     #    self.logger.debug("testing a bad mod")
     #    with self.assertRaises(game_system.exceptions.InvalidItemAttributeException):
     #        self.eq_shadowrun.get_mod("bad_mod")
-
-### MAIN ###
-def main():
-    pass
-
-if __name__ == '__main__':
-    main()
