@@ -49,6 +49,7 @@ class ADNDPDFGen:
         self._generate_page_skills()
         self._generate_thaco()
         self._generate_inventory()
+        self._generate_notes()
 
     def _generate_page_char(self):
         self.pdf_class.add_page()
@@ -311,6 +312,7 @@ class ADNDPDFGen:
         self.pdf_class.cell(0.5, 0, "Thief Skills", 0, 0, 'L')
 
         # Page Layout
+        self.pdf_class.set_draw_color(127)
         self.pdf_class.line(0.75, 1.5, 2.75 + (0.5 * column_count), 1.5)
         row_count = 8 # Only 8 thief skills
         for i in range(row_count):
@@ -320,6 +322,7 @@ class ADNDPDFGen:
         self.pdf_class.line(2.75, 1.5, 2.75, 1.5 + (0.25 * row_count))
         for i in range(column_count):
             self.pdf_class.line(3.25 + (0.5 * i), 1.5, 3.25 + (0.5 * i), 1.5 + (0.25 * row_count))
+        self.pdf_class.set_draw_color(255)
 
         self.pdf_class.set_font('Arial', '', 12)
         self.pdf_class.set_xy(0.45, 1.25)
@@ -379,6 +382,7 @@ class ADNDPDFGen:
         self.pdf_class.cell(0.5, 0, "THAC0", 0, 0, 'L')
 
         # Page Layout
+        self.pdf_class.set_draw_color(127)
         self.pdf_class.line(1.75, 1.25, 7.75, 1.25)
         self.pdf_class.line(1.75, 1.5, 7.75, 1.5)
         self.pdf_class.line(1.75, 1.75, 7.75, 1.75)
@@ -419,6 +423,7 @@ class ADNDPDFGen:
         self.pdf_class.line(4.75, 1.25, 4.75, 9.25)
         self.pdf_class.line(6.25, 1.25, 6.25, 9.25)
         self.pdf_class.line(7.75, 1.25, 7.75, 9.25)
+        self.pdf_class.set_draw_color(255)
 
         self.pdf_class.set_font('Arial', '', 12)
         self.pdf_class.set_xy(0.45, 1.25)
@@ -501,7 +506,7 @@ class ADNDPDFGen:
             self.pdf_class.cell(1.5, 0.25, "{}".format(tmp_thaco + 10) if tmp_thaco < 11 else "", 0, 2, 'C')
 
     def _generate_inventory(self):
-        tmp_item_names_list = list(self.character.inventory.get_item_names())
+        tmp_item_names_list = sorted(list(self.character.inventory.get_item_names()))
         inv_count = len(tmp_item_names_list)
         page_count = int(inv_count / 33) + 1 # 33 rows
 
@@ -525,6 +530,7 @@ class ADNDPDFGen:
 
         # Page Layout
         # 0.75 to 7.75: 7, (7 - 0.5) / 2: 3.25
+        self.pdf_class.set_draw_color(127)
         self.pdf_class.line(0.75, 1.5, 7.75, 1.5)
         for i in range(row_count):
             self.pdf_class.line(0.75, 1.75 + (0.25 * i), 7.75, 1.75 + (0.25 * i))
@@ -532,6 +538,7 @@ class ADNDPDFGen:
         self.pdf_class.line(1.25, 1.5, 1.25, 1.5 + (0.25 * row_count))
         self.pdf_class.line(6.75, 1.5, 6.75, 1.5 + (0.25 * row_count))
         self.pdf_class.line(7.75, 1.5, 7.75, 1.5 + (0.25 * row_count))
+        self.pdf_class.set_draw_color(255)
         # Column Headers
         self.pdf_class.set_font('Arial', '', 12)
         self.pdf_class.set_xy(0.75, 1.25)
@@ -551,3 +558,38 @@ class ADNDPDFGen:
             self.pdf_class.cell(5.5, 0.25, tmp_items[0].item_name, 0, 2, 'L') # NAME
             self.pdf_class.set_xy(6.75, 1.5 + (0.25 * i))
             self.pdf_class.cell(1.0, 0.25, tmp_items[0].get_cost('cost_money'), 0, 2, 'R') # VALUE
+
+    def _generate_notes(self):
+        # Blank Page for now
+        self._generate_page_notes([])
+
+    def _generate_page_notes(self, notes_sublist):
+        self.pdf_class.add_page()
+
+        row_count = 33
+        num_items = len(notes_sublist) if len(notes_sublist) < 34 else 33
+
+        # Page Title Block
+        self.pdf_class.set_xy(0.5, 0.8)
+        self.pdf_class.set_font('Arial', '', 16)
+        self.pdf_class.cell(0.5, 0, "Notes", 0, 0, 'L')
+
+        # Page Layout
+        # 0.75 to 7.75: 7, (7 - 0.5) / 2: 3.25
+        self.pdf_class.set_draw_color(127)
+        self.pdf_class.line(0.75, 1.5, 7.75, 1.5)
+        for i in range(row_count):
+            self.pdf_class.line(0.75, 1.75 + (0.25 * i), 7.75, 1.75 + (0.25 * i))
+        # self.pdf_class.line(0.75, 1.5, 0.75, 1.5 + (0.25 * row_count))
+        # self.pdf_class.line(1.25, 1.5, 1.25, 1.5 + (0.25 * row_count))
+        # self.pdf_class.line(6.75, 1.5, 6.75, 1.5 + (0.25 * row_count))
+        # self.pdf_class.line(7.75, 1.5, 7.75, 1.5 + (0.25 * row_count))
+        # # Column Headers
+        # self.pdf_class.set_font('Arial', '', 12)
+        # self.pdf_class.set_xy(0.75, 1.25)
+        # self.pdf_class.cell(0.5, 0.25, "QTY", 0, 2, 'C')
+        # self.pdf_class.set_xy(1.25, 1.25)
+        # self.pdf_class.cell(5.5, 0.25, "Name", 0, 2, 'C')
+        # self.pdf_class.set_xy(6.75, 1.25)
+        # self.pdf_class.cell(1.0, 0.25, "Value", 0, 2, 'C')
+
