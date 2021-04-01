@@ -19,7 +19,7 @@ class TestWeaponCreation(unittest.TestCase):
 
     def test_create_adnd(self):
         self.logger.debug("test_create_adnd")
-        weapon = game_system.adnd.ADNDWeapon({"item_name": "Generic ADND Weapon One", "cost_money": 123, "stat_damage": 1})
+        weapon = game_system.adnd.ADNDWeapon({"item_name": "Generic ADND Weapon One", "cost_money": {"value": 123}, "stat_damage": 1})
         self.logger.debug("ADNDWeapon: %s", weapon)
         self.assertEqual(weapon.get_name(), "Generic ADND Weapon One")
         self.assertEqual(str(weapon), "ADNDWeapon: Generic ADND Weapon One")
@@ -32,7 +32,7 @@ class TestWeaponStats(unittest.TestCase):
 
         self.wpn_adnd_data = {
             "item_name": "Generic ADND Weapon One",
-            "cost_money": 123,
+            "cost_money": {"value": 123},
             "stat_weight": 1,
             "stat_type": 'P',
             "stat_size": 'S',
@@ -47,11 +47,11 @@ class TestWeaponStats(unittest.TestCase):
         self.logger.debug("test_costs_adnd")
         for tmp_cost in game_system.adnd.ADNDWeapon.cost_types:
             if tmp_cost in self.wpn_adnd_data:
-                self.logger.debug("tmp_cost: %s, weapon value: %s, data value: %s", tmp_cost, self.wpn_adnd.get_cost(tmp_cost), self.wpn_adnd_data[tmp_cost])
-                self.assertEqual(self.wpn_adnd.get_cost(tmp_cost), self.wpn_adnd_data[tmp_cost])
+                self.logger.debug("tmp_cost: %s, weapon value: %s, data value: %s", tmp_cost, self.wpn_adnd.get_cost(tmp_cost).get_value(), self.wpn_adnd_data[tmp_cost]['value'])
+                self.assertEqual(self.wpn_adnd.get_cost(tmp_cost).get_value(), self.wpn_adnd_data[tmp_cost]['value'])
             else:
-                self.logger.debug("tmp_cost: %s, weapon value: %s, 0", tmp_cost, self.wpn_adnd.get_cost(tmp_cost))
-                self.assertEqual(self.wpn_adnd.get_cost(tmp_cost), 0)
+                self.logger.debug("tmp_cost: %s, weapon value: %s, 0", tmp_cost, self.wpn_adnd.get_cost(tmp_cost).get_value())
+                self.assertEqual(self.wpn_adnd.get_cost(tmp_cost).get_value(), 0)
 
     def test_bad_cost_adnd(self):
         self.logger.debug("test_bad_cost_adnd")
@@ -62,11 +62,11 @@ class TestWeaponStats(unittest.TestCase):
         self.logger.debug("test_mods_adnd")
         for tmp_mod in game_system.adnd.ADNDWeapon.mod_types:
             if tmp_mod in self.wpn_adnd_data:
-                self.logger.debug("tmp_mod: %s, weapon value: %s, data value: %s", tmp_mod, self.wpn_adnd.get_mod(tmp_mod), self.wpn_adnd_data[tmp_mod])
-                self.assertEqual(self.wpn_adnd.get_mod(tmp_mod), self.wpn_adnd_data[tmp_mod])
+                self.logger.debug("tmp_mod: %s, weapon value: %s, data value: %s", tmp_mod, self.wpn_adnd.get_mod(tmp_mod).get_value(), self.wpn_adnd_data[tmp_mod]['value'])
+                self.assertEqual(self.wpn_adnd.get_mod(tmp_mod).get_value(), self.wpn_adnd_data[tmp_mod]['value'])
             else:
-                self.logger.debug("tmp_mod: %s, weapon value: %s, 0", tmp_mod, self.wpn_adnd.get_mod(tmp_mod))
-                self.assertEqual(self.wpn_adnd.get_mod(tmp_mod), 0)
+                self.logger.debug("tmp_mod: %s, weapon value: %s, 0", tmp_mod, self.wpn_adnd.get_mod(tmp_mod).get_value())
+                self.assertEqual(self.wpn_adnd.get_mod(tmp_mod).get_value(), 0)
 
     def test_bad_mod_adnd(self):
         self.logger.debug("test_bad_mod_adnd")

@@ -7,6 +7,7 @@ from game_system.object_loader import ObjectLoader
 
 import game_system.exceptions
 import game_system.factories
+import game_system.modifierdata
 
 import game_system.none
 import game_system.adnd

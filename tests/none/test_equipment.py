@@ -19,7 +19,7 @@ class TestEquipmentCreation(unittest.TestCase):
 
     def test_create_none(self):
         self.logger.debug("test_create_none")
-        equipment = game_system.none.Equipment({"item_name": "Generic Equipment One", "cost_money": 111, "mod_strength": 1, "mod_charisma": 1, "mod_intelligence": 1, "mod_wisdom": 1})
+        equipment = game_system.none.Equipment({"item_name": "Generic Equipment One", "cost_money": {"value": 111}, "mod_strength": {"value": 1, "combine_method": "add"}, "mod_charisma": {"value": 1, "combine_method": "add"}, "mod_intelligence": {"value": 1, "mod_wisdom": {"value": 1, "combine_method": "add"}, "combine_method": "add"}})
         self.logger.debug("Equipment: %s", equipment)
         self.assertEqual(equipment.get_name(), "Generic Equipment One")
         self.assertEqual(str(equipment), "Equipment: Generic Equipment One")
@@ -37,7 +37,7 @@ class TestEquipmentStats(unittest.TestCase):
         self.logger = logging.getLogger(type(self).__name__)
         self.logger.debug("setUp")
 
-        self.eq_none_data = {"item_name": "Generic Equipment One", "cost_money": 111, "mod_strength": 1, "mod_charisma": 1, "mod_intelligence": 1, "mod_wisdom": 1}
+        self.eq_none_data = {"item_name": "Generic Equipment One", "cost_money": {"value": 111, "combine_method": "overwrite"}, "mod_strength": {"value": 1, "combine_method": "add"}, "mod_charisma": {"value": 1, "combine_method": "add"}, "mod_intelligence": {"value": 1, "combine_method": "add"}, "mod_wisdom": {"value": 1, "combine_method": "add"}}
         self.eq_none = game_system.none.Equipment(self.eq_none_data)
         #self.eq_shadowrun_data = {"item_name": "Generic SR Equipment Two", "mod_quickness": 1, "mod_strength": 1, "cost_body": 0.8, "cost_money": 45000}
         #self.eq_shadowrun = game_system.shadowrun.ShadowRunEquipment(self.eq_shadowrun_data)
@@ -46,11 +46,11 @@ class TestEquipmentStats(unittest.TestCase):
         self.logger.debug("test_costs_none")
         for tmp_cost in game_system.none.Equipment.cost_types:
             if tmp_cost in self.eq_none_data:
-                self.logger.debug("tmp_cost: %s, equip value: %s, data value: %s", tmp_cost, self.eq_none.get_cost(tmp_cost), self.eq_none_data[tmp_cost])
-                self.assertEqual(self.eq_none.get_cost(tmp_cost), self.eq_none_data[tmp_cost])
+                self.logger.debug("tmp_cost: %s, equip value: %s, data value: %s", tmp_cost, self.eq_none.get_cost(tmp_cost).get_value(), self.eq_none_data[tmp_cost]['value'])
+                self.assertEqual(self.eq_none.get_cost(tmp_cost).get_value(), self.eq_none_data[tmp_cost]['value'])
             else:
-                self.logger.debug("tmp_cost: %s, equip value: %s, 0", tmp_cost, self.eq_none.get_cost(tmp_cost))
-                self.assertEqual(self.eq_none.get_cost(tmp_cost), 0)
+                self.logger.debug("tmp_cost: %s, equip value: %s, 0", tmp_cost, self.eq_none.get_cost(tmp_cost).get_value())
+                self.assertEqual(self.eq_none.get_cost(tmp_cost).get_value(), 0)
 
     def test_bad_cost_none(self):
         self.logger.debug("test_bad_cost_none")
@@ -74,11 +74,11 @@ class TestEquipmentStats(unittest.TestCase):
         self.logger.debug("test_mods_none")
         for tmp_mod in game_system.none.Equipment.mod_types:
             if tmp_mod in self.eq_none_data:
-                self.logger.debug("tmp_mod: %s, equip value: %s, data value: %s", tmp_mod, self.eq_none.get_mod(tmp_mod), self.eq_none_data[tmp_mod])
-                self.assertEqual(self.eq_none.get_mod(tmp_mod), self.eq_none_data[tmp_mod])
+                self.logger.debug("tmp_mod: %s, equip value: %s, data value: %s", tmp_mod, self.eq_none.get_mod(tmp_mod).get_value(), self.eq_none_data[tmp_mod]['value'])
+                self.assertEqual(self.eq_none.get_mod(tmp_mod).get_value(), self.eq_none_data[tmp_mod]['value'])
             else:
-                self.logger.debug("tmp_mod: %s, equip value: %s, 0", tmp_mod, self.eq_none.get_mod(tmp_mod))
-                self.assertEqual(self.eq_none.get_mod(tmp_mod), 0)
+                self.logger.debug("tmp_mod: %s, equip value: %s, 0", tmp_mod, self.eq_none.get_mod(tmp_mod).get_value())
+                self.assertEqual(self.eq_none.get_mod(tmp_mod).get_value(), 0)
 
     def test_bad_mod_none(self):
         self.logger.debug("test_bad_mod_none")

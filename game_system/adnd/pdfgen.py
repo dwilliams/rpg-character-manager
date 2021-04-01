@@ -43,6 +43,17 @@ class ADNDPDFGen:
     def output_string(self):
         return self.pdf_class.output(dest = 'S').encode('latin-1')
 
+    def char_format_basic_stat(self, basic_stat):
+        result = ""
+        if self.character.get_basic_base_stat(basic_stat) == self.character.get_basic_calcd_stat(basic_stat):
+            result = str(self.character.get_basic_calcd_stat(basic_stat))
+        else:
+            result = "{} ({})".format(
+                self.character.get_basic_calcd_stat(basic_stat),
+                self.character.get_basic_base_stat(basic_stat)
+            )
+        return result
+
     def _generate_pdf(self):
         self.pdf_class = ADNDPDF(self.character.name)
         self._generate_page_char()
@@ -97,7 +108,16 @@ class ADNDPDFGen:
         self.pdf_class.set_font('Arial', '', 12)
         self.pdf_class.cell(0.5, 0, "STR:", 0, 0, 'R')
         self.pdf_class.set_font('Arial', 'U', 10)
-        self.pdf_class.cell(1, 0, "{0: ^16}".format(self.character.get_basic_stat('strength')), 0, 1, 'L')
+        #self.pdf_class.cell(1, 0, "{0: ^16}".format(self.character.get_basic_stat('strength')), 0, 1, 'L')
+        # if self.character.get_basic_base_stat('strength') == self.character.get_basic_calcd_stat('strength'):
+        #     self.pdf_class.cell(1, 0, "{0: ^16}".format(self.character.get_basic_calcd_stat('strength')), 0, 1, 'L')
+        # else:
+        #     tmp_str = "{} ({})".format(
+        #         self.character.get_basic_calcd_stat('strength'),
+        #         self.character.get_basic_base_stat('strength')
+        #     )
+        #     self.pdf_class.cell(1, 0, "{0: ^16}".format(tmp_str), 0, 1, 'L')
+        self.pdf_class.cell(1, 0, "{0: ^16}".format(self.char_format_basic_stat('strength')), 0, 1, 'L')
 
         self.pdf_class.set_xy(0.75, 3.25)
         self.pdf_class.set_font('Arial', '', 12)
@@ -122,7 +142,8 @@ class ADNDPDFGen:
         self.pdf_class.set_font('Arial', '', 12)
         self.pdf_class.cell(0.5, 0, "DEX:", 0, 0, 'R')
         self.pdf_class.set_font('Arial', 'U', 10)
-        self.pdf_class.cell(1, 0, "{0: ^16}".format(self.character.get_basic_stat('dexterity')), 0, 1, 'L')
+        #self.pdf_class.cell(1, 0, "{0: ^16}".format(self.character.get_basic_stat('dexterity')), 0, 1, 'L')
+        self.pdf_class.cell(1, 0, "{0: ^16}".format(self.char_format_basic_stat('dexterity')), 0, 1, 'L')
 
         self.pdf_class.set_xy(3.5, 3.25)
         self.pdf_class.set_font('Arial', '', 12)
@@ -147,7 +168,8 @@ class ADNDPDFGen:
         self.pdf_class.set_font('Arial', '', 12)
         self.pdf_class.cell(0.5, 0, "CON:", 0, 0, 'R')
         self.pdf_class.set_font('Arial', 'U', 10)
-        self.pdf_class.cell(1, 0, "{0: ^16}".format(self.character.get_basic_stat('constitution')), 0, 1, 'L')
+        #self.pdf_class.cell(1, 0, "{0: ^16}".format(self.character.get_basic_stat('constitution')), 0, 1, 'L')
+        self.pdf_class.cell(1, 0, "{0: ^16}".format(self.char_format_basic_stat('constitution')), 0, 1, 'L')
 
         self.pdf_class.set_xy(6.25, 3.25)
         self.pdf_class.set_font('Arial', '', 12)
@@ -172,7 +194,8 @@ class ADNDPDFGen:
         self.pdf_class.set_font('Arial', '', 12)
         self.pdf_class.cell(0.5, 0, "INT:", 0, 0, 'R')
         self.pdf_class.set_font('Arial', 'U', 10)
-        self.pdf_class.cell(1, 0, "{0: ^16}".format(self.character.get_basic_stat('intelligence')), 0, 1, 'L')
+        #self.pdf_class.cell(1, 0, "{0: ^16}".format(self.character.get_basic_stat('intelligence')), 0, 1, 'L')
+        self.pdf_class.cell(1, 0, "{0: ^16}".format(self.char_format_basic_stat('intelligence')), 0, 1, 'L')
 
         self.pdf_class.set_xy(0.75, 5.25)
         self.pdf_class.set_font('Arial', '', 12)
@@ -203,7 +226,8 @@ class ADNDPDFGen:
         self.pdf_class.set_font('Arial', '', 12)
         self.pdf_class.cell(0.5, 0, "WIS:", 0, 0, 'R')
         self.pdf_class.set_font('Arial', 'U', 10)
-        self.pdf_class.cell(1, 0, "{0: ^16}".format(self.character.get_basic_stat('wisdom')), 0, 1, 'L')
+        #self.pdf_class.cell(1, 0, "{0: ^16}".format(self.character.get_basic_stat('wisdom')), 0, 1, 'L')
+        self.pdf_class.cell(1, 0, "{0: ^16}".format(self.char_format_basic_stat('wisdom')), 0, 1, 'L')
 
         self.pdf_class.set_xy(3.5, 5.25)
         self.pdf_class.set_font('Arial', '', 12)
@@ -228,7 +252,8 @@ class ADNDPDFGen:
         self.pdf_class.set_font('Arial', '', 12)
         self.pdf_class.cell(0.5, 0, "CHA:", 0, 0, 'R')
         self.pdf_class.set_font('Arial', 'U', 10)
-        self.pdf_class.cell(1, 0, "{0: ^16}".format(self.character.get_basic_stat('charisma')), 0, 1, 'L')
+        #self.pdf_class.cell(1, 0, "{0: ^16}".format(self.character.get_basic_stat('charisma')), 0, 1, 'L')
+        self.pdf_class.cell(1, 0, "{0: ^16}".format(self.char_format_basic_stat('charisma')), 0, 1, 'L')
 
         self.pdf_class.set_xy(6.25, 5.25)
         self.pdf_class.set_font('Arial', '', 12)
@@ -557,7 +582,7 @@ class ADNDPDFGen:
             self.pdf_class.set_xy(1.25, 1.5 + (0.25 * i))
             self.pdf_class.cell(5.5, 0.25, tmp_items[0].item_name, 0, 2, 'L') # NAME
             self.pdf_class.set_xy(6.75, 1.5 + (0.25 * i))
-            self.pdf_class.cell(1.0, 0.25, tmp_items[0].get_cost('cost_money'), 0, 2, 'R') # VALUE
+            self.pdf_class.cell(1.0, 0.25, tmp_items[0].get_cost('cost_money').get_value(), 0, 2, 'R') # VALUE
 
     def _generate_notes(self):
         # Blank Page for now

@@ -8,9 +8,9 @@ import game_system
 
 ### GLOBALS ###
 TEST_ITEM_LIST = [
-  {"game_system": "none", "object_type": "item", "data": {"item_name": "Generic Item One", "cost_money": 111}},
-  {"game_system": "none", "object_type": "item", "data": {"item_name": "Generic Item Two", "cost_money": 234}},
-  {"game_system": "shadowrun", "object_type": "item", "data": {"item_name": "Generic SR Item Two", "cost_money": 567}}
+  {"game_system": "none", "object_type": "item", "data": {"item_name": "Generic Item One", "cost_money": {"value": 111}}},
+  {"game_system": "none", "object_type": "item", "data": {"item_name": "Generic Item Two", "cost_money": {"value": 234}}},
+  {"game_system": "shadowrun", "object_type": "item", "data": {"item_name": "Generic SR Item Two", "cost_money": {"value": 567}}}
 ]
 
 ### FUNCTIONS ###

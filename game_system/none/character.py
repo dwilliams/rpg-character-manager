@@ -12,6 +12,8 @@ from game_system.exceptions import GameSystemMismatchException
 # from game_system.exceptions import InvalidObjectTypeException
 from game_system.exceptions import NotCharacterException
 
+from game_system.modifierdata import ModifierDataCombiner
+
 from .item import Item
 from .equipment import Equipment
 from .weapon import Weapon
@@ -120,21 +122,35 @@ class Character:
 
         return char_dict
 
-    def get_basic_stat(self, stat_name):
+    def get_basic_base_stat(self, stat_name):
+        self.logger.debug("Start - stat_name: %s", str(stat_name))
+        if stat_name not in self.basic_stats_types:
+            raise InvalidCharacterStatTypeException()
+        result = self.basic_stats[stat_name]
+        self.logger.debug("base: %s", result)
+        return result
+
+    def get_basic_calcd_stat(self, stat_name):
         self.logger.debug("Start - stat_name: %s", str(stat_name))
         if stat_name not in self.basic_stats_types:
             raise InvalidCharacterStatTypeException()
         ## Calculate the total stat for the character
         # Grab the base stat for the character
-        result = self.basic_stats[stat_name]
+        result = self.get_basic_base_stat(stat_name)
         self.logger.debug("base: %s", result)
         # Add mod_ stat_name for equipped items
+        tmp_mdc = ModifierDataCombiner()
         for tmp_item in self.inventory.get_equipment():
-            result = result + tmp_item.get_mod("mod_{}".format(stat_name))
-        self.logger.debug("base+equip: %s", result)
-        # Add mod_ stat_name for temporaries (magic spells, etc)
+            #result = result + tmp_item.get_mod("mod_{}".format(stat_name))
+            tmp_mdc.add_item(tmp_item.get_mod("mod_{}".format(stat_name)))
         for tmp_effect in self.effects:
-            result = result + tmp_effect.get_mod("mod_{}".format(stat_name))
+            tmp_mdc.add_item(tmp_effect.get_mod("mod_{}".format(stat_name)))
+        self.logger.debug("number of items: %d", len(tmp_mdc.items_to_combine))
+        result = tmp_mdc.resolve(result)
+        #self.logger.debug("base+equip: %s", result)
+        # Add mod_ stat_name for temporaries (magic spells, etc)
+        #for tmp_effect in self.effects:
+        #    result = result + tmp_effect.get_mod("mod_{}".format(stat_name))
         self.logger.debug("base+equip+effect: %s", result)
         return result
 

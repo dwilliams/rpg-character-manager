@@ -119,7 +119,7 @@ class ADNDCharacter(Character):
         #     self.logger.debug("stat value: %s", tmp_value)
         #     return tmp_value
         if stat_name in DATA_ABILITY['strength']['1']:
-            tmp_stat = self.get_basic_stat('strength')
+            tmp_stat = self.get_basic_calcd_stat('strength')
             self.logger.debug("stat strength: %s", tmp_stat)
             tmp_value = DATA_ABILITY['strength'][tmp_stat][stat_name]
             self.logger.debug("stat value: %s", tmp_value)
@@ -144,35 +144,35 @@ class ADNDCharacter(Character):
         #     self.logger.debug("stat value: %s", tmp_value)
         #     return tmp_value
         elif stat_name in DATA_ABILITY['dexterity']['1']:
-            tmp_stat = self.get_basic_stat('dexterity')
+            tmp_stat = self.get_basic_calcd_stat('dexterity')
             self.logger.debug("stat dexterity: %s", tmp_stat)
             tmp_value = DATA_ABILITY['dexterity'][tmp_stat][stat_name]
             self.logger.debug("stat value: %s", tmp_value)
             return tmp_value
         # CON based stats
         elif stat_name in DATA_ABILITY['constitution']['1']:
-            tmp_stat = self.get_basic_stat('constitution')
+            tmp_stat = self.get_basic_calcd_stat('constitution')
             self.logger.debug("stat constitution: %s", tmp_stat)
             tmp_value = DATA_ABILITY['constitution'][tmp_stat][stat_name]
             self.logger.debug("stat value: %s", tmp_value)
             return tmp_value
         # INT based stats
         elif stat_name in DATA_ABILITY['intelligence']['1']:
-            tmp_stat = self.get_basic_stat('intelligence')
+            tmp_stat = self.get_basic_calcd_stat('intelligence')
             self.logger.debug("stat intelligence: %s", tmp_stat)
             tmp_value = DATA_ABILITY['intelligence'][tmp_stat][stat_name]
             self.logger.debug("stat value: %s", tmp_value)
             return tmp_value
         # WIS based stats
         elif stat_name in DATA_ABILITY['wisdom']['1']:
-            tmp_stat = self.get_basic_stat('wisdom')
+            tmp_stat = self.get_basic_calcd_stat('wisdom')
             self.logger.debug("stat wisdom: %s", tmp_stat)
             tmp_value = DATA_ABILITY['wisdom'][tmp_stat][stat_name]
             self.logger.debug("stat value: %s", tmp_value)
             return tmp_value
         # CHA based stats
         elif stat_name in DATA_ABILITY['charisma']['1']:
-            tmp_stat = self.get_basic_stat('charisma')
+            tmp_stat = self.get_basic_calcd_stat('charisma')
             self.logger.debug("stat charisma: %s", tmp_stat)
             tmp_value = DATA_ABILITY['charisma'][tmp_stat][stat_name]
             self.logger.debug("stat value: %s", tmp_value)
@@ -199,12 +199,23 @@ class ADNDCharacter(Character):
         self.logger.debug("Bisect Position: %d", pos)
         return pos
 
-    def get_thaco_for_weapon(self, weapon):
-        self.logger.debug("Start - weapon: %s", weapon)
+    def get_thaco_with_equipment(self):
+        self.logger.debug("Start - None")
         # Get starting thac0 based on level
         tmp_thaco = DATA_LEVEL['rogue'][self.get_level()]['thac0'] # FIXME: Move to character class variable
         # Check for spec based modifiers
         tmp_thaco = tmp_thaco - self.get_calcd_stat('hit_probability')
+        # Check for modifications due to equipment
+        # tmp_thaco = ??
+        return tmp_thaco
+
+    def get_thaco_for_weapon(self, weapon):
+        self.logger.debug("Start - weapon: %s", weapon)
+        # # Get starting thac0 based on level
+        # tmp_thaco = DATA_LEVEL['rogue'][self.get_level()]['thac0'] # FIXME: Move to character class variable
+        # # Check for spec based modifiers
+        # tmp_thaco = tmp_thaco - self.get_calcd_stat('hit_probability')
+        tmp_thaco = self.get_thaco_with_equipment()
         # Check for weapon modifiers
         if weapon not in self.inventory.get_weapons():
             raise ItemNotActiveException
@@ -264,7 +275,7 @@ class ADNDCharacter(Character):
         for i in self.thief_skills[thief_skill][0:tmp_level]:
             tmp_result = tmp_result + i # Adding percents
         self.logger.debug("Level add ups: %d", tmp_result)
-        if tmp_thief_skill in DATA_ABILITY['dexterity'][self.get_basic_stat('dexterity')]:
-            tmp_result = tmp_result + DATA_ABILITY['dexterity'][self.get_basic_stat('dexterity')][tmp_thief_skill]
+        if tmp_thief_skill in DATA_ABILITY['dexterity'][self.get_basic_calcd_stat('dexterity')]:
+            tmp_result = tmp_result + DATA_ABILITY['dexterity'][self.get_basic_calcd_stat('dexterity')][tmp_thief_skill]
         self.logger.debug("Stat Modifier add ups: %d", tmp_result)
         return tmp_result
