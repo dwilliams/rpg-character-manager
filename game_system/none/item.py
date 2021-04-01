@@ -59,7 +59,7 @@ class Item:
         if mod_type not in self.mod_types:
             raise InvalidItemAttributeException()
         tmp_md = getattr(self, mod_type, ModifierData(0))
-        self.logger.debug("Return: %d", tmp_md)
+        self.logger.debug("Return: %s", tmp_md)
         return tmp_md
 
     def get_cost(self, cost_type):

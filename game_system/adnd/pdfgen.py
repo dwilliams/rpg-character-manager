@@ -54,6 +54,30 @@ class ADNDPDFGen:
             )
         return result
 
+    def char_format_thaco(self, thaco, thaco_offhand, offset):
+        #AC+: "{}".format(tmp_thaco - 10) if tmp_thaco > 11 else ""
+        #AC0: "{}".format(tmp_thaco) if tmp_thaco > 1 else ""
+        #AC-: "{}".format(tmp_thaco + 1) if tmp_thaco < 19 else ""
+        tmp_str = ""
+        # FIXME: Deal with non-offhand weapons
+        # FIXME: Figure out a better way to format this.
+        if offset >= 0:
+            if (thaco > (offset + 1)) and (thaco_offhand > (offset + 1)):
+                tmp_str = "{}  /  {}".format(thaco - offset, thaco_offhand - offset)
+            elif (thaco > (offset + 1)) and not (thaco_offhand > (offset + 1)):
+                tmp_str = "{}  /  -".format(thaco - offset)
+            elif not (thaco > (offset + 1)) and (thaco_offhand > (offset + 1)):
+                tmp_str = "-  /  {}".format(thaco_offhand - offset)
+        else:
+            # Negative offsets
+            if (thaco < (20 + offset)) and (thaco_offhand < (20 + offset)):
+                tmp_str = "{}  /  {}".format(thaco - offset, thaco_offhand - offset)
+            elif (thaco < (20 + offset)) and not (thaco_offhand < (20 + offset)):
+                tmp_str = "{}  /  -".format(thaco - offset)
+            elif not (thaco < (20 + offset)) and (thaco_offhand < (20 + offset)):
+                tmp_str = "-  /  {}".format(thaco_offhand - offset)
+        return tmp_str
+
     def _generate_pdf(self):
         self.pdf_class = ADNDPDF(self.character.name)
         self._generate_page_char()
@@ -108,15 +132,6 @@ class ADNDPDFGen:
         self.pdf_class.set_font('Arial', '', 12)
         self.pdf_class.cell(0.5, 0, "STR:", 0, 0, 'R')
         self.pdf_class.set_font('Arial', 'U', 10)
-        #self.pdf_class.cell(1, 0, "{0: ^16}".format(self.character.get_basic_stat('strength')), 0, 1, 'L')
-        # if self.character.get_basic_base_stat('strength') == self.character.get_basic_calcd_stat('strength'):
-        #     self.pdf_class.cell(1, 0, "{0: ^16}".format(self.character.get_basic_calcd_stat('strength')), 0, 1, 'L')
-        # else:
-        #     tmp_str = "{} ({})".format(
-        #         self.character.get_basic_calcd_stat('strength'),
-        #         self.character.get_basic_base_stat('strength')
-        #     )
-        #     self.pdf_class.cell(1, 0, "{0: ^16}".format(tmp_str), 0, 1, 'L')
         self.pdf_class.cell(1, 0, "{0: ^16}".format(self.char_format_basic_stat('strength')), 0, 1, 'L')
 
         self.pdf_class.set_xy(0.75, 3.25)
@@ -142,7 +157,6 @@ class ADNDPDFGen:
         self.pdf_class.set_font('Arial', '', 12)
         self.pdf_class.cell(0.5, 0, "DEX:", 0, 0, 'R')
         self.pdf_class.set_font('Arial', 'U', 10)
-        #self.pdf_class.cell(1, 0, "{0: ^16}".format(self.character.get_basic_stat('dexterity')), 0, 1, 'L')
         self.pdf_class.cell(1, 0, "{0: ^16}".format(self.char_format_basic_stat('dexterity')), 0, 1, 'L')
 
         self.pdf_class.set_xy(3.5, 3.25)
@@ -168,7 +182,6 @@ class ADNDPDFGen:
         self.pdf_class.set_font('Arial', '', 12)
         self.pdf_class.cell(0.5, 0, "CON:", 0, 0, 'R')
         self.pdf_class.set_font('Arial', 'U', 10)
-        #self.pdf_class.cell(1, 0, "{0: ^16}".format(self.character.get_basic_stat('constitution')), 0, 1, 'L')
         self.pdf_class.cell(1, 0, "{0: ^16}".format(self.char_format_basic_stat('constitution')), 0, 1, 'L')
 
         self.pdf_class.set_xy(6.25, 3.25)
@@ -194,7 +207,6 @@ class ADNDPDFGen:
         self.pdf_class.set_font('Arial', '', 12)
         self.pdf_class.cell(0.5, 0, "INT:", 0, 0, 'R')
         self.pdf_class.set_font('Arial', 'U', 10)
-        #self.pdf_class.cell(1, 0, "{0: ^16}".format(self.character.get_basic_stat('intelligence')), 0, 1, 'L')
         self.pdf_class.cell(1, 0, "{0: ^16}".format(self.char_format_basic_stat('intelligence')), 0, 1, 'L')
 
         self.pdf_class.set_xy(0.75, 5.25)
@@ -226,7 +238,6 @@ class ADNDPDFGen:
         self.pdf_class.set_font('Arial', '', 12)
         self.pdf_class.cell(0.5, 0, "WIS:", 0, 0, 'R')
         self.pdf_class.set_font('Arial', 'U', 10)
-        #self.pdf_class.cell(1, 0, "{0: ^16}".format(self.character.get_basic_stat('wisdom')), 0, 1, 'L')
         self.pdf_class.cell(1, 0, "{0: ^16}".format(self.char_format_basic_stat('wisdom')), 0, 1, 'L')
 
         self.pdf_class.set_xy(3.5, 5.25)
@@ -252,7 +263,6 @@ class ADNDPDFGen:
         self.pdf_class.set_font('Arial', '', 12)
         self.pdf_class.cell(0.5, 0, "CHA:", 0, 0, 'R')
         self.pdf_class.set_font('Arial', 'U', 10)
-        #self.pdf_class.cell(1, 0, "{0: ^16}".format(self.character.get_basic_stat('charisma')), 0, 1, 'L')
         self.pdf_class.cell(1, 0, "{0: ^16}".format(self.char_format_basic_stat('charisma')), 0, 1, 'L')
 
         self.pdf_class.set_xy(6.25, 5.25)
@@ -318,9 +328,20 @@ class ADNDPDFGen:
         self.pdf_class.set_font('Arial', '', 12)
         self.pdf_class.cell(1.5, 0, "Weapon Proficiencies:", 0, 0, 'C')
 
+        self.pdf_class.set_xy(3.75, 7.25)
+        self.pdf_class.set_font('Arial', '', 10)
+        for item in self.character.weapon_proficienies:
+            self.pdf_class.cell(1.5, 0.25, item, 0, 2, 'L')
+
+
         self.pdf_class.set_xy(6.25, 7.0)
         self.pdf_class.set_font('Arial', '', 12)
         self.pdf_class.cell(1.5, 0, "Non-Weapon Proficiencies:", 0, 0, 'C')
+
+        self.pdf_class.set_xy(6.5, 7.25)
+        self.pdf_class.set_font('Arial', '', 10)
+        for item in self.character.nonweapon_proficienies:
+            self.pdf_class.cell(1.5, 0.25, item, 0, 2, 'L')
 
     def _generate_page_skills(self):
         self.pdf_class.add_page()
@@ -487,6 +508,13 @@ class ADNDPDFGen:
         self.pdf_class.cell(1.0, 0.25, "-10", 0, 2, 'C')
 
         # Weapons & THAC0
+        self.pdf_class.set_font('Arial', '', 12)
+        self.pdf_class.set_xy(3.25, 1.0)
+        tmp_str = "Base: {} - Modifiers & Equipment: {}".format(
+            self.character.get_thaco_base(),
+            self.character.get_thaco_base() - self.character.get_thaco_with_equipment()
+        )
+        self.pdf_class.cell(3.0, 0, tmp_str, 0, 0, 'C')
         # FIXME: Figure out how to do a second page
         #tmp_wpns_list = self.character.inventory.get_weapons()
         tmp_num_wpns = len(thaco_sublist) if len(thaco_sublist) < 4 else 4 # Figure out how to go to page 2
@@ -495,6 +523,7 @@ class ADNDPDFGen:
             # Grab THAC0 and fill in chart
             tmp_x_offset = 1.75 + (tmp_i * 1.5)
             tmp_thaco = self.character.get_thaco_for_weapon(thaco_sublist[tmp_i])
+            tmp_thaco_offhand = self.character.get_thaco_for_weapon_offhand(thaco_sublist[tmp_i])
             self.pdf_class.set_font('Arial', '', 12)
             self.pdf_class.set_xy(tmp_x_offset, 1.25)
             self.pdf_class.cell(1.5, 0.25, thaco_sublist[tmp_i].item_name, 0, 2, 'C')
@@ -508,27 +537,50 @@ class ADNDPDFGen:
             self.pdf_class.cell(1.5, 0.25, str(thaco_sublist[tmp_i].get_stat('stat_range')), 0, 2, 'C')
 
             self.pdf_class.set_xy(tmp_x_offset, 4.0)
-            self.pdf_class.cell(1.5, 0.25, "{}".format(tmp_thaco - 10) if tmp_thaco > 11 else "", 0, 2, 'C')
-            self.pdf_class.cell(1.5, 0.25, "{}".format(tmp_thaco - 9) if tmp_thaco > 10 else "", 0, 2, 'C')
-            self.pdf_class.cell(1.5, 0.25, "{}".format(tmp_thaco - 8) if tmp_thaco > 9 else "", 0, 2, 'C')
-            self.pdf_class.cell(1.5, 0.25, "{}".format(tmp_thaco - 7) if tmp_thaco > 8 else "", 0, 2, 'C')
-            self.pdf_class.cell(1.5, 0.25, "{}".format(tmp_thaco - 6) if tmp_thaco > 7 else "", 0, 2, 'C')
-            self.pdf_class.cell(1.5, 0.25, "{}".format(tmp_thaco - 5) if tmp_thaco > 6 else "", 0, 2, 'C')
-            self.pdf_class.cell(1.5, 0.25, "{}".format(tmp_thaco - 4) if tmp_thaco > 5 else "", 0, 2, 'C')
-            self.pdf_class.cell(1.5, 0.25, "{}".format(tmp_thaco - 3) if tmp_thaco > 4 else "", 0, 2, 'C')
-            self.pdf_class.cell(1.5, 0.25, "{}".format(tmp_thaco - 2) if tmp_thaco > 3 else "", 0, 2, 'C')
-            self.pdf_class.cell(1.5, 0.25, "{}".format(tmp_thaco - 1) if tmp_thaco > 2 else "", 0, 2, 'C')
-            self.pdf_class.cell(1.5, 0.25, "{}".format(tmp_thaco) if tmp_thaco > 1 else "", 0, 2, 'C')
-            self.pdf_class.cell(1.5, 0.25, "{}".format(tmp_thaco + 1) if tmp_thaco < 20 else "", 0, 2, 'C')
-            self.pdf_class.cell(1.5, 0.25, "{}".format(tmp_thaco + 2) if tmp_thaco < 19 else "", 0, 2, 'C')
-            self.pdf_class.cell(1.5, 0.25, "{}".format(tmp_thaco + 3) if tmp_thaco < 18 else "", 0, 2, 'C')
-            self.pdf_class.cell(1.5, 0.25, "{}".format(tmp_thaco + 4) if tmp_thaco < 17 else "", 0, 2, 'C')
-            self.pdf_class.cell(1.5, 0.25, "{}".format(tmp_thaco + 5) if tmp_thaco < 16 else "", 0, 2, 'C')
-            self.pdf_class.cell(1.5, 0.25, "{}".format(tmp_thaco + 6) if tmp_thaco < 15 else "", 0, 2, 'C')
-            self.pdf_class.cell(1.5, 0.25, "{}".format(tmp_thaco + 7) if tmp_thaco < 14 else "", 0, 2, 'C')
-            self.pdf_class.cell(1.5, 0.25, "{}".format(tmp_thaco + 8) if tmp_thaco < 13 else "", 0, 2, 'C')
-            self.pdf_class.cell(1.5, 0.25, "{}".format(tmp_thaco + 9) if tmp_thaco < 12 else "", 0, 2, 'C')
-            self.pdf_class.cell(1.5, 0.25, "{}".format(tmp_thaco + 10) if tmp_thaco < 11 else "", 0, 2, 'C')
+
+            # self.pdf_class.cell(1.5, 0.25, "{}".format(tmp_thaco - 10) if tmp_thaco > 11 else "", 0, 2, 'C')
+            # self.pdf_class.cell(1.5, 0.25, "{}".format(tmp_thaco - 9) if tmp_thaco > 10 else "", 0, 2, 'C')
+            # self.pdf_class.cell(1.5, 0.25, "{}".format(tmp_thaco - 8) if tmp_thaco > 9 else "", 0, 2, 'C')
+            # self.pdf_class.cell(1.5, 0.25, "{}".format(tmp_thaco - 7) if tmp_thaco > 8 else "", 0, 2, 'C')
+            # self.pdf_class.cell(1.5, 0.25, "{}".format(tmp_thaco - 6) if tmp_thaco > 7 else "", 0, 2, 'C')
+            # self.pdf_class.cell(1.5, 0.25, "{}".format(tmp_thaco - 5) if tmp_thaco > 6 else "", 0, 2, 'C')
+            # self.pdf_class.cell(1.5, 0.25, "{}".format(tmp_thaco - 4) if tmp_thaco > 5 else "", 0, 2, 'C')
+            # self.pdf_class.cell(1.5, 0.25, "{}".format(tmp_thaco - 3) if tmp_thaco > 4 else "", 0, 2, 'C')
+            # self.pdf_class.cell(1.5, 0.25, "{}".format(tmp_thaco - 2) if tmp_thaco > 3 else "", 0, 2, 'C')
+            # self.pdf_class.cell(1.5, 0.25, "{}".format(tmp_thaco - 1) if tmp_thaco > 2 else "", 0, 2, 'C')
+            # self.pdf_class.cell(1.5, 0.25, "{}".format(tmp_thaco) if tmp_thaco > 1 else "", 0, 2, 'C')
+            # self.pdf_class.cell(1.5, 0.25, "{}".format(tmp_thaco + 1) if tmp_thaco < 19 else "", 0, 2, 'C')
+            # self.pdf_class.cell(1.5, 0.25, "{}".format(tmp_thaco + 2) if tmp_thaco < 18 else "", 0, 2, 'C')
+            # self.pdf_class.cell(1.5, 0.25, "{}".format(tmp_thaco + 3) if tmp_thaco < 17 else "", 0, 2, 'C')
+            # self.pdf_class.cell(1.5, 0.25, "{}".format(tmp_thaco + 4) if tmp_thaco < 16 else "", 0, 2, 'C')
+            # self.pdf_class.cell(1.5, 0.25, "{}".format(tmp_thaco + 5) if tmp_thaco < 15 else "", 0, 2, 'C')
+            # self.pdf_class.cell(1.5, 0.25, "{}".format(tmp_thaco + 6) if tmp_thaco < 14 else "", 0, 2, 'C')
+            # self.pdf_class.cell(1.5, 0.25, "{}".format(tmp_thaco + 7) if tmp_thaco < 13 else "", 0, 2, 'C')
+            # self.pdf_class.cell(1.5, 0.25, "{}".format(tmp_thaco + 8) if tmp_thaco < 12 else "", 0, 2, 'C')
+            # self.pdf_class.cell(1.5, 0.25, "{}".format(tmp_thaco + 9) if tmp_thaco < 11 else "", 0, 2, 'C')
+            # self.pdf_class.cell(1.5, 0.25, "{}".format(tmp_thaco + 10) if tmp_thaco < 10 else "", 0, 2, 'C')
+
+            self.pdf_class.cell(1.5, 0.25, self.char_format_thaco(tmp_thaco, tmp_thaco_offhand, 10), 0, 2, 'C')
+            self.pdf_class.cell(1.5, 0.25, self.char_format_thaco(tmp_thaco, tmp_thaco_offhand, 9), 0, 2, 'C')
+            self.pdf_class.cell(1.5, 0.25, self.char_format_thaco(tmp_thaco, tmp_thaco_offhand, 8), 0, 2, 'C')
+            self.pdf_class.cell(1.5, 0.25, self.char_format_thaco(tmp_thaco, tmp_thaco_offhand, 7), 0, 2, 'C')
+            self.pdf_class.cell(1.5, 0.25, self.char_format_thaco(tmp_thaco, tmp_thaco_offhand, 6), 0, 2, 'C')
+            self.pdf_class.cell(1.5, 0.25, self.char_format_thaco(tmp_thaco, tmp_thaco_offhand, 5), 0, 2, 'C')
+            self.pdf_class.cell(1.5, 0.25, self.char_format_thaco(tmp_thaco, tmp_thaco_offhand, 4), 0, 2, 'C')
+            self.pdf_class.cell(1.5, 0.25, self.char_format_thaco(tmp_thaco, tmp_thaco_offhand, 3), 0, 2, 'C')
+            self.pdf_class.cell(1.5, 0.25, self.char_format_thaco(tmp_thaco, tmp_thaco_offhand, 2), 0, 2, 'C')
+            self.pdf_class.cell(1.5, 0.25, self.char_format_thaco(tmp_thaco, tmp_thaco_offhand, 1), 0, 2, 'C')
+            self.pdf_class.cell(1.5, 0.25, self.char_format_thaco(tmp_thaco, tmp_thaco_offhand, 0), 0, 2, 'C')
+            self.pdf_class.cell(1.5, 0.25, self.char_format_thaco(tmp_thaco, tmp_thaco_offhand, -1), 0, 2, 'C')
+            self.pdf_class.cell(1.5, 0.25, self.char_format_thaco(tmp_thaco, tmp_thaco_offhand, -2), 0, 2, 'C')
+            self.pdf_class.cell(1.5, 0.25, self.char_format_thaco(tmp_thaco, tmp_thaco_offhand, -3), 0, 2, 'C')
+            self.pdf_class.cell(1.5, 0.25, self.char_format_thaco(tmp_thaco, tmp_thaco_offhand, -4), 0, 2, 'C')
+            self.pdf_class.cell(1.5, 0.25, self.char_format_thaco(tmp_thaco, tmp_thaco_offhand, -5), 0, 2, 'C')
+            self.pdf_class.cell(1.5, 0.25, self.char_format_thaco(tmp_thaco, tmp_thaco_offhand, -6), 0, 2, 'C')
+            self.pdf_class.cell(1.5, 0.25, self.char_format_thaco(tmp_thaco, tmp_thaco_offhand, -7), 0, 2, 'C')
+            self.pdf_class.cell(1.5, 0.25, self.char_format_thaco(tmp_thaco, tmp_thaco_offhand, -8), 0, 2, 'C')
+            self.pdf_class.cell(1.5, 0.25, self.char_format_thaco(tmp_thaco, tmp_thaco_offhand, -9), 0, 2, 'C')
+            self.pdf_class.cell(1.5, 0.25, self.char_format_thaco(tmp_thaco, tmp_thaco_offhand, -10), 0, 2, 'C')
 
     def _generate_inventory(self):
         tmp_item_names_list = sorted(list(self.character.inventory.get_item_names()))
